@@ -1,0 +1,40 @@
+This experimental version of OpenSSL has been integrated with the Open Quantum Safe library,
+including the new proposed signature API.
+
+Setup
+=====
+
+Some manual setup is required to build and enable the Picnic signature scheme. The following
+script downloads a fork of OQS enabling the Picnic signature algorithm, and sets it up. The 
+script must be run before building OpenSSL.
+
+./get-and-setup-oqs-with-picnic.sh
+
+Test
+====
+
+Run the following programs to test the PQC kex+auth TLS connection.
+
+To generate a Picnic key (new app):
+./apps/openssl genoqs -picnic -out oqs.key
+
+To generate a Picnic cert:
+./apps/openssl req -new -x509 -days 365 -sha256 -key oqs.key -out oqs.crt -subj "/C=US/L=Redmond/CN=OQStest" -config openssl.cnf
+
+To test a complete (kex+auth) PQS TLS connection, start a server:
+./apps/openssl s_server -cipher RLWEMSRLN16-PICNIC-AES256-GCM-SHA384 -cert oqs.crt -key oqs.key -www
+
+And connect to it with a client
+./apps/openssl s_client -cipher RLWEMSRLN16-PICNIC-AES256-GCM-SHA384 -connect localhost:4433
+
+The following cipher suites are supported:
+ * LWEFRODO-PICNIC-AES256-GCM-SHA384
+ * RLWEMSRLN16-PICNIC-AES256-GCM-SHA384
+ * SIDHCLN16-PICNIC-AES256-GCM-SHA384
+
+
+Acknowledgement
+===============
+The OpenSSL integration code is based on the code submitted in the add-xmss branch of OQS
+(https://github.com/open-quantum-safe/liboqs/tree/add-xmss/src/xmss). Many thanks to Denis
+Butin for his input.

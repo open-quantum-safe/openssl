@@ -234,6 +234,14 @@ const EVP_PKEY_ASN1_METHOD *EVP_PKEY_asn1_find_str(ENGINE **pe,
 
 int EVP_PKEY_asn1_add0(const EVP_PKEY_ASN1_METHOD *ameth)
 {
+  /* OQS sig hack: adding code to free app_methods, to avoid leak */
+  if (ameth == NULL && app_methods != NULL) {
+    // let's free everything
+    sk_EVP_PKEY_ASN1_METHOD_free(app_methods);
+    return 1;
+  }
+  /* OQS sig hack end ------------------------------ */
+
     if (app_methods == NULL) {
         app_methods = sk_EVP_PKEY_ASN1_METHOD_new(ameth_cmp);
         if (!app_methods)
@@ -484,3 +492,4 @@ void EVP_PKEY_asn1_set_item(EVP_PKEY_ASN1_METHOD *ameth,
     ameth->item_sign = item_sign;
     ameth->item_verify = item_verify;
 }
+

@@ -3692,6 +3692,56 @@ OPENSSL_GLOBAL SSL_CIPHER ssl3_ciphers[] = {
 
 #endif                          /* OPENSSL_NO_HYBRID_OQSKEX_ECDHE */
 
+#ifndef OPENSSL_NO_OQS
+    /* Cipher FF60 */
+    {
+     1, 
+     TLS1_TXT_OQSKEX_LWE_FRODO_RECOMMENDED_PICNIC_WITH_AES_256_GCM_SHA384,
+     TLS1_CK_OQSKEX_LWE_FRODO_RECOMMENDED_PICNIC_WITH_AES_256_GCM_SHA384,
+     SSL_kOQSKEX_LWE_FRODO_RECOMMENDED,
+     SSL_aOQSPICNIC,
+     SSL_AES256GCM,
+     SSL_AEAD,
+     SSL_TLSV1_2,
+     SSL_NOT_EXP | SSL_HIGH | SSL_FIPS,
+     SSL_HANDSHAKE_MAC_SHA384 | TLS1_PRF_SHA384,
+     256,
+     256,
+     },
+
+    /* Cipher FF61 */
+    {
+     1, 
+     TLS1_TXT_OQSKEX_RLWE_MSRLN16_PICNIC_WITH_AES_256_GCM_SHA384,
+     TLS1_CK_OQSKEX_RLWE_MSRLN16_PICNIC_WITH_AES_256_GCM_SHA384,
+     SSL_kOQSKEX_RLWE_MSRLN16,
+     SSL_aOQSPICNIC,
+     SSL_AES256GCM,
+     SSL_AEAD,
+     SSL_TLSV1_2,
+     SSL_NOT_EXP | SSL_HIGH | SSL_FIPS,
+     SSL_HANDSHAKE_MAC_SHA384 | TLS1_PRF_SHA384,
+     256,
+     256,
+     },
+
+    /* Cipher FF62 */
+    {
+     1, 
+     TLS1_TXT_OQSKEX_SIDH_CLN16_PICNIC_WITH_AES_256_GCM_SHA384,
+     TLS1_CK_OQSKEX_SIDH_CLN16_PICNIC_WITH_AES_256_GCM_SHA384,
+     SSL_kOQSKEX_SIDH_CLN16,
+     SSL_aOQSPICNIC,
+     SSL_AES256GCM,
+     SSL_AEAD,
+     SSL_TLSV1_2,
+     SSL_NOT_EXP | SSL_HIGH | SSL_FIPS,
+     SSL_HANDSHAKE_MAC_SHA384 | TLS1_PRF_SHA384,
+     256,
+     256,
+     },
+#endif
+
 #ifdef TEMP_GOST_TLS
 /* Cipher FF00 */
     {
@@ -4280,7 +4330,7 @@ long ssl3_ctrl(SSL *s, int cmd, long larg, void *parg)
              * No certificate for unauthenticated ciphersuites or using SRP
              * authentication
              */
-            if (cipher->algorithm_auth & (SSL_aNULL | SSL_aSRP))
+            if (cipher->algorithm_auth & (SSL_aNULL | SSL_aSRP) && !(cipher->algorithm_auth & SSL_aOQSPICNIC)) /* OQS sig */
                 return 2;
             cpk = ssl_get_server_send_pkey(s);
             if (!cpk)

@@ -117,6 +117,7 @@
 # define EVP_PKEY_EC     NID_X9_62_id_ecPublicKey
 # define EVP_PKEY_HMAC   NID_hmac
 # define EVP_PKEY_CMAC   NID_cmac
+# define EVP_PKEY_OQS    NID_oqs_picnic_default /* OQS sig */
 
 #ifdef  __cplusplus
 extern "C" {

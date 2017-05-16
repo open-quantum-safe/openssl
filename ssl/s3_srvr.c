@@ -424,11 +424,12 @@ int ssl3_accept(SSL *s)
         case SSL3_ST_SW_CERT_B:
             /* Check if it is anon DH or anon ECDH, */
             /* normal PSK or KRB5 or SRP */
-            if (!
+            if ((!
                 (s->s3->tmp.
                  new_cipher->algorithm_auth & (SSL_aNULL | SSL_aKRB5 |
                                                SSL_aSRP))
-&& !(s->s3->tmp.new_cipher->algorithm_mkey & SSL_kPSK)) {
+		 || s->s3->tmp.new_cipher->algorithm_auth & SSL_aOQSPICNIC) /* OQS sig */
+		&& !(s->s3->tmp.new_cipher->algorithm_mkey & SSL_kPSK)) {
                 ret = ssl3_send_server_certificate(s);
                 if (ret <= 0)
                     goto end;
@@ -2006,7 +2007,8 @@ int ssl3_send_server_key_exchange(SSL *s)
                 n += 2 + nr[i];
         }
 
-        if (!(s->s3->tmp.new_cipher->algorithm_auth & (SSL_aNULL | SSL_aSRP))
+        if ((!(s->s3->tmp.new_cipher->algorithm_auth & (SSL_aNULL | SSL_aSRP))
+	     || s->s3->tmp.new_cipher->algorithm_auth & SSL_aOQSPICNIC)
             && !(s->s3->tmp.new_cipher->algorithm_mkey & SSL_kPSK)) {
             if ((pkey = ssl_get_sign_pkey(s, s->s3->tmp.new_cipher, &md))
                 == NULL) {
@@ -2018,7 +2020,7 @@ int ssl3_send_server_key_exchange(SSL *s)
             if (SSL_USE_SIGALGS(s))
                 kn += 2;
             /* Allow space for signature length */
-            kn += 2;
+            kn += 4; /* OQS note: increased from 2 for OQS sig */
         } else {
             pkey = NULL;
             kn = 0;
@@ -2164,14 +2166,14 @@ int ssl3_send_server_key_exchange(SSL *s)
                         || EVP_SignUpdate(&md_ctx, &(s->s3->server_random[0]),
                                           SSL3_RANDOM_SIZE) <= 0
                         || EVP_SignUpdate(&md_ctx, d, n) <= 0
-                        || EVP_SignFinal(&md_ctx, &(p[2]),
+                        || EVP_SignFinal(&md_ctx, &(p[4]), /* OQS note: was p[2] */
                                          (unsigned int *)&i, pkey) <= 0) {
                     SSLerr(SSL_F_SSL3_SEND_SERVER_KEY_EXCHANGE, ERR_LIB_EVP);
                     al = SSL_AD_INTERNAL_ERROR;
                     goto f_err;
                 }
-                s2n(i, p);
-                n += i + 2;
+                l2n(i, p); // OQS note: was s2n, increased size for OQS sig
+                n += i + 4; // OQS note: was + 2, increased size for OQS sig
                 if (SSL_USE_SIGALGS(s))
                     n += 2;
             } else {

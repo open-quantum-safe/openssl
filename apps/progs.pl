@@ -41,6 +41,8 @@ foreach (@ARGV)
 		{ print "#ifndef OPENSSL_NO_RSA\n${str}#endif\n";  }
 	elsif ( ($_ =~ /^dsa$/) || ($_ =~ /^gendsa$/) || ($_ =~ /^dsaparam$/))
 		{ print "#ifndef OPENSSL_NO_DSA\n${str}#endif\n"; }
+	elsif ( ($_ =~ /^genoqs$/))
+		{ print "#ifndef OPENSSL_NO_OQS\n${str}#endif\n"; }
 	elsif ( ($_ =~ /^ec$/) || ($_ =~ /^ecparam$/))
 		{ print "#ifndef OPENSSL_NO_EC\n${str}#endif\n";}
 	elsif ( ($_ =~ /^dh$/) || ($_ =~ /^gendh$/) || ($_ =~ /^dhparam$/))

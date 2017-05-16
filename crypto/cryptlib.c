@@ -166,7 +166,8 @@ static const char *const lock_names[CRYPTO_NUM_LOCKS] = {
     "comp",
     "fips",
     "fips2",
-#if CRYPTO_NUM_LOCKS != 41
+    "oqs", /* OQS note: new value for OQS */
+#if CRYPTO_NUM_LOCKS != 42
 # error "Inconsistency between crypto.h and cryptlib.c"
 #endif
 };

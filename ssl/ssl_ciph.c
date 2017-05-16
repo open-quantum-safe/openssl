@@ -796,6 +796,7 @@ static void ssl_cipher_get_disabled(unsigned long *mkey, unsigned long *auth,
     if ((*auth & (SSL_aGOST94 | SSL_aGOST01)) == (SSL_aGOST94 | SSL_aGOST01)) {
         *mkey |= SSL_kGOST;
     }
+
 #ifdef SSL_FORBID_ENULL
     *enc |= SSL_eNULL;
 #endif
@@ -2124,6 +2125,8 @@ int ssl_cipher_get_cert_index(const SSL_CIPHER *c)
         return SSL_PKEY_GOST94;
     else if (alg_a & SSL_aGOST01)
         return SSL_PKEY_GOST01;
+    else if (alg_a & SSL_aOQSPICNIC)
+        return SSL_PKEY_OQS;
     return -1;
 }
 
