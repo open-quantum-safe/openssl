@@ -13,4 +13,4 @@ autoreconf -i
 ./configure --enable-openssl --enable-picnic
 make clean
 make
-cp -r src/sig_picnic/external/Picnic-master/data ../../
+
