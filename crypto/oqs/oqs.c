@@ -21,6 +21,8 @@
  * The code needs to be generalized to support more than one sig alg.
  */
 
+static int g_initialized = 0;
+
 int OQS_up_ref(OQS_PKEY_CTX *key)
 {
   int i = CRYPTO_add(&key->references, 1, CRYPTO_LOCK_OQS);
@@ -550,27 +552,35 @@ static EVP_PKEY_ASN1_METHOD oqs_ameth =
 
 void OQS_add_all_algorithms()
 {
-  // add the OQS methods
-  EVP_PKEY_asn1_add0(&oqs_ameth);
-  EVP_PKEY_meth_add0(&oqs_pmeth);
-  if (!OBJ_create("1 3 6 1 4 1 8301 3 1 3 3 1", "PicnicWithSHA256", "PicnicWithSHA256")) {
+  // Only initialize once (Not threadsafe FIXMEOQS)
+  if (!g_initialized) {
+
+    // add the OQS methods
+    EVP_PKEY_asn1_add0(&oqs_ameth);
+    EVP_PKEY_meth_add0(&oqs_pmeth);
+    if (!OBJ_create("1 3 6 1 4 1 8301 3 1 3 3 1", "PicnicWithSHA256", "PicnicWithSHA256")) {
       OQSerr(0, ERR_R_FATAL);
       return;
     }
 
-  if(!OBJ_add_sigid(NID_oqs_picnic_default, NID_sha256, NID_oqs_picnic_default /*FIXMEOQS: why the double NID_oqs_picnic_default*/))
-    {
+    if(!OBJ_add_sigid(NID_oqs_picnic_default, NID_sha256, NID_oqs_picnic_default /*FIXMEOQS: why the double NID_oqs_picnic_default*/)) {
       OQSerr(0, ERR_R_FATAL);
       return;
     }
+
+    g_initialized = 1;
+  }
 }
 
 void OQS_shutdown()
 {
+  if (g_initialized) {
   /* OQS sig hack: calling modified versions of the following functions to free
    * leaky static variables. Should fix that properly by adding OpenSSL functions
    */
     EVP_PKEY_asn1_add0(NULL);
     EVP_PKEY_meth_add0(NULL);
+    g_initialized = 0;
+  }
     return;
 }
