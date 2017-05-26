@@ -278,9 +278,10 @@ extern "C" {
 # define TLSEXT_signature_rsa                            1
 # define TLSEXT_signature_dsa                            2
 # define TLSEXT_signature_ecdsa                          3
+# define TLSEXT_signature_oqs                            4 /* OQS sig */
 
 /* Total number of different signature algorithms */
-# define TLSEXT_signature_num                            4
+# define TLSEXT_signature_num                            5
 
 # define TLSEXT_hash_none                                0
 # define TLSEXT_hash_md5                                 1
@@ -612,6 +613,10 @@ SSL_CTX_callback_ctrl(ssl,SSL_CTRL_SET_TLSEXT_TICKET_KEY_CB,(void (*)(void))cb)
 # define TLS1_CK_OQSKEX_SIDH_CLN16_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256      0x0300FF55
 # define TLS1_CK_OQSKEX_SIDH_CLN16_ECDHE_RSA_WITH_AES_256_GCM_SHA384        0x0300FF56
 # define TLS1_CK_OQSKEX_SIDH_CLN16_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384      0x0300FF57
+  /* OQS sig */ 
+# define TLS1_CK_OQSKEX_LWE_FRODO_RECOMMENDED_PICNIC_WITH_AES_256_GCM_SHA384 0x0300FF60
+# define TLS1_CK_OQSKEX_RLWE_MSRLN16_PICNIC_WITH_AES_256_GCM_SHA384          0x0300FF61
+# define TLS1_CK_OQSKEX_SIDH_CLN16_PICNIC_WITH_AES_256_GCM_SHA384            0x0300FF62
 
 /*
  * XXX * Backward compatibility alert: + * Older versions of OpenSSL gave
@@ -812,6 +817,11 @@ SSL_CTX_callback_ctrl(ssl,SSL_CTRL_SET_TLSEXT_TICKET_KEY_CB,(void (*)(void))cb)
 # define TLS1_TXT_OQSKEX_SIDH_CLN16_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256      "OQSKEX-SIDH-CLN16-ECDHE-ECDSA-AES128-GCM-SHA256"
 # define TLS1_TXT_OQSKEX_SIDH_CLN16_ECDHE_RSA_WITH_AES_256_GCM_SHA384        "OQSKEX-SIDH-CLN16-ECDHE-RSA-AES256-GCM-SHA384"
 # define TLS1_TXT_OQSKEX_SIDH_CLN16_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384      "OQSKEX-SIDH-CLN16-ECDHE-ECDSA-AES256-GCM-SHA384"
+  /* OQS sig */
+# define TLS1_TXT_OQSKEX_LWE_FRODO_RECOMMENDED_PICNIC_WITH_AES_256_GCM_SHA384 "LWEFRODO-PICNIC-AES256-GCM-SHA384"
+# define TLS1_TXT_OQSKEX_RLWE_MSRLN16_PICNIC_WITH_AES_256_GCM_SHA384 "RLWEMSRLN16-PICNIC-AES256-GCM-SHA384"
+# define TLS1_TXT_OQSKEX_SIDH_CLN16_PICNIC_WITH_AES_256_GCM_SHA384 "SIDHCLN16-PICNIC-AES256-GCM-SHA384"
+
 
 # define TLS_CT_RSA_SIGN                 1
 # define TLS_CT_DSS_SIGN                 2

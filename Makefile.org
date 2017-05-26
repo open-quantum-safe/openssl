@@ -146,7 +146,7 @@ SDIRS=  \
 	objects \
 	md2 md4 md5 sha mdc2 hmac ripemd whrlpool \
 	des aes rc2 rc4 rc5 idea bf cast camellia seed modes \
-	bn ec rsa dsa ecdsa dh ecdh dso engine \
+	bn ec rsa dsa ecdsa dh ecdh oqs dso engine \
 	buffer bio stack lhash rand err \
 	evp asn1 pem x509 x509v3 conf txt_db pkcs7 pkcs12 comp ocsp ui krb5 \
 	cms pqueue ts jpake srp store cmac
@@ -435,7 +435,7 @@ files:
 	$(PERL) $(TOP)/util/files.pl Makefile > $(TOP)/MINFO
 	@set -e; target=files; $(RECURSIVE_BUILD_CMD)
 
-LIBOQS_HEADERS = aes.h kex_lwe_frodo.h kex_rlwe_newhope.h rand_urandom_aesctr.h common.h kex_rlwe_bcns15.h kex_sidh_cln16.h rand_urandom_chacha20.h kex.h kex_rlwe_msrln16.h rand.h sha3.h
+LIBOQS_HEADERS = aes.h kex_lwe_frodo.h kex_rlwe_newhope.h rand_urandom_aesctr.h common.h kex_rlwe_bcns15.h kex_sidh_cln16.h rand_urandom_chacha20.h kex.h kex_rlwe_msrln16.h rand.h sha3.h sig.h
 
 links:
 	@$(PERL) $(TOP)/util/mkdir-p.pl include/openssl

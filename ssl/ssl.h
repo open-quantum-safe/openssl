@@ -357,6 +357,7 @@ extern "C" {
  * an application-defined cipher list string starts with 'DEFAULT'.
  */
 # define SSL_DEFAULT_CIPHER_LIST "ALL:!EXPORT:!LOW:!aNULL:!eNULL:!SSLv2"
+
 /*
  * As of OpenSSL 1.0.0, ssl_create_cipher_list() in ssl/ssl_ciph.c always
  * starts with a reasonable order, and all we have to do for DEFAULT is
@@ -899,8 +900,9 @@ int SRP_generate_client_master_secret(SSL *s, unsigned char *master_key);
 #  define SSL_MAX_CERT_LIST_DEFAULT 1024*30
                                           /* 30k max cert list :-) */
 # else
-#  define SSL_MAX_CERT_LIST_DEFAULT 1024*100
-                                           /* 100k max cert list :-) */
+/* OQS note: increased from 1024*100, for bigger OQS certs */
+#  define SSL_MAX_CERT_LIST_DEFAULT 1024*160
+                                           /* 160k max cert list :-) */
 # endif
 
 # define SSL_SESSION_CACHE_MAX_SIZE_DEFAULT      (1024*20)

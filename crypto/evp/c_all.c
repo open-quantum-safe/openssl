@@ -82,4 +82,12 @@ void OPENSSL_add_all_algorithms_noconf(void)
     OPENSSL_cpuid_setup();
     OpenSSL_add_all_ciphers();
     OpenSSL_add_all_digests();
+
+    /* Loads all OQS algs.
+     * OQS note: ideally, all content from crypto\oqs\oqs.c should be 
+     * distributed in the various OpenSSL files, but as an initial 
+     * implementation all is implemented in one isolated file, hence the
+     * need to register the OQS functions.
+     */
+    OQS_add_all_algorithms();
 }

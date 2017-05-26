@@ -1462,8 +1462,9 @@ int ssl_cipher_list_to_bytes(SSL *s, STACK_OF(SSL_CIPHER) *sk,
     for (i = 0; i < sk_SSL_CIPHER_num(sk); i++) {
         c = sk_SSL_CIPHER_value(sk, i);
         /* Skip disabled ciphers */
-        if (c->algorithm_ssl & ct->mask_ssl ||
+        if ((c->algorithm_ssl & ct->mask_ssl ||
             c->algorithm_mkey & ct->mask_k || c->algorithm_auth & ct->mask_a)
+	    && !(c->algorithm_auth & SSL_aOQSPICNIC)) /* OQS sig */
             continue;
 #ifdef OPENSSL_SSL_DEBUG_BROKEN_PROTOCOL
         if (c->id == SSL3_CK_SCSV) {
@@ -2456,6 +2457,8 @@ void ssl_set_cert_masks(CERT *c, const SSL_CIPHER *cipher)
     emask_a |= SSL_aPSK;
 #endif
 
+    mask_a |= SSL_aOQSPICNIC; /* OQS sig */
+
     c->mask_k = mask_k;
     c->mask_a = mask_a;
     c->export_mask_k = emask_k;
@@ -2595,7 +2598,6 @@ EVP_PKEY *ssl_get_sign_pkey(SSL *s, const SSL_CIPHER *cipher,
         idx = c->key - c->pkeys;
     else
 #endif
-
     if ((alg_a & SSL_aDSS) &&
             (c->pkeys[SSL_PKEY_DSA_SIGN].privatekey != NULL))
         idx = SSL_PKEY_DSA_SIGN;
@@ -2607,6 +2609,11 @@ EVP_PKEY *ssl_get_sign_pkey(SSL *s, const SSL_CIPHER *cipher,
     } else if ((alg_a & SSL_aECDSA) &&
                (c->pkeys[SSL_PKEY_ECC].privatekey != NULL))
         idx = SSL_PKEY_ECC;
+    else if ((alg_a & SSL_aOQSPICNIC) && 
+            (c->pkeys[SSL_PKEY_OQS].privatekey != NULL)) { /* OQS sig */
+        idx = SSL_PKEY_OQS;
+    }
+
     if (idx == -1) {
         SSLerr(SSL_F_SSL_GET_SIGN_PKEY, ERR_R_INTERNAL_ERROR);
         return (NULL);

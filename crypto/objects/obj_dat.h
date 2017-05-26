@@ -2514,6 +2514,7 @@ static const ASN1_OBJECT nid_objs[NUM_NID]={
 	NID_jurisdictionStateOrProvinceName,11,&(lvalues[6232]),0},
 {"jurisdictionC","jurisdictionCountryName",
 	NID_jurisdictionCountryName,11,&(lvalues[6243]),0},
+{"NULL","NULL",NID_oqs_picnic_default,0,NULL,0},
 };
 
 static const unsigned int sn_objs[NUM_SN]={
@@ -2630,6 +2631,7 @@ static const unsigned int sn_objs[NUM_SN]={
 388,	/* "Mail" */
 393,	/* "NULL" */
 404,	/* "NULL" */
+958,	/* "NULL" */
 57,	/* "Netscape" */
 366,	/* "Nonce" */
 17,	/* "O" */
@@ -3540,6 +3542,7 @@ static const unsigned int ln_objs[NUM_LN]={
 649,	/* "Microsoft Universal Principal Name" */
 393,	/* "NULL" */
 404,	/* "NULL" */
+958,	/* "NULL" */
 72,	/* "Netscape Base Url" */
 76,	/* "Netscape CA Policy Url" */
 74,	/* "Netscape CA Revocation Url" */

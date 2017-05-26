@@ -322,6 +322,14 @@ EVP_PKEY_CTX *EVP_PKEY_CTX_dup(EVP_PKEY_CTX *pctx)
 
 int EVP_PKEY_meth_add0(const EVP_PKEY_METHOD *pmeth)
 {
+  /* OQS sig hack: adding code to free app_pkey_methods, to avoid leak */
+  if (pmeth == NULL && app_pkey_methods != NULL) {
+    // let's free everything
+    sk_EVP_PKEY_METHOD_free(app_pkey_methods);
+    return 1;
+  }
+  /* OQS sig hack end ------------------------------ */
+
     if (app_pkey_methods == NULL) {
         app_pkey_methods = sk_EVP_PKEY_METHOD_new(pmeth_cmp);
         if (!app_pkey_methods)

@@ -342,9 +342,10 @@ int ssl3_connect(SSL *s)
 #endif
             /* Check if it is anon DH/ECDH, SRP auth */
             /* or PSK */
-            if (!
+            if ((!
                 (s->s3->tmp.
-                 new_cipher->algorithm_auth & (SSL_aNULL | SSL_aSRP))
+                 new_cipher->algorithm_auth & (SSL_aNULL | SSL_aSRP)))
+		|| s->s3->tmp.new_cipher->algorithm_auth & SSL_aOQSPICNIC  /* OQS sig */
                     && !(s->s3->tmp.new_cipher->algorithm_mkey & SSL_kPSK)) {
                 ret = ssl3_get_server_certificate(s);
                 if (ret <= 0)
@@ -1797,6 +1798,10 @@ int ssl3_get_key_exchange(SSL *s)
                                 sess_cert->peer_pkeys[SSL_PKEY_DSA_SIGN].
                                 x509);
 # endif
+        if (alg_a & SSL_aOQSPICNIC) { /* OQS sig */
+	  pkey=X509_get_pubkey(s->session->sess_cert->peer_pkeys[SSL_PKEY_OQS].x509);
+	}
+
         /* else anonymous DH, so no certificate or pkey. */
 
         s->session->sess_cert->peer_dh_tmp = dh;
@@ -1832,6 +1837,10 @@ int ssl3_get_key_exchange(SSL *s)
         p += srvr_oqskex_msg_len;
         param_len = 2 + srvr_oqskex_msg_len;
 
+#ifndef OPENSSL_NO_OQS
+        if (alg_a & SSL_aOQSPICNIC) /* OQS sig */
+            pkey=X509_get_pubkey(s->session->sess_cert->peer_pkeys[SSL_PKEY_OQS].x509);
+#endif
 #ifndef OPENSSL_NO_RSA
         if (alg_a & SSL_aRSA)
             pkey=X509_get_pubkey(s->session->sess_cert->peer_pkeys[SSL_PKEY_RSA_ENC].x509);
@@ -2018,12 +2027,12 @@ int ssl3_get_key_exchange(SSL *s)
         } else
             md = EVP_sha1();
 
-        if (2 > n) {
+        if (4 > n) { /* OQS note: increased from 2 for big OQS sig */
             SSLerr(SSL_F_SSL3_GET_KEY_EXCHANGE, SSL_R_LENGTH_TOO_SHORT);
             goto f_err;
         }
-        n2s(p, i);
-        n -= 2;
+        n2l(p, i); /* OQS note: was n2s, changed for big OQS sig */
+        n -= 4; /* OQS note: increased from 2 for big OQS sig */
         j = EVP_PKEY_size(pkey);
 
         /*
@@ -2094,7 +2103,7 @@ int ssl3_get_key_exchange(SSL *s)
         }
     } else {
         /* aNULL, aSRP or kPSK do not need public keys */
-        if (!(alg_a & (SSL_aNULL | SSL_aSRP)) && !(alg_k & SSL_kPSK)) {
+      if ((alg_a == SSL_aOQSPICNIC || !(alg_a & (SSL_aNULL | SSL_aSRP))) && !(alg_k & SSL_kPSK)) { // OQS sig
             /* Might be wrong key type, check it */
             if (ssl3_check_cert_and_algorithm(s))
                 /* Otherwise this shouldn't happen */
