@@ -61,6 +61,7 @@
 #include <openssl/evp.h>
 #include <openssl/objects.h>
 #include <openssl/x509.h>
+#include <openssl/oqs_sig.h>
 
 int X509_certificate_type(X509 *x, EVP_PKEY *pkey)
 {
@@ -115,6 +116,9 @@ int X509_certificate_type(X509 *x, EVP_PKEY *pkey)
             break;
         case NID_X9_62_id_ecPublicKey:
             ret |= EVP_PKS_EC;
+            break;
+        case NID_oqs_picnic_default:
+	    ret |= EVP_PKT_SIGN;
             break;
         default:
             break;
