@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2016 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2006-2018 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the OpenSSL license (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -50,9 +50,10 @@ static int pkey_dh_init(EVP_PKEY_CTX *ctx)
 {
     DH_PKEY_CTX *dctx;
 
-    dctx = OPENSSL_zalloc(sizeof(*dctx));
-    if (dctx == NULL)
+    if ((dctx = OPENSSL_zalloc(sizeof(*dctx))) == NULL) {
+        DHerr(DH_F_PKEY_DH_INIT, ERR_R_MALLOC_FAILURE);
         return 0;
+    }
     dctx->prime_len = 1024;
     dctx->subprime_len = -1;
     dctx->generator = 2;

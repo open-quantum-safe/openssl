@@ -21,7 +21,8 @@ $VERSION = "0.8";
 @EXPORT_OK = (@Test::More::EXPORT_OK, qw(bldtop_dir bldtop_file
                                          srctop_dir srctop_file
                                          data_file
-                                         pipe with cmdstr quotify));
+                                         pipe with cmdstr quotify
+                                         openssl_versions));
 
 =head1 NAME
 
@@ -606,6 +607,23 @@ sub srctop_file {
 
 =over 4
 
+=item B<data_dir LIST>
+
+LIST is a list of directories that make up a path from the data directory
+associated with the test (see L</DESCRIPTION> above).
+C<data_dir> returns the resulting directory as a string, adapted to the local
+operating system.
+
+=back
+
+=cut
+
+sub data_dir {
+    return __data_dir(@_);
+}
+
+=over 4
+
 =item B<data_file LIST, FILENAME>
 
 LIST is a list of directories that make up a path from the data directory
@@ -788,6 +806,32 @@ sub quotify {
     return map { $arg_formatter->($_) } @_;
 }
 
+=over 4
+
+=item B<openssl_versions>
+
+Returns a list of two numbers, the first representing the build version,
+the second representing the library version.  See opensslv.h for more
+information on those numbers.
+
+= back
+
+=cut
+
+my @versions = ();
+sub openssl_versions {
+    unless (@versions) {
+        my %lines =
+            map { s/\R$//;
+                  /^(.*): (0x[[:xdigit:]]{8})$/;
+                  die "Weird line: $_" unless defined $1;
+                  $1 => hex($2) }
+            run(test(['versions']), capture => 1);
+        @versions = ( $lines{'Build version'}, $lines{'Library version'} );
+    }
+    return @versions;
+}
+
 ######################################################################
 # private functions.  These are never exported.
 
@@ -938,6 +982,12 @@ sub __data_file {
 
     my $f = pop;
     return catfile($directories{SRCDATA},@_,$f);
+}
+
+sub __data_dir {
+    BAIL_OUT("Must run setup() first") if (! $test_name);
+
+    return catdir($directories{SRCDATA},@_);
 }
 
 sub __results_file {

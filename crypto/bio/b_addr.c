@@ -66,18 +66,18 @@ void BIO_ADDR_clear(BIO_ADDR *ap)
 int BIO_ADDR_make(BIO_ADDR *ap, const struct sockaddr *sa)
 {
     if (sa->sa_family == AF_INET) {
-        ap->s_in = *(const struct sockaddr_in *)sa;
+        memcpy(&(ap->s_in), sa, sizeof(struct sockaddr_in));
         return 1;
     }
 #ifdef AF_INET6
     if (sa->sa_family == AF_INET6) {
-        ap->s_in6 = *(const struct sockaddr_in6 *)sa;
+        memcpy(&(ap->s_in6), sa, sizeof(struct sockaddr_in6));
         return 1;
     }
 #endif
 #ifdef AF_UNIX
     if (sa->sa_family == AF_UNIX) {
-        ap->s_un = *(const struct sockaddr_un *)sa;
+        memcpy(&(ap->s_un), sa, sizeof(struct sockaddr_un));
         return 1;
     }
 #endif
@@ -565,9 +565,10 @@ static int addrinfo_wrap(int family, int socktype,
                          unsigned short port,
                          BIO_ADDRINFO **bai)
 {
-    *bai = OPENSSL_zalloc(sizeof(**bai));
-    if (*bai == NULL)
+    if ((*bai = OPENSSL_zalloc(sizeof(**bai))) == NULL) {
+        BIOerr(BIO_F_ADDRINFO_WRAP, ERR_R_MALLOC_FAILURE);
         return 0;
+    }
 
     (*bai)->bai_family = family;
     (*bai)->bai_socktype = socktype;

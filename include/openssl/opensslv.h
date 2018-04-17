@@ -39,13 +39,8 @@ extern "C" {
  * (Prior to 0.9.5a beta1, a different scheme was used: MMNNFFRBB for
  *  major minor fix final patch/beta)
  */
-# define OPENSSL_VERSION_NUMBER  0x10101003L
-# define OPENSSL_VERSION_TEXT    "OpenSSL 1.1.1-pre3-dev  xx XXX xxxx"
-
-#define OPENSSL_MAKE_VERSION(maj,min,fix,patch) ((0x10000000L)+((maj&0xff)<<20)+((min&0xff)<<12)+((fix&0xff)<<4)+patch)
-
-/* use this for #if tests, should never depend upon fix/patch */
-#define OPENSSL_VERSION_AT_LEAST(maj,min) (OPENSSL_MAKE_VERSION(maj,min, 0, 0) >= OPENSSL_VERSION_NUMBER)
+# define OPENSSL_VERSION_NUMBER  0x10101006L
+# define OPENSSL_VERSION_TEXT    "OpenSSL 1.1.1-pre6-dev  xx XXX xxxx"
 
 /*-
  * The macros below are to be used for shared library (.so, .dll, ...)

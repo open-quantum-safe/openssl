@@ -395,22 +395,6 @@ static void felem_sum(felem out, const felem in)
     out[3] += in[3];
 }
 
-/* Get negative value: out = -in */
-/* Assumes in[i] < 2^57 */
-static void felem_neg(felem out, const felem in)
-{
-    static const limb two58p2 = (((limb) 1) << 58) + (((limb) 1) << 2);
-    static const limb two58m2 = (((limb) 1) << 58) - (((limb) 1) << 2);
-    static const limb two58m42m2 = (((limb) 1) << 58) -
-        (((limb) 1) << 42) - (((limb) 1) << 2);
-
-    /* Set to 0 mod 2^224-2^96+1 to ensure out > in */
-    out[0] = two58p2 - in[0];
-    out[1] = two58m42m2 - in[1];
-    out[2] = two58m2 - in[2];
-    out[3] = two58m2 - in[3];
-}
-
 /* Subtract field elements: out -= in */
 /* Assumes in[i] < 2^57 */
 static void felem_diff(felem out, const felem in)
@@ -680,6 +664,18 @@ static void felem_contract(felem out, const felem in)
 }
 
 /*
+ * Get negative value: out = -in
+ * Requires in[i] < 2^63,
+ * ensures out[0] < 2^56, out[1] < 2^56, out[2] < 2^56, out[3] <= 2^56 + 2^16
+ */
+static void felem_neg(felem out, const felem in)
+{
+    widefelem tmp = {0};
+    felem_diff_128_64(tmp, in);
+    felem_reduce(out, tmp);
+}
+
+/*
  * Zero-check: returns 1 if input is 0, and 0 otherwise. We know that field
  * elements are reduced to in < 2^225, so we only need to check three cases:
  * 0, 2^224 - 2^96 + 1, and 2^225 - 2^97 + 2
@@ -817,7 +813,7 @@ static void copy_conditional(felem out, const felem in, limb icopy)
  * Double an elliptic curve point:
  * (X', Y', Z') = 2 * (X, Y, Z), where
  * X' = (3 * (X - Z^2) * (X + Z^2))^2 - 8 * X * Y^2
- * Y' = 3 * (X - Z^2) * (X + Z^2) * (4 * X * Y^2 - X') - 8 * Y^2
+ * Y' = 3 * (X - Z^2) * (X + Z^2) * (4 * X * Y^2 - X') - 8 * Y^4
  * Z' = (Y + Z)^2 - Y^2 - Z^2 = 2 * Y * Z
  * Outputs can equal corresponding inputs, i.e., x_out == x_in is allowed,
  * while x_out == y_in is not (maybe this works, but it's not tested).

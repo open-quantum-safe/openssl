@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright 1998-2017 The OpenSSL Project Authors. All Rights Reserved.
+# Copyright 1998-2018 The OpenSSL Project Authors. All Rights Reserved.
 #
 # Licensed under the OpenSSL license (the "License").  You may not use
 # this file except in compliance with the License.  You can obtain a copy
@@ -238,21 +238,6 @@ case "${SYSTEM}:${RELEASE}:${VERSION}:${MACHINE}" in
 		echo "${MACHINE}-dec-osf"; exit 0
 		;;
 	esac
-	;;
-
-    QNX:*)
-	case "$RELEASE" in
-	    4*)
-		echo "${MACHINE}-whatever-qnx4"
-		;;
-	    6*)
-		echo "${MACHINE}-whatever-qnx6"
-		;;
-	    *)
-		echo "${MACHINE}-whatever-qnx"
-		;;
-	esac
-	exit 0
 	;;
 
     Paragon*:*:*:*)
@@ -775,7 +760,11 @@ case "$GUESSOS" in
 	        OUT="hpux-ia64-cc"
              fi
 	elif [ $CPU_VERSION -ge 532 ]; then	# PA-RISC 2.x CPU
-	     OUT=${OUT:-"hpux-parisc2-${CC}"}
+	     # PA-RISC 2.0 is no longer supported as separate 32-bit
+	     # target. This is compensated for by run-time detection
+	     # in most critical assembly modules and taking advantage
+	     # of 2.0 architecture in PA-RISC 1.1 build.
+	     OUT=${OUT:-"hpux-parisc1_1-${CC}"}
 	     if [ $KERNEL_BITS -eq 64 -a "$CC" = "cc" ]; then
 		echo "WARNING! If you wish to build 64-bit library then you have to"
 		echo "         invoke '$THERE/Configure hpux64-parisc2-cc' *manually*."
@@ -784,11 +773,6 @@ case "$GUESSOS" in
 		  (trap "stty `stty -g`; exit 0" 2 0; stty -icanon min 0 time 50; read waste) <&1
 		fi
 	     fi
-	     # PA-RISC 2.0 is no longer supported as separate 32-bit
-	     # target. This is compensated for by run-time detection
-	     # in most critical assembly modules and taking advantage
-	     # of 2.0 architecture in PA-RISC 1.1 build.
-	     OUT="hpux-parisc1_1-${CC}"
 	elif [ $CPU_VERSION -ge 528 ]; then	# PA-RISC 1.1+ CPU
 	     OUT="hpux-parisc1_1-${CC}"
 	elif [ $CPU_VERSION -ge 523 ]; then	# PA-RISC 1.0 CPU
@@ -831,8 +815,6 @@ case "$GUESSOS" in
   # these are all covered by the catchall below
   i[3456]86-*-cygwin) OUT="Cygwin-x86" ;;
   *-*-cygwin) OUT="Cygwin-${MACHINE}" ;;
-  x86pc-*-qnx6) OUT="QNX6-i386" ;;
-  *-*-qnx6) OUT="QNX6" ;;
   x86-*-android|i?86-*-android) OUT="android-x86" ;;
   armv[7-9]*-*-android)
       OUT="android-armeabi"
@@ -886,7 +868,7 @@ case "$GUESSOS" in
   i386-*) options="$options 386" ;;
 esac
 
-for i in aes aria bf camellia cast des dh dsa ec hmac idea md2 md5 mdc2 rc2 rc4 rc5 ripemd rsa seed sha sm3 sm4
+for i in aes aria bf camellia cast des dh dsa ec hmac idea md2 md5 mdc2 rc2 rc4 rc5 ripemd rsa seed sha sm2 sm3 sm4
 do
   if [ ! -d $THERE/crypto/$i ]
   then
