@@ -94,19 +94,39 @@ typedef struct rand_drbg_method_st {
  * The state of a DRBG AES-CTR.
  */
 typedef struct rand_drbg_ctr_st {
-    AES_KEY ks;
+    EVP_CIPHER_CTX *ctx;
+    EVP_CIPHER_CTX *ctx_df;
+    const EVP_CIPHER *cipher;
     size_t keylen;
     unsigned char K[32];
     unsigned char V[16];
-    /* Temp variables used by derivation function */
-    AES_KEY df_ks;
-    AES_KEY df_kxks;
     /* Temporary block storage used by ctr_df */
     unsigned char bltmp[16];
     size_t bltmp_pos;
     unsigned char KX[48];
 } RAND_DRBG_CTR;
 
+
+/*
+ * The 'random pool' acts as a dumb container for collecting random
+ * input from various entropy sources. The pool has no knowledge about
+ * whether its randomness is fed into a legacy RAND_METHOD via RAND_add()
+ * or into a new style RAND_DRBG. It is the callers duty to 1) initialize the
+ * random pool, 2) pass it to the polling callbacks, 3) seed the RNG, and
+ * 4) cleanup the random pool again.
+ *
+ * The random pool contains no locking mechanism because its scope and
+ * lifetime is intended to be restricted to a single stack frame.
+ */
+struct rand_pool_st {
+    unsigned char *buffer;  /* points to the beginning of the random pool */
+    size_t len; /* current number of random bytes contained in the pool */
+
+    size_t min_len; /* minimum number of random bytes requested */
+    size_t max_len; /* maximum number of random bytes (allocated buffer size) */
+    size_t entropy; /* current entropy count in bits */
+    size_t requested_entropy; /* requested entropy count in bits */
+};
 
 /*
  * The state of all types of DRBGs, even though we only have CTR mode
@@ -117,6 +137,12 @@ struct rand_drbg_st {
     RAND_DRBG *parent;
     int secure; /* 1: allocated on the secure heap, 0: otherwise */
     int type; /* the nid of the underlying algorithm */
+    /*
+     * Stores the value of the rand_fork_count global as of when we last
+     * reseeded.  The DRG reseeds automatically whenever drbg->fork_count !=
+     * rand_fork_count.  Used to provide fork-safety and reseed this DRBG in
+     * the child process.
+     */
     int fork_count;
     unsigned short flags; /* various external flags */
 
@@ -203,7 +229,17 @@ struct rand_drbg_st {
 /* The global RAND method, and the global buffer and DRBG instance. */
 extern RAND_METHOD rand_meth;
 
-/* How often we've forked (only incremented in child). */
+/*
+ * A "generation count" of forks.  Incremented in the child process after a
+ * fork.  Since rand_fork_count is increment-only, and only ever written to in
+ * the child process of the fork, which is guaranteed to be single-threaded, no
+ * locking is needed for normal (read) accesses; the rest of pthread fork
+ * processing is assumed to introduce the necessary memory barriers.  Sibling
+ * children of a given parent will produce duplicate values, but this is not
+ * problematic because the reseeding process pulls input from the system CSPRNG
+ * and/or other global sources, so the siblings will end up generating
+ * different output streams.
+ */
 extern int rand_fork_count;
 
 /* DRBG helpers */

@@ -21,13 +21,12 @@ my $DQUOTE      = 0x0400;
 my $COMMENT     = 0x0080;
 my $FCOMMENT    = 0x0800;
 my $EOF         = 0x0008;
-my $HIGHBIT     = 0x1000;
 my @V_def;
 my @V_w32;
 
 my $v;
 my $c;
-foreach (0 .. 255) {
+foreach (0 .. 127) {
     $c = sprintf("%c", $_);
     $v = 0;
     $v |= $NUMBER      if $c =~ /[0-9]/;
@@ -40,7 +39,6 @@ foreach (0 .. 255) {
     $v |= $QUOTE       if $c =~ /['`"]/;         # for emacs: "`'
     $v |= $COMMENT     if $c =~ /\#/;
     $v |= $EOF         if $c =~ /\0/;
-    $v |= $HIGHBIT     if $c =~ /[\x80-\xff]/;
     push(@V_def, $v);
 
     $v = 0;
@@ -53,7 +51,6 @@ foreach (0 .. 255) {
     $v |= $DQUOTE      if $c =~ /["]/;           # for emacs: "
     $v |= $FCOMMENT    if $c =~ /;/;
     $v |= $EOF         if $c =~ /\0/;
-    $v |= $HIGHBIT     if $c =~ /[\x80-\xff]/;
     push(@V_w32, $v);
 }
 
@@ -84,44 +81,35 @@ print <<"EOF";
 #define CONF_COMMENT      $COMMENT
 #define CONF_FCOMMENT     $FCOMMENT
 #define CONF_EOF          $EOF
-#define CONF_HIGHBIT      $HIGHBIT
 #define CONF_ALPHA        (CONF_UPPER|CONF_LOWER)
 #define CONF_ALNUM        (CONF_ALPHA|CONF_NUMBER|CONF_UNDER)
 #define CONF_ALNUM_PUNCT  (CONF_ALPHA|CONF_NUMBER|CONF_UNDER|CONF_PUNCT)
 
-#define KEYTYPES(c)       ((const unsigned short *)((c)->meth_data))
 
-#ifndef CHARSET_EBCDIC
-# define CVT(a) ((a) & 0xFF)
-#else
-# define CVT(a) os_toascci[(a) & 0FF]
-#endif
-
-#define IS_COMMENT(c,a)     (KEYTYPES(c)[CVT(a)] & CONF_COMMENT)
-#define IS_FCOMMENT(c,a)    (KEYTYPES(c)[CVT(a)] & CONF_FCOMMENT)
-#define IS_EOF(c,a)         (KEYTYPES(c)[CVT(a)] & CONF_EOF)
-#define IS_ESC(c,a)         (KEYTYPES(c)[CVT(a)] & CONF_ESC)
-#define IS_NUMBER(c,a)      (KEYTYPES(c)[CVT(a)] & CONF_NUMBER)
-#define IS_WS(c,a)          (KEYTYPES(c)[CVT(a)] & CONF_WS)
-#define IS_ALNUM(c,a)       (KEYTYPES(c)[CVT(a)] & CONF_ALNUM)
-#define IS_ALNUM_PUNCT(c,a) (KEYTYPES(c)[CVT(a)] & CONF_ALNUM_PUNCT)
-#define IS_QUOTE(c,a)       (KEYTYPES(c)[CVT(a)] & CONF_QUOTE)
-#define IS_DQUOTE(c,a)      (KEYTYPES(c)[CVT(a)] & CONF_DQUOTE)
-#define IS_HIGHBIT(c,a)     (KEYTYPES(c)[CVT(a)] & CONF_HIGHBIT)
+#define IS_COMMENT(conf,c)     is_keytype(conf, c, CONF_COMMENT)
+#define IS_FCOMMENT(conf,c)    is_keytype(conf, c, CONF_FCOMMENT)
+#define IS_EOF(conf,c)         is_keytype(conf, c, CONF_EOF)
+#define IS_ESC(conf,c)         is_keytype(conf, c, CONF_ESC)
+#define IS_NUMBER(conf,c)      is_keytype(conf, c, CONF_NUMBER)
+#define IS_WS(conf,c)          is_keytype(conf, c, CONF_WS)
+#define IS_ALNUM(conf,c)       is_keytype(conf, c, CONF_ALNUM)
+#define IS_ALNUM_PUNCT(conf,c) is_keytype(conf, c, CONF_ALNUM_PUNCT)
+#define IS_QUOTE(conf,c)       is_keytype(conf, c, CONF_QUOTE)
+#define IS_DQUOTE(conf,c)      is_keytype(conf, c, CONF_DQUOTE)
 
 EOF
 
 my $i;
 
-print "static const unsigned short CONF_type_default[256] = {";
-for ($i = 0; $i < 256; $i++) {
+print "static const unsigned short CONF_type_default[128] = {";
+for ($i = 0; $i < 128; $i++) {
     print "\n   " if ($i % 8) == 0;
     printf " 0x%04X,", $V_def[$i];
 }
 print "\n};\n\n";
 
-print "static const unsigned short CONF_type_win32[256] = {";
-for ($i = 0; $i < 256; $i++) {
+print "static const unsigned short CONF_type_win32[128] = {";
+for ($i = 0; $i < 128; $i++) {
     print "\n   " if ($i % 8) == 0;
     printf " 0x%04X,", $V_w32[$i];
 }

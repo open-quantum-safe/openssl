@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2017 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2002-2018 The OpenSSL Project Authors. All Rights Reserved.
  * Copyright (c) 2002, Oracle and/or its affiliates. All rights reserved
  *
  * Licensed under the OpenSSL license (the "License").  You may not use
@@ -613,12 +613,14 @@ size_t EC_KEY_priv2buf(const EC_KEY *eckey, unsigned char **pbuf)
 {
     size_t len;
     unsigned char *buf;
+
     len = EC_KEY_priv2oct(eckey, NULL, 0);
     if (len == 0)
         return 0;
-    buf = OPENSSL_malloc(len);
-    if (buf == NULL)
+    if ((buf = OPENSSL_malloc(len)) == NULL) {
+        ECerr(EC_F_EC_KEY_PRIV2BUF, ERR_R_MALLOC_FAILURE);
         return 0;
+    }
     len = EC_KEY_priv2oct(eckey, buf, len);
     if (len == 0) {
         OPENSSL_free(buf);

@@ -24,6 +24,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include "internal/thread_once.h"
+#include "internal/dso_conf.h"
 #include "internal/dso.h"
 #include "internal/store.h"
 
@@ -539,18 +540,8 @@ void OPENSSL_cleanup(void)
  */
 int OPENSSL_init_crypto(uint64_t opts, const OPENSSL_INIT_SETTINGS *settings)
 {
-    static int stoperrset = 0;
-
     if (stopped) {
-        if (!stoperrset) {
-            /*
-             * We only ever set this once to avoid getting into an infinite
-             * loop where the error system keeps trying to init and fails so
-             * sets an error etc
-             */
-            stoperrset = 1;
-            CRYPTOerr(CRYPTO_F_OPENSSL_INIT_CRYPTO, ERR_R_INIT_FAIL);
-        }
+        CRYPTOerr(CRYPTO_F_OPENSSL_INIT_CRYPTO, ERR_R_INIT_FAIL);
         return 0;
     }
 
@@ -707,9 +698,10 @@ int OPENSSL_atexit(void (*handler)(void))
     }
 #endif
 
-    newhand = OPENSSL_malloc(sizeof(*newhand));
-    if (newhand == NULL)
+    if ((newhand = OPENSSL_malloc(sizeof(*newhand))) == NULL) {
+        CRYPTOerr(CRYPTO_F_OPENSSL_ATEXIT, ERR_R_MALLOC_FAILURE);
         return 0;
+    }
 
     newhand->handler = handler;
     newhand->next = stop_handlers;

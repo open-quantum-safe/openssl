@@ -88,12 +88,9 @@ DEPS={- join(" ", map { (my $x = $_) =~ s|\.o$|$depext|; $x; }
                   keys %{$unified_info{sources}}); -}
 {- output_on() if $disabled{makedepend}; "" -}
 GENERATED_MANDATORY={- join(" ", @{$unified_info{depends}->{""}} ) -}
-GENERATED={- join(" ",
-                  ( map { (my $x = $_) =~ s|\.[sS]$|\.asm|; $x }
-                    grep { defined $unified_info{generate}->{$_} }
-                    map { @{$unified_info{sources}->{$_}} }
-                    grep { /\.o$/ } keys %{$unified_info{sources}} ),
-                  ( grep { /\.h$/ } keys %{$unified_info{generate}} )) -}
+GENERATED={- # common0.tmpl provides @generated
+             join(" ", map { (my $x = $_) =~ s|\.[sS]$|.asm|; $x }
+                       @generated) -}
 
 INSTALL_LIBS={- join(" ", map { lib($_) } @{$unified_info{install}->{libraries}}) -}
 INSTALL_SHLIBS={- join(" ", map { shlib($_) } @{$unified_info{install}->{libraries}}) -}
@@ -207,10 +204,10 @@ CNF_ASFLAGS={- join(' ', $target{asflags} || (),
                          @{$config{asflags}}) -}
 CNF_CPPFLAGS={- our $cppfags2 =
                     join(' ', $target{cppflags} || (),
-                              (map { quotify_l("-D".$_) } @{$target{defines}},
-                                                          @{$config{defines}}),
-                              (map { quotify_l("-I".$_) } @{$target{includes}},
-                                                          @{$config{includes}}),
+                              (map { '-D'.quotify1($_) } @{$target{defines}},
+                                                         @{$config{defines}}),
+                              (map { '-I'.quotify1($_) } @{$target{includes}},
+                                                         @{$config{includes}}),
                               @{$config{cppflags}}) -}
 CNF_CFLAGS={- join(' ', $target{cflags} || (),
                         @{$config{cflags}}) -}
@@ -233,12 +230,12 @@ LIB_ASFLAGS={- join(' ', $target{lib_asflags} || (),
 LIB_CPPFLAGS={- our $lib_cppflags =
                 join(' ', $target{lib_cppflags} || (),
                           $target{shared_cppflag} || (),
-                          (map { quotify_l("-D".$_) }
+                          (map { '-D'.quotify1($_) }
                                @{$target{lib_defines}},
                                @{$target{shared_defines}},
                                @{$config{lib_defines}},
                                @{$config{shared_defines}}),
-                          (map { quotify_l("-I".$_) }
+                          (map { '-I'.quotify1($_) }
                                @{$target{lib_includes}},
                                @{$target{shared_includes}},
                                @{$config{lib_includes}},
@@ -246,7 +243,7 @@ LIB_CPPFLAGS={- our $lib_cppflags =
                           @{$config{lib_cppflags}},
                           @{$config{shared_cppflag}});
                 join(' ', $lib_cppflags,
-                          (map { quotify_l("-D".$_) }
+                          (map { '-D'.quotify1($_) }
                                "OPENSSLDIR=\"$openssldir\"",
                                "ENGINESDIR=\"$enginesdir\""),
                           '$(CNF_CPPFLAGS)', '$(CPPFLAGS)') -}
@@ -322,6 +319,11 @@ build_apps build_tests: build_programs
 # Convenience target to prebuild all generated files, not just the mandatory
 # ones
 build_all_generated: $(GENERATED_MANDATORY) $(GENERATED)
+	@rem {- output_off() if $disabled{makedepend}; "" -}
+	@echo "Warning: consider configuring with no-makedepend, because if"
+	@echo "         target system doesn't have $(PERL),"
+	@echo "         then make will fail..."
+	@rem {- output_on() if $disabled{makedepend}; "" -}
 
 test: tests
 {- dependmagic('tests'); -}: build_programs_nodep build_engines_nodep
@@ -351,30 +353,19 @@ install: install_sw install_ssldirs install_docs
 uninstall: uninstall_docs uninstall_sw
 
 libclean:
-	"$(PERL)" -e "map { m/(.*)\.dll$$/; unlink glob """$$1.*"""; } @ARGV" $(SHLIBS)
-	"$(PERL)" -e "map { m/(.*)\.dll$$/; unlink glob """apps/$$1.*"""; } @ARGV" $(SHLIBS)
-	"$(PERL)" -e "map { m/(.*)\.dll$$/; unlink glob """test/$$1.*"""; } @ARGV" $(SHLIBS)
-	"$(PERL)" -e "map { m/(.*)\.dll$$/; unlink glob """fuzz/$$1.*"""; } @ARGV" $(SHLIBS)
-	-del /Q /F $(LIBS)
-	-del /Q ossl_static.pdb
+	"$(PERL)" -e "map { m/(.*)\.dll$$/; unlink glob """{.,apps,test,fuzz}/$$1.*"""; } @ARGV" $(SHLIBS)
+	-del /Q /F $(LIBS) libcrypto.* libssl.* ossl_static.pdb
 
 clean: libclean
 	{- join("\n\t", map { "-del /Q /F $_" } @PROGRAMS) -}
 	-del /Q /F $(ENGINES)
 	-del /Q /F $(SCRIPTS)
+	-del /Q /F $(GENERATED_MANDATORY)
 	-del /Q /F $(GENERATED)
-	-del /Q /S /F *.d
-	-del /Q /S /F *.obj
-	-del /Q /S /F *.pdb
-	-del /Q /F *.exp
-	-del /Q /F apps\*.exp
-	-del /Q /F engines\*.exp
-	-del /Q /S /F engines\*.ilk
+	-del /Q /S /F *.d *.obj *.pdb *.exp *.ilk *.manifest
 	-del /Q /S /F engines\*.lib
-	-del /Q /S /F apps\*.lib
-	-del /Q /S /F engines\*.manifest
-	-del /Q /S /F apps\*.manifest
-	-del /Q /S /F test\*.manifest
+	-del /Q /S /F apps\*.lib apps\*.rc apps\*.res
+	-rmdir /Q /S test\test-runs
 
 distclean: clean
 	-del /Q /F configdata.pm
@@ -595,6 +586,11 @@ EOF
          return <<"EOF";
 $obj$objext: $deps
 	\$(AS) $asflags \$(ASOUTFLAG)\$\@ $srcs
+EOF
+     } elsif ($srcs[0] =~ /.S$/) {
+         return <<"EOF";
+$obj$objext: $deps
+	\$(CC) /EP /D__ASSEMBLER__ $cflags $srcs > \$@.asm && \$(AS) $asflags \$(ASOUTFLAG)\$\@ \$@.asm
 EOF
      }
      return <<"EOF"	if (!$disabled{makedepend});

@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include <time.h>
+#include <assert.h>
 #include "../ssl_locl.h"
 #include "statem_locl.h"
 #include <openssl/buffer.h>
@@ -1198,14 +1199,14 @@ int tls_construct_client_hello(SSL *s, WPACKET *pkt)
             sess_id_len = 0;
         }
     } else {
+        assert(s->session->session_id_length <= sizeof(s->session->session_id));
         sess_id_len = s->session->session_id_length;
         if (s->version == TLS1_3_VERSION) {
             s->tmp_session_id_len = sess_id_len;
             memcpy(s->tmp_session_id, s->session->session_id, sess_id_len);
         }
     }
-    if (sess_id_len > sizeof(s->session->session_id)
-            || !WPACKET_start_sub_packet_u8(pkt)
+    if (!WPACKET_start_sub_packet_u8(pkt)
             || (sess_id_len != 0 && !WPACKET_memcpy(pkt, session_id,
                                                     sess_id_len))
             || !WPACKET_close(pkt)) {
@@ -1897,7 +1898,7 @@ MSG_PROCESS_RETURN tls_process_server_certificate(SSL *s, PACKET *pkt)
      * set. The *documented* interface remains the same.
      */
     if (s->verify_mode != SSL_VERIFY_NONE && i <= 0) {
-        SSLfatal(s, ssl_verify_alarm_type(s->verify_result),
+        SSLfatal(s, ssl_x509err2alert(s->verify_result),
                  SSL_F_TLS_PROCESS_SERVER_CERTIFICATE,
                  SSL_R_CERTIFICATE_VERIFY_FAILED);
         goto err;
@@ -2191,7 +2192,8 @@ static int tls_process_ske_ecdhe(SSL *s, PACKET *pkt, EVP_PKEY **pkey)
      * Check curve is named curve type and one of our preferences, if not
      * server has sent an invalid curve.
      */
-    if (curve_type != NAMED_CURVE_TYPE || !tls1_check_group_id(s, curve_id)) {
+    if (curve_type != NAMED_CURVE_TYPE
+            || !tls1_check_group_id(s, curve_id, 1)) {
         SSLfatal(s, SSL_AD_ILLEGAL_PARAMETER, SSL_F_TLS_PROCESS_SKE_ECDHE,
                  SSL_R_WRONG_CURVE);
         return 0;

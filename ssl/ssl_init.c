@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2016-2018 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the OpenSSL license (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -106,7 +106,6 @@ DEFINE_RUN_ONCE_STATIC(ossl_init_ssl_base)
     fprintf(stderr, "OPENSSL_INIT: ossl_init_ssl_base: "
             "SSL_add_ssl_module()\n");
 #endif
-    SSL_add_ssl_module();
     /*
      * We ignore an error return here. Not much we can do - but not that bad
      * either. We can still safely continue.
@@ -195,11 +194,16 @@ int OPENSSL_init_ssl(uint64_t opts, const OPENSSL_INIT_SETTINGS * settings)
         return 0;
     }
 
-    if (!RUN_ONCE(&ssl_base, ossl_init_ssl_base))
+    if (!OPENSSL_init_crypto(opts
+#ifndef OPENSSL_NO_AUTOLOAD_CONFIG
+                             | OPENSSL_INIT_LOAD_CONFIG
+#endif
+                             | OPENSSL_INIT_ADD_ALL_CIPHERS
+                             | OPENSSL_INIT_ADD_ALL_DIGESTS,
+                             settings))
         return 0;
 
-    if (!OPENSSL_init_crypto(opts | OPENSSL_INIT_ADD_ALL_CIPHERS
-                             | OPENSSL_INIT_ADD_ALL_DIGESTS, settings))
+    if (!RUN_ONCE(&ssl_base, ossl_init_ssl_base))
         return 0;
 
     if ((opts & OPENSSL_INIT_NO_LOAD_SSL_STRINGS)

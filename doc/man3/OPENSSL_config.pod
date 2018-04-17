@@ -48,6 +48,17 @@ application calls OPENSSL_config() it doesn't need to know or care about
 ENGINE control operations because they can be performed by editing a
 configuration file.
 
+=head1 ENVIRONMENT
+
+=over 4
+
+=item B<OPENSSL_CONF>
+
+The path to the config file.
+Ignored in set-user-ID and set-group-ID programs.
+
+=back
+
 =head1 RETURN VALUES
 
 Neither OPENSSL_config() nor OPENSSL_no_config() return a value.
@@ -64,7 +75,7 @@ deprecated in OpenSSL 1.1.0 by OPENSSL_init_crypto().
 
 =head1 COPYRIGHT
 
-Copyright 2004-2016 The OpenSSL Project Authors. All Rights Reserved.
+Copyright 2004-2018 The OpenSSL Project Authors. All Rights Reserved.
 
 Licensed under the OpenSSL license (the "License").  You may not use
 this file except in compliance with the License.  You can obtain a copy

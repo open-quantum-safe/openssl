@@ -70,7 +70,8 @@ size_t rand_pool_acquire_entropy(RAND_POOL *pool)
             BCRYPT_USE_SYSTEM_PREFERRED_RNG) == STATUS_SUCCESS)
             bytes = bytes_needed;
 
-        entropy_available = rand_pool_add_end(pool, bytes, 8 * bytes);
+        rand_pool_add_end(pool, bytes, 8 * bytes);
+        entropy_available = rand_pool_entropy_available(pool);
     }
     if (entropy_available > 0)
         return entropy_available;
@@ -88,7 +89,8 @@ size_t rand_pool_acquire_entropy(RAND_POOL *pool)
             CryptReleaseContext(hProvider, 0);
         }
 
-        entropy_available = rand_pool_add_end(pool, bytes, 8 * bytes);
+        rand_pool_add_end(pool, bytes, 8 * bytes);
+        entropy_available = rand_pool_entropy_available(pool);
     }
     if (entropy_available > 0)
         return entropy_available;
@@ -106,13 +108,52 @@ size_t rand_pool_acquire_entropy(RAND_POOL *pool)
 
             CryptReleaseContext(hProvider, 0);
         }
-        entropy_available = rand_pool_add_end(pool, bytes, 8 * bytes);
+        rand_pool_add_end(pool, bytes, 8 * bytes);
+        entropy_available = rand_pool_entropy_available(pool);
     }
     if (entropy_available > 0)
         return entropy_available;
 # endif
 
     return rand_pool_entropy_available(pool);
+}
+
+
+int rand_pool_add_nonce_data(RAND_POOL *pool)
+{
+    struct {
+        DWORD pid;
+        DWORD tid;
+        FILETIME time;
+    } data = { 0 };
+
+    /*
+     * Add process id, thread id, and a high resolution timestamp to
+     * ensure that the nonce is unique whith high probability for
+     * different process instances.
+     */
+    data.pid = GetCurrentProcessId();
+    data.tid = GetCurrentThreadId();
+    GetSystemTimeAsFileTime(&data.time);
+
+    return rand_pool_add(pool, (unsigned char *)&data, sizeof(data), 0);
+}
+
+int rand_pool_add_additional_data(RAND_POOL *pool)
+{
+    struct {
+        DWORD tid;
+        LARGE_INTEGER time;
+    } data = { 0 };
+
+    /*
+     * Add some noise from the thread id and a high resolution timer.
+     * The thread id adds a little randomness if the drbg is accessed
+     * concurrently (which is the case for the <master> drbg).
+     */
+    data.tid = GetCurrentThreadId();
+    QueryPerformanceCounter(&data.time);
+    return rand_pool_add(pool, (unsigned char *)&data, sizeof(data), 0);
 }
 
 # if OPENSSL_API_COMPAT < 0x10100000L

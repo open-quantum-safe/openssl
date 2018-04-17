@@ -1,5 +1,5 @@
 /*
- * Copyright 2007-2017 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2007-2018 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the OpenSSL license (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -12,6 +12,7 @@
 #include <openssl/x509.h>
 #include <openssl/x509v3.h>
 #include <openssl/evp.h>
+#include <openssl/err.h>
 #include "internal/siphash.h"
 #include "siphash_local.h"
 #include "internal/evp_int.h"
@@ -27,9 +28,10 @@ static int pkey_siphash_init(EVP_PKEY_CTX *ctx)
 {
     SIPHASH_PKEY_CTX *pctx;
 
-    pctx = OPENSSL_zalloc(sizeof(*pctx));
-    if (pctx == NULL)
+    if ((pctx = OPENSSL_zalloc(sizeof(*pctx))) == NULL) {
+        CRYPTOerr(CRYPTO_F_PKEY_SIPHASH_INIT, ERR_R_MALLOC_FAILURE);
         return 0;
+    }
     pctx->ktmp.type = V_ASN1_OCTET_STRING;
 
     EVP_PKEY_CTX_set_data(ctx, pctx);

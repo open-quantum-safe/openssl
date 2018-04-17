@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2017 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2000-2018 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the OpenSSL license (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -133,9 +133,10 @@ int asn1_enc_save(ASN1_VALUE **pval, const unsigned char *in, int inlen,
         return 1;
 
     OPENSSL_free(enc->enc);
-    enc->enc = OPENSSL_malloc(inlen);
-    if (enc->enc == NULL)
+    if ((enc->enc = OPENSSL_malloc(inlen)) == NULL) {
+        ASN1err(ASN1_F_ASN1_ENC_SAVE, ERR_R_MALLOC_FAILURE);
         return 0;
+    }
     memcpy(enc->enc, in, inlen);
     enc->len = inlen;
     enc->modified = 0;

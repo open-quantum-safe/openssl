@@ -2100,7 +2100,17 @@ int tls_handle_alpn(SSL *s)
                 s->ext.early_data_ok = 0;
 
                 if (!s->hit) {
-                    /* If a new session update it with the new ALPN value */
+                    /*
+                     * This is a new session and so alpn_selected should have
+                     * been initialised to NULL. We should update it with the
+                     * selected ALPN.
+                     */
+                    if (!ossl_assert(s->session->ext.alpn_selected == NULL)) {
+                        SSLfatal(s, SSL_AD_INTERNAL_ERROR,
+                                 SSL_F_TLS_HANDLE_ALPN,
+                                 ERR_R_INTERNAL_ERROR);
+                        return 0;
+                    }
                     s->session->ext.alpn_selected = OPENSSL_memdup(selected,
                                                                    selected_len);
                     if (s->session->ext.alpn_selected == NULL) {
@@ -2471,6 +2481,12 @@ int tls_construct_server_key_exchange(SSL *s, WPACKET *pkt)
         }
 
         dh = EVP_PKEY_get0_DH(s->s3->tmp.pkey);
+        if (dh == NULL) {
+            SSLfatal(s, SSL_AD_INTERNAL_ERROR,
+                     SSL_F_TLS_CONSTRUCT_SERVER_KEY_EXCHANGE,
+                     ERR_R_INTERNAL_ERROR);
+            goto err;
+        }
 
         EVP_PKEY_free(pkdh);
         pkdh = NULL;
@@ -2926,7 +2942,7 @@ static int tls_process_cke_rsa(SSL *s, PACKET *pkt)
      * fails. See https://tools.ietf.org/html/rfc5246#section-7.4.7.1
      */
 
-    if (RAND_bytes(rand_premaster_secret,
+    if (RAND_priv_bytes(rand_premaster_secret,
                       sizeof(rand_premaster_secret)) <= 0) {
         SSLfatal(s, SSL_AD_INTERNAL_ERROR, SSL_F_TLS_PROCESS_CKE_RSA,
                  ERR_R_INTERNAL_ERROR);
@@ -3223,11 +3239,9 @@ static int tls_process_cke_gost(SSL *s, PACKET *pkt)
     const unsigned char *start;
     size_t outlen = 32, inlen;
     unsigned long alg_a;
-    int Ttag, Tclass;
-    long Tlen;
-    size_t sess_key_len;
-    const unsigned char *data;
+    unsigned int asn1id, asn1len;
     int ret = 0;
+    PACKET encdata;
 
     /* Get our certificate private key */
     alg_a = s->s3->tmp.new_cipher->algorithm_auth;
@@ -3269,22 +3283,42 @@ static int tls_process_cke_gost(SSL *s, PACKET *pkt)
             ERR_clear_error();
     }
     /* Decrypt session key */
-    sess_key_len = PACKET_remaining(pkt);
-    if (!PACKET_get_bytes(pkt, &data, sess_key_len)) {
-        SSLfatal(s, SSL_AD_INTERNAL_ERROR, SSL_F_TLS_PROCESS_CKE_GOST,
-                 ERR_R_INTERNAL_ERROR);
-        goto err;
-    }
-    /* TODO(size_t): Convert this function */
-    if (ASN1_get_object((const unsigned char **)&data, &Tlen, &Ttag,
-                        &Tclass, (long)sess_key_len) != V_ASN1_CONSTRUCTED
-        || Ttag != V_ASN1_SEQUENCE || Tclass != V_ASN1_UNIVERSAL) {
+    if (!PACKET_get_1(pkt, &asn1id)
+            || asn1id != (V_ASN1_SEQUENCE | V_ASN1_CONSTRUCTED)
+            || !PACKET_peek_1(pkt, &asn1len)) {
         SSLfatal(s, SSL_AD_DECODE_ERROR, SSL_F_TLS_PROCESS_CKE_GOST,
                  SSL_R_DECRYPTION_FAILED);
         goto err;
     }
-    start = data;
-    inlen = Tlen;
+    if (asn1len == 0x81) {
+        /*
+         * Long form length. Should only be one byte of length. Anything else
+         * isn't supported.
+         * We did a successful peek before so this shouldn't fail
+         */
+        if (!PACKET_forward(pkt, 1)) {
+            SSLfatal(s, SSL_AD_INTERNAL_ERROR, SSL_F_TLS_PROCESS_CKE_GOST,
+                     SSL_R_DECRYPTION_FAILED);
+            goto err;
+        }
+    } else  if (asn1len >= 0x80) {
+        /*
+         * Indefinite length, or more than one long form length bytes. We don't
+         * support it
+         */
+        SSLfatal(s, SSL_AD_DECODE_ERROR, SSL_F_TLS_PROCESS_CKE_GOST,
+                 SSL_R_DECRYPTION_FAILED);
+        goto err;
+    } /* else short form length */
+
+    if (!PACKET_as_length_prefixed_1(pkt, &encdata)) {
+        SSLfatal(s, SSL_AD_DECODE_ERROR, SSL_F_TLS_PROCESS_CKE_GOST,
+                 SSL_R_DECRYPTION_FAILED);
+        goto err;
+    }
+    inlen = PACKET_remaining(&encdata);
+    start = PACKET_data(&encdata);
+
     if (EVP_PKEY_decrypt(pkey_ctx, premaster_secret, &outlen, start,
                          inlen) <= 0) {
         SSLfatal(s, SSL_AD_DECODE_ERROR, SSL_F_TLS_PROCESS_CKE_GOST,
@@ -3553,7 +3587,7 @@ MSG_PROCESS_RETURN tls_process_client_certificate(SSL *s, PACKET *pkt)
         EVP_PKEY *pkey;
         i = ssl_verify_cert_chain(s, sk);
         if (i <= 0) {
-            SSLfatal(s, ssl_verify_alarm_type(s->verify_result),
+            SSLfatal(s, ssl_x509err2alert(s->verify_result),
                      SSL_F_TLS_PROCESS_CLIENT_CERTIFICATE,
                      SSL_R_CERTIFICATE_VERIFY_FAILED);
             goto err;
@@ -3688,6 +3722,23 @@ int tls_construct_new_session_ticket(SSL *s, WPACKET *pkt)
     } age_add_u;
 
     if (SSL_IS_TLS13(s)) {
+        if (s->post_handshake_auth != SSL_PHA_EXT_RECEIVED) {
+            void (*cb) (const SSL *ssl, int type, int val) = NULL;
+
+            /*
+             * This is the first session ticket we've sent. In the state
+             * machine we "cheated" and tacked this onto the end of the first
+             * handshake. From an info callback perspective this should appear
+             * like the start of a new handshake.
+             */
+            if (s->info_callback != NULL)
+                cb = s->info_callback;
+            else if (s->ctx->info_callback != NULL)
+                cb = s->ctx->info_callback;
+            if (cb != NULL)
+                cb(s, SSL_CB_HANDSHAKE_START, 1);
+        }
+
         if (!ssl_generate_session_id(s, s->session)) {
             /* SSLfatal() already called */
             goto err;

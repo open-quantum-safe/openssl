@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2016 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2009-2018 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the OpenSSL license (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -188,9 +188,10 @@ static int kek_unwrap_key(unsigned char *out, size_t *outlen,
         /* Invalid size */
         return 0;
     }
-    tmp = OPENSSL_malloc(inlen);
-    if (tmp == NULL)
+    if ((tmp = OPENSSL_malloc(inlen)) == NULL) {
+        CMSerr(CMS_F_KEK_UNWRAP_KEY, ERR_R_MALLOC_FAILURE);
         return 0;
+    }
     /* setup IV by decrypting last two blocks */
     if (!EVP_DecryptUpdate(ctx, tmp + inlen - 2 * blocklen, &outl,
                            in + inlen - 2 * blocklen, blocklen * 2)

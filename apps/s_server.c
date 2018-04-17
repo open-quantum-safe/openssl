@@ -236,6 +236,7 @@ typedef struct srpsrvparm_st {
     SRP_VBASE *vb;
     SRP_user_pwd *user;
 } srpsrvparm;
+static srpsrvparm srp_callback_parm;
 
 /*
  * This callback pretends to require some asynchronous logic in order to
@@ -722,13 +723,6 @@ static int not_resumable_sess_cb(SSL *s, int is_forward_secure)
     return is_forward_secure;
 }
 
-#ifndef OPENSSL_NO_SRP
-static srpsrvparm srp_callback_parm;
-#endif
-#ifndef OPENSSL_NO_SRTP
-static char *srtp_profiles = NULL;
-#endif
-
 typedef enum OPTION_choice {
     OPT_ERR = -1, OPT_EOF = 0, OPT_HELP, OPT_ENGINE,
     OPT_4, OPT_6, OPT_ACCEPT, OPT_PORT, OPT_UNIX, OPT_UNLINK, OPT_NACCEPT,
@@ -1024,6 +1018,7 @@ int s_server_main(int argc, char *argv[])
     char *srpuserseed = NULL;
     char *srp_verifier_file = NULL;
 #endif
+    char *srtp_profiles = NULL;
     int min_version = 0, max_version = 0, prot_opt = 0, no_prot_opt = 0;
     int s_server_verify = SSL_VERIFY_NONE;
     int s_server_session_id_context = 1; /* anything will do */
@@ -1529,9 +1524,7 @@ int s_server_main(int argc, char *argv[])
             alpn_in = opt_arg();
             break;
         case OPT_SRTP_PROFILES:
-#ifndef OPENSSL_NO_SRTP
             srtp_profiles = opt_arg();
-#endif
             break;
         case OPT_KEYMATEXPORT:
             keymatexportlabel = opt_arg();
@@ -2102,8 +2095,6 @@ int s_server_main(int argc, char *argv[])
     if (max_early_data >= 0)
         SSL_CTX_set_max_early_data(ctx, max_early_data);
 
-    BIO_printf(bio_s_out, "ACCEPT\n");
-    (void)BIO_flush(bio_s_out);
     if (rev)
         server_cb = rev_body;
     else if (www)
@@ -2116,7 +2107,7 @@ int s_server_main(int argc, char *argv[])
         unlink(host);
 #endif
     do_server(&accept_socket, host, port, socket_family, socket_type, protocol,
-              server_cb, context, naccept);
+              server_cb, context, naccept, bio_s_out);
     print_stats(bio_s_out, ctx);
     ret = 0;
  end:
@@ -2680,9 +2671,6 @@ static int sv_body(int s, int stype, int prot, unsigned char *context)
     }
     BIO_printf(bio_s_out, "CONNECTION CLOSED\n");
     OPENSSL_clear_free(buf, bufsize);
-    if (ret >= 0)
-        BIO_printf(bio_s_out, "ACCEPT\n");
-    (void)BIO_flush(bio_s_out);
     return ret;
 }
 
@@ -3291,8 +3279,6 @@ static int www_body(int s, int stype, int prot, unsigned char *context)
     SSL_set_shutdown(con, SSL_SENT_SHUTDOWN | SSL_RECEIVED_SHUTDOWN);
 
  err:
-    if (ret >= 0)
-        BIO_printf(bio_s_out, "ACCEPT\n");
     OPENSSL_free(buf);
     BIO_free_all(io);
     return ret;

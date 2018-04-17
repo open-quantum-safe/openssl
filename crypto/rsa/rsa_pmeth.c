@@ -1,5 +1,5 @@
 /*
- * Copyright 2006-2017 The OpenSSL Project Authors. All Rights Reserved.
+ * Copyright 2006-2018 The OpenSSL Project Authors. All Rights Reserved.
  *
  * Licensed under the OpenSSL license (the "License").  You may not use
  * this file except in compliance with the License.  You can obtain a copy
@@ -101,9 +101,10 @@ static int setup_tbuf(RSA_PKEY_CTX *ctx, EVP_PKEY_CTX *pk)
 {
     if (ctx->tbuf != NULL)
         return 1;
-    ctx->tbuf = OPENSSL_malloc(EVP_PKEY_size(pk->pkey));
-    if (ctx->tbuf == NULL)
+    if ((ctx->tbuf = OPENSSL_malloc(EVP_PKEY_size(pk->pkey))) == NULL) {
+        RSAerr(RSA_F_SETUP_TBUF, ERR_R_MALLOC_FAILURE);
         return 0;
+    }
     return 1;
 }
 
