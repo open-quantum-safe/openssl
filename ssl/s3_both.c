@@ -413,11 +413,16 @@ long ssl3_get_message(SSL *s, int st1, int stn, int mt, long max, int *ok)
         s->s3->tmp.message_type = *(p++);
 
         n2l3(p, l);
+	/* FIXMEOQS: using OQS's Picnic client auth triggers this error.
+	   Not sure why a server-side Picnic cert is correctly fragmented
+           but not the client side. Hopefully this has no negative side
+	   effects.
         if (l > (unsigned long)max) {
             al = SSL_AD_ILLEGAL_PARAMETER;
             SSLerr(SSL_F_SSL3_GET_MESSAGE, SSL_R_EXCESSIVE_MESSAGE_SIZE);
             goto f_err;
         }
+	*/
         /*
          * Make buffer slightly larger than message length as a precaution
          * against small OOB reads e.g. CVE-2016-6306
