@@ -146,7 +146,7 @@ int init_client(int *sock, const char *host, const char *port,
         }
 #endif
 
-        if (!BIO_connect(*sock, BIO_ADDRINFO_address(ai), 0)) {
+        if (!BIO_connect(*sock, BIO_ADDRINFO_address(ai), BIO_SOCK_NODELAY)) {
             BIO_closesocket(*sock);
             *sock = INVALID_SOCKET;
             continue;
@@ -211,7 +211,7 @@ int do_server(int *accept_sock, const char *host, const char *port,
     int i;
     BIO_ADDRINFO *res = NULL;
     const BIO_ADDRINFO *next;
-    int sock_family, sock_type, sock_protocol;
+    int sock_family, sock_type, sock_protocol, sock_port;
     const BIO_ADDR *sock_address;
     int sock_options = BIO_SOCK_REUSEADDR;
     int ret = 0;
@@ -280,10 +280,13 @@ int do_server(int *accept_sock, const char *host, const char *port,
     }
 #endif
 
+    sock_port = BIO_ADDR_rawport(sock_address);
+
     BIO_ADDRINFO_free(res);
     res = NULL;
 
-    {
+    if (sock_port == 0) {
+        /* dynamically allocated port, report which one */
         union BIO_sock_info_u info;
         char *hostname = NULL;
         char *service = NULL;
@@ -309,6 +312,9 @@ int do_server(int *accept_sock, const char *host, const char *port,
             ERR_print_errors(bio_err);
             goto end;
         }
+    } else {
+        (void)BIO_printf(bio_s_out, "ACCEPT\n");
+        (void)BIO_flush(bio_s_out);
     }
 
     if (accept_sock != NULL)
@@ -330,20 +336,8 @@ int do_server(int *accept_sock, const char *host, const char *port,
                 BIO_closesocket(asock);
                 break;
             }
+            BIO_set_tcp_ndelay(sock, 1);
             i = (*cb)(sock, type, protocol, context);
-
-            /*
-             * Give the socket time to send its last data before we close it.
-             * No amount of setting SO_LINGER etc on the socket seems to
-             * persuade Windows to send the data before closing the socket...
-             * but sleeping for a short time seems to do it (units in ms)
-             * TODO: Find a better way to do this
-             */
-#if defined(OPENSSL_SYS_WINDOWS)
-            Sleep(50);
-#elif defined(OPENSSL_SYS_CYGWIN)
-            usleep(50000);
-#endif
 
             /*
              * If we ended with an alert being sent, but still with data in the

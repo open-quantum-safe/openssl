@@ -23,54 +23,15 @@ use TLSProxy::CertificateVerify;
 use TLSProxy::ServerKeyExchange;
 use TLSProxy::NewSessionTicket;
 
-my $have_IPv6 = 0;
+my $have_IPv6;
 my $IP_factory;
 
-my $is_tls13 = 0;
-my $ciphersuite = undef;
-
-sub new
+BEGIN
 {
-    my $class = shift;
-    my ($filter,
-        $execute,
-        $cert,
-        $debug) = @_;
-
-    my $self = {
-        #Public read/write
-        proxy_addr => "localhost",
-        server_addr => "localhost",
-        filter => $filter,
-        serverflags => "",
-        clientflags => "",
-        serverconnects => 1,
-        reneg => 0,
-        sessionfile => undef,
-
-        #Public read
-        proxy_port => 0,
-        server_port => 0,
-        serverpid => 0,
-        clientpid => 0,
-        execute => $execute,
-        cert => $cert,
-        debug => $debug,
-        cipherc => "",
-        ciphersuitesc => "",
-        ciphers => "AES128-SHA",
-        ciphersuitess => "TLS_AES_128_GCM_SHA256",
-        flight => -1,
-        direction => -1,
-        partial => ["", ""],
-        record_list => [],
-        message_list => [],
-    };
-
     # IO::Socket::IP is on the core module list, IO::Socket::INET6 isn't.
     # However, IO::Socket::INET6 is older and is said to be more widely
     # deployed for the moment, and may have less bugs, so we try the latter
-    # first, then fall back on the code modules.  Worst case scenario, we
+    # first, then fall back on the core modules.  Worst case scenario, we
     # fall back to IO::Socket::INET, only supports IPv4.
     eval {
         require IO::Socket::INET6;
@@ -101,8 +62,50 @@ sub new
             $have_IPv6 = 1;
         } else {
             $IP_factory = sub { IO::Socket::INET->new(@_); };
+            $have_IPv6 = 0;
         }
     }
+}
+
+my $is_tls13 = 0;
+my $ciphersuite = undef;
+
+sub new
+{
+    my $class = shift;
+    my ($filter,
+        $execute,
+        $cert,
+        $debug) = @_;
+
+    my $self = {
+        #Public read/write
+        proxy_addr => $have_IPv6 ? "[::1]" : "127.0.0.1",
+        filter => $filter,
+        serverflags => "",
+        clientflags => "",
+        serverconnects => 1,
+        reneg => 0,
+        sessionfile => undef,
+
+        #Public read
+        proxy_port => 0,
+        server_port => 0,
+        serverpid => 0,
+        clientpid => 0,
+        execute => $execute,
+        cert => $cert,
+        debug => $debug,
+        cipherc => "",
+        ciphersuitesc => "",
+        ciphers => "AES128-SHA",
+        ciphersuitess => "TLS_AES_128_GCM_SHA256",
+        flight => -1,
+        direction => -1,
+        partial => ["", ""],
+        record_list => [],
+        message_list => [],
+    };
 
     # Create the Proxy socket
     my $proxaddr = $self->{proxy_addr};
@@ -113,11 +116,16 @@ sub new
         Proto       => "tcp",
         Listen      => SOMAXCONN,
        );
-    $self->{proxy_sock} = $IP_factory->(@proxyargs);
 
-    if ($self->{proxy_sock}) {
-        $self->{proxy_port} = $self->{proxy_sock}->sockport();
-        print "Proxy started on port ".$self->{proxy_port}."\n";
+    if (my $sock = $IP_factory->(@proxyargs)) {
+        $self->{proxy_sock} = $sock;
+        $self->{proxy_port} = $sock->sockport();
+        $self->{proxy_addr} = $sock->sockhost();
+        $self->{proxy_addr} =~ s/(.*:.*)/[$1]/;
+        print "Proxy started on port ",
+              "$self->{proxy_addr}:$self->{proxy_port}\n";
+        # use same address for s_server
+        $self->{server_addr} = $self->{proxy_addr};
     } else {
         warn "Failed creating proxy socket (".$proxaddr.",0): $!\n";
     }
@@ -189,10 +197,16 @@ sub connect_to_server
 
     $servaddr =~ s/[\[\]]//g; # Remove [ and ]
 
-    $self->{server_sock} = $IP_factory->(PeerAddr => $servaddr,
-                                         PeerPort => $self->{server_port},
-                                         Proto => 'tcp')
-                           or die "unable to connect: $!\n";
+    my $sock = $IP_factory->(PeerAddr => $servaddr,
+                             PeerPort => $self->{server_port},
+                             Proto => 'tcp');
+    if (!defined($sock)) {
+        my $err = $!;
+        kill(3, $self->{real_serverpid});
+        die "unable to connect: $err\n";
+    }
+
+    $self->{server_sock} = $sock;
 }
 
 sub start
@@ -206,11 +220,9 @@ sub start
 
     my $execcmd = $self->execute
         ." s_server -max_protocol TLSv1.3 -no_comp -rev -engine ossltest"
-        ." -accept 0 -cert ".$self->cert." -cert2 ".$self->cert
+        ." -accept $self->{server_addr}:0"
+        ." -cert ".$self->cert." -cert2 ".$self->cert
         ." -naccept ".$self->serverconnects;
-    unless ($self->supports_IPv6) {
-        $execcmd .= " -4";
-    }
     if ($self->ciphers ne "") {
         $execcmd .= " -cipher ".$self->ciphers;
     }
@@ -227,7 +239,7 @@ sub start
     open(my $savedin, "<&STDIN");
 
     # Temporarily replace STDIN so that sink process can inherit it...
-    $pid = open(STDIN, "$execcmd |") or die "Failed to $execcmd: $!\n";
+    $pid = open(STDIN, "$execcmd 2>&1 |") or die "Failed to $execcmd: $!\n";
     $self->{real_serverpid} = $pid;
 
     # Process the output from s_server until we find the ACCEPT line, which
@@ -243,7 +255,8 @@ sub start
     if ($self->{server_port} == 0) {
         # This actually means that s_server exited, because otherwise
         # we would still searching for ACCEPT...
-        die "no ACCEPT detected in '$execcmd' output\n";
+        waitpid($pid, 0);
+        die "no ACCEPT detected in '$execcmd' output: $?\n";
     }
 
     # Just make sure everything else is simply printed [as separate lines].
@@ -255,6 +268,7 @@ sub start
     if (eval { require Win32::Process; 1; }) {
         if (Win32::Process::Create(my $h, $^X, "perl -ne print", 0, 0, ".")) {
             $pid = $h->GetProcessID();
+            $self->{proc_handle} = $h;  # hold handle till next round [or exit]
         } else {
             $error = Win32::FormatMessage(Win32::GetLastError());
         }
@@ -278,7 +292,7 @@ sub start
     $self->{serverpid} = $pid;
 
     print STDERR "Server responds on ",
-        $self->{server_addr}, ":", $self->{server_port}, "\n";
+                 "$self->{server_addr}:$self->{server_port}\n";
 
     # Connect right away...
     $self->connect_to_server();
@@ -293,11 +307,8 @@ sub clientstart
     if ($self->execute) {
         my $pid;
         my $execcmd = $self->execute
-             ." s_client -max_protocol TLSv1.3 -engine ossltest -connect "
-             .($self->proxy_addr).":".($self->proxy_port);
-        unless ($self->supports_IPv6) {
-            $execcmd .= " -4";
-        }
+             ." s_client -max_protocol TLSv1.3 -engine ossltest"
+             ." -connect $self->{proxy_addr}:$self->{proxy_port}";
         if ($self->cipherc ne "") {
             $execcmd .= " -cipher ".$self->cipherc;
         }
@@ -306,6 +317,9 @@ sub clientstart
         }
         if ($self->clientflags ne "") {
             $execcmd .= " ".$self->clientflags;
+        }
+        if ($self->clientflags !~ m/-(no)?servername/) {
+            $execcmd .= " -servername localhost";
         }
         if (defined $self->sessionfile) {
             $execcmd .= " -ign_eof";
@@ -335,7 +349,7 @@ sub clientstart
 
     # Wait for incoming connection from client
     my $fdset = IO::Select->new($self->{proxy_sock});
-    if (!$fdset->can_read(1)) {
+    if (!$fdset->can_read(60)) {
         kill(3, $self->{real_serverpid});
         die "s_client didn't try to connect\n";
     }
@@ -356,25 +370,39 @@ sub clientstart
     my @ready;
     my $ctr = 0;
     local $SIG{PIPE} = "IGNORE";
-    while(     (!(TLSProxy::Message->end)
-                || (defined $self->sessionfile()
-                    && (-s $self->sessionfile()) == 0))
-            && $ctr < 10) {
+    $self->{saw_session_ticket} = undef;
+    while($fdset->count && $ctr < 10) {
+        if (defined($self->{sessionfile})) {
+            # s_client got -ign_eof and won't be exiting voluntarily, so we
+            # look for data *and* session ticket...
+            last if TLSProxy::Message->success()
+                    && $self->{saw_session_ticket};
+        }
         if (!(@ready = $fdset->can_read(1))) {
             $ctr++;
             next;
         }
         foreach my $hand (@ready) {
             if ($hand == $server_sock) {
-                $server_sock->sysread($indata, 16384) or goto END;
-                $indata = $self->process_packet(1, $indata);
-                $client_sock->syswrite($indata);
-                $ctr = 0;
+                if ($server_sock->sysread($indata, 16384)) {
+                    if ($indata = $self->process_packet(1, $indata)) {
+                        $client_sock->syswrite($indata) or goto END;
+                    }
+                    $ctr = 0;
+                } else {
+                    $fdset->remove($server_sock);
+                    $client_sock->shutdown(SHUT_WR);
+                }
             } elsif ($hand == $client_sock) {
-                $client_sock->sysread($indata, 16384) or goto END;
-                $indata = $self->process_packet(0, $indata);
-                $server_sock->syswrite($indata);
-                $ctr = 0;
+                if ($client_sock->sysread($indata, 16384)) {
+                    if ($indata = $self->process_packet(0, $indata)) {
+                        $server_sock->syswrite($indata) or goto END;
+                    }
+                    $ctr = 0;
+                } else {
+                    $fdset->remove($client_sock);
+                    $server_sock->shutdown(SHUT_WR);
+                }
             } else {
                 kill(3, $self->{real_serverpid});
                 die "Unexpected handle";
@@ -401,11 +429,19 @@ sub clientstart
     my $pid;
     if (--$self->{serverconnects} == 0) {
         $pid = $self->{serverpid};
-        die "serverpid is zero\n" if $pid == 0;
-        print "Waiting for server process to close: $pid...\n";
-        # recall that we wait on process that buffers server's output
+        print "Waiting for 'perl -ne print' process to close: $pid...\n";
+        $pid = waitpid($pid, 0);
+        if ($pid > 0) {
+            die "exit code $? from 'perl -ne print' process\n" if $? != 0;
+        } elsif ($pid == 0) {
+            kill(3, $self->{real_serverpid});
+            die "lost control over $self->{serverpid}?";
+        }
+        $pid = $self->{real_serverpid};
+        print "Waiting for s_server process to close: $pid...\n";
+        # it's done already, just collect the exit code [and reap]...
         waitpid($pid, 0);
-        die "exit code $? from server process\n" if $? != 0;
+        die "exit code $? from s_server process\n" if $? != 0;
     } else {
         # It's a bit counter-intuitive spot to make next connection to
         # the s_server. Rationale is that established connection works
@@ -414,8 +450,7 @@ sub clientstart
         $self->connect_to_server();
     }
     $pid = $self->{clientpid};
-    die "clientpid is zero\n" if $pid == 0;
-    print "Waiting for client process to close: $pid...\n";
+    print "Waiting for s_client process to close: $pid...\n";
     waitpid($pid, 0);
 
     return 1;
@@ -445,7 +480,8 @@ sub process_packet
 
     #Return contains the list of record found in the packet followed by the
     #list of messages in those records and any partial message
-    my @ret = TLSProxy::Record->get_records($server, $self->flight, $self->{partial}[$server].$packet);
+    my @ret = TLSProxy::Record->get_records($server, $self->flight,
+                                            $self->{partial}[$server].$packet);
     $self->{partial}[$server] = $ret[2];
     push @{$self->{record_list}}, @{$ret[0]};
     push @{$self->{message_list}}, @{$ret[1]};
@@ -459,6 +495,14 @@ sub process_packet
     #Finished parsing. Call user provided filter here
     if (defined $self->filter) {
         $self->filter->($self);
+    }
+
+    #Take a note on NewSessionTicket
+    foreach my $message (reverse @{$self->{message_list}}) {
+        if ($message->{mt} == TLSProxy::Message::MT_NEW_SESSION_TICKET) {
+            $self->{saw_session_ticket} = 1;
+            last;
+        }
     }
 
     #Reconstruct the packet

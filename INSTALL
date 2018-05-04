@@ -224,7 +224,8 @@
                    os:         Use a trusted operating system entropy source.
                                This is the default method if such an entropy
                                source exists.
-                   getrandom:  Use the L<getrandom(2)> system call if available.
+                   getrandom:  Use the L<getrandom(2)> or equivalent system
+                               call.
                    devrandom:  Use the the first device from the DEVRANDOM list
                                which can be opened to read random bytes. The
                                DEVRANDOM preprocessor constant expands to
@@ -276,6 +277,10 @@
                    error strings. For a statically linked application this may
                    be undesirable if small executable size is an objective.
 
+  no-autoload-config
+                   Don't automatically load the default openssl.cnf file.
+                   Typically OpenSSL will automatically load a system config
+                   file which configures default ssl options.
 
   no-capieng
                    Don't build the CAPI engine. This option will be forced if

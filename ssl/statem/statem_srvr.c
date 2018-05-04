@@ -2481,6 +2481,12 @@ int tls_construct_server_key_exchange(SSL *s, WPACKET *pkt)
         }
 
         dh = EVP_PKEY_get0_DH(s->s3->tmp.pkey);
+        if (dh == NULL) {
+            SSLfatal(s, SSL_AD_INTERNAL_ERROR,
+                     SSL_F_TLS_CONSTRUCT_SERVER_KEY_EXCHANGE,
+                     ERR_R_INTERNAL_ERROR);
+            goto err;
+        }
 
         EVP_PKEY_free(pkdh);
         pkdh = NULL;
@@ -3716,6 +3722,23 @@ int tls_construct_new_session_ticket(SSL *s, WPACKET *pkt)
     } age_add_u;
 
     if (SSL_IS_TLS13(s)) {
+        if (s->post_handshake_auth != SSL_PHA_EXT_RECEIVED) {
+            void (*cb) (const SSL *ssl, int type, int val) = NULL;
+
+            /*
+             * This is the first session ticket we've sent. In the state
+             * machine we "cheated" and tacked this onto the end of the first
+             * handshake. From an info callback perspective this should appear
+             * like the start of a new handshake.
+             */
+            if (s->info_callback != NULL)
+                cb = s->info_callback;
+            else if (s->ctx->info_callback != NULL)
+                cb = s->ctx->info_callback;
+            if (cb != NULL)
+                cb(s, SSL_CB_HANDSHAKE_START, 1);
+        }
+
         if (!ssl_generate_session_id(s, s->session)) {
             /* SSLfatal() already called */
             goto err;

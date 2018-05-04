@@ -14,6 +14,8 @@
 #include <openssl/crypto.h>
 #include <openssl/ssl.h>
 #include <openssl/ocsp.h>
+#include <openssl/srp.h>
+#include <openssl/txt_db.h>
 
 #include "ssltestlib.h"
 #include "testutil.h"
@@ -23,8 +25,10 @@
 
 static char *cert = NULL;
 static char *privkey = NULL;
+static char *srpvfile = NULL;
+static char *tmpfilename = NULL;
 
-#define LOG_BUFFER_SIZE 1024
+#define LOG_BUFFER_SIZE 2048
 static char server_log_buffer[LOG_BUFFER_SIZE + 1] = {0};
 static size_t server_log_buffer_index = 0;
 static char client_log_buffer[LOG_BUFFER_SIZE + 1] = {0};
@@ -50,10 +54,13 @@ static X509 *ocspcert = NULL;
 struct sslapitest_log_counts {
     unsigned int rsa_key_exchange_count;
     unsigned int master_secret_count;
+    unsigned int client_early_secret_count;
     unsigned int client_handshake_secret_count;
     unsigned int server_handshake_secret_count;
     unsigned int client_application_secret_count;
     unsigned int server_application_secret_count;
+    unsigned int early_exporter_secret_count;
+    unsigned int exporter_secret_count;
 };
 
 
@@ -135,10 +142,13 @@ static int test_keylog_output(char *buffer, const SSL *ssl,
     size_t master_key_size = SSL_MAX_MASTER_KEY_LENGTH;
     unsigned int rsa_key_exchange_count = 0;
     unsigned int master_secret_count = 0;
+    unsigned int client_early_secret_count = 0;
     unsigned int client_handshake_secret_count = 0;
     unsigned int server_handshake_secret_count = 0;
     unsigned int client_application_secret_count = 0;
     unsigned int server_application_secret_count = 0;
+    unsigned int early_exporter_secret_count = 0;
+    unsigned int exporter_secret_count = 0;
 
     for (token = strtok(buffer, " \n"); token != NULL;
          token = strtok(NULL, " \n")) {
@@ -192,17 +202,22 @@ static int test_keylog_output(char *buffer, const SSL *ssl,
                                                        master_key_size)))
                 return 0;
             master_secret_count++;
-        } else if (strcmp(token, "CLIENT_HANDSHAKE_TRAFFIC_SECRET") == 0
+        } else if (strcmp(token, "CLIENT_EARLY_TRAFFIC_SECRET") == 0
+                    || strcmp(token, "CLIENT_HANDSHAKE_TRAFFIC_SECRET") == 0
                     || strcmp(token, "SERVER_HANDSHAKE_TRAFFIC_SECRET") == 0
                     || strcmp(token, "CLIENT_TRAFFIC_SECRET_0") == 0
-                    || strcmp(token, "SERVER_TRAFFIC_SECRET_0") == 0) {
+                    || strcmp(token, "SERVER_TRAFFIC_SECRET_0") == 0
+                    || strcmp(token, "EARLY_EXPORTER_SECRET") == 0
+                    || strcmp(token, "EXPORTER_SECRET") == 0) {
             /*
              * TLSv1.3 secret. Tokens should be: 64 ASCII bytes of hex-encoded
              * client random, and then the hex-encoded secret. In this case,
              * we treat all of these secrets identically and then just
              * distinguish between them when counting what we saw.
              */
-            if (strcmp(token, "CLIENT_HANDSHAKE_TRAFFIC_SECRET") == 0)
+            if (strcmp(token, "CLIENT_EARLY_TRAFFIC_SECRET") == 0)
+                client_early_secret_count++;
+            else if (strcmp(token, "CLIENT_HANDSHAKE_TRAFFIC_SECRET") == 0)
                 client_handshake_secret_count++;
             else if (strcmp(token, "SERVER_HANDSHAKE_TRAFFIC_SECRET") == 0)
                 server_handshake_secret_count++;
@@ -210,6 +225,10 @@ static int test_keylog_output(char *buffer, const SSL *ssl,
                 client_application_secret_count++;
             else if (strcmp(token, "SERVER_TRAFFIC_SECRET_0") == 0)
                 server_application_secret_count++;
+            else if (strcmp(token, "EARLY_EXPORTER_SECRET") == 0)
+                early_exporter_secret_count++;
+            else if (strcmp(token, "EXPORTER_SECRET") == 0)
+                exporter_secret_count++;
 
             client_random_size = SSL_get_client_random(ssl,
                                                        actual_client_random,
@@ -243,6 +262,8 @@ static int test_keylog_output(char *buffer, const SSL *ssl,
                         expected->rsa_key_exchange_count)
             || !TEST_size_t_eq(master_secret_count,
                                expected->master_secret_count)
+            || !TEST_size_t_eq(client_early_secret_count,
+                               expected->client_early_secret_count)
             || !TEST_size_t_eq(client_handshake_secret_count,
                                expected->client_handshake_secret_count)
             || !TEST_size_t_eq(server_handshake_secret_count,
@@ -250,7 +271,11 @@ static int test_keylog_output(char *buffer, const SSL *ssl,
             || !TEST_size_t_eq(client_application_secret_count,
                                expected->client_application_secret_count)
             || !TEST_size_t_eq(server_application_secret_count,
-                               expected->server_application_secret_count))
+                               expected->server_application_secret_count)
+            || !TEST_size_t_eq(early_exporter_secret_count,
+                               expected->early_exporter_secret_count)
+            || !TEST_size_t_eq(exporter_secret_count,
+                               expected->exporter_secret_count))
         return 0;
     return 1;
 }
@@ -340,8 +365,11 @@ static int test_keylog_no_master_key(void)
 {
     SSL_CTX *cctx = NULL, *sctx = NULL;
     SSL *clientssl = NULL, *serverssl = NULL;
+    SSL_SESSION *sess = NULL;
     int testresult = 0;
     struct sslapitest_log_counts expected = {0};
+    unsigned char buf[1];
+    size_t readbytes, written;
 
     /* Clean up logging space */
     memset(client_log_buffer, 0, sizeof(client_log_buffer));
@@ -352,7 +380,9 @@ static int test_keylog_no_master_key(void)
 
     if (!TEST_true(create_ssl_ctx_pair(TLS_server_method(), TLS_client_method(),
                                        TLS1_VERSION, TLS_MAX_VERSION,
-                                       &sctx, &cctx, cert, privkey)))
+                                       &sctx, &cctx, cert, privkey))
+        || !TEST_true(SSL_CTX_set_max_early_data(sctx,
+                                                 SSL3_RT_MAX_PLAIN_LENGTH)))
         return 0;
 
     if (!TEST_true(SSL_CTX_get_keylog_callback(cctx) == NULL)
@@ -386,6 +416,46 @@ static int test_keylog_no_master_key(void)
     expected.server_handshake_secret_count = 1;
     expected.client_application_secret_count = 1;
     expected.server_application_secret_count = 1;
+    expected.exporter_secret_count = 1;
+    if (!TEST_true(test_keylog_output(client_log_buffer, clientssl,
+                                      SSL_get_session(clientssl), &expected))
+            || !TEST_true(test_keylog_output(server_log_buffer, serverssl,
+                                             SSL_get_session(serverssl),
+                                             &expected)))
+        goto end;
+
+    /* Terminate old session and resume with early data. */
+    sess = SSL_get1_session(clientssl);
+    SSL_shutdown(clientssl);
+    SSL_shutdown(serverssl);
+    SSL_free(serverssl);
+    SSL_free(clientssl);
+    serverssl = clientssl = NULL;
+
+    /* Reset key log */
+    memset(client_log_buffer, 0, sizeof(client_log_buffer));
+    memset(server_log_buffer, 0, sizeof(server_log_buffer));
+    client_log_buffer_index = 0;
+    server_log_buffer_index = 0;
+
+    if (!TEST_true(create_ssl_objects(sctx, cctx, &serverssl,
+                                      &clientssl, NULL, NULL))
+            || !TEST_true(SSL_set_session(clientssl, sess))
+            /* Here writing 0 length early data is enough. */
+            || !TEST_true(SSL_write_early_data(clientssl, NULL, 0, &written))
+            || !TEST_int_eq(SSL_read_early_data(serverssl, buf, sizeof(buf),
+                                                &readbytes),
+                            SSL_READ_EARLY_DATA_ERROR)
+            || !TEST_int_eq(SSL_get_early_data_status(serverssl),
+                            SSL_EARLY_DATA_ACCEPTED)
+            || !TEST_true(create_ssl_connection(serverssl, clientssl,
+                          SSL_ERROR_NONE))
+            || !TEST_true(SSL_session_reused(clientssl)))
+        goto end;
+
+    /* In addition to the previous entries, expect early secrets. */
+    expected.client_early_secret_count = 1;
+    expected.early_exporter_secret_count = 1;
     if (!TEST_true(test_keylog_output(client_log_buffer, clientssl,
                                       SSL_get_session(clientssl), &expected))
             || !TEST_true(test_keylog_output(server_log_buffer, serverssl,
@@ -396,6 +466,7 @@ static int test_keylog_no_master_key(void)
     testresult = 1;
 
 end:
+    SSL_SESSION_free(sess);
     SSL_free(serverssl);
     SSL_free(clientssl);
     SSL_CTX_free(sctx);
@@ -1109,11 +1180,27 @@ static int test_session_with_both_cache(void)
 #endif
 }
 
-#define USE_NULL    0
-#define USE_BIO_1   1
-#define USE_BIO_2   2
+#define USE_NULL            0
+#define USE_BIO_1           1
+#define USE_BIO_2           2
+#define USE_DEFAULT         3
 
-#define TOTAL_SSL_SET_BIO_TESTS (3 * 3 * 3 * 3)
+#define CONNTYPE_CONNECTION_SUCCESS  0
+#define CONNTYPE_CONNECTION_FAIL     1
+#define CONNTYPE_NO_CONNECTION       2
+
+#define TOTAL_NO_CONN_SSL_SET_BIO_TESTS         (3 * 3 * 3 * 3)
+#define TOTAL_CONN_SUCCESS_SSL_SET_BIO_TESTS    (2 * 2)
+#if !defined(OPENSSL_NO_TLS1_3) && !defined(OPENSSL_NO_TLS1_2)
+# define TOTAL_CONN_FAIL_SSL_SET_BIO_TESTS       (2 * 2)
+#else
+# define TOTAL_CONN_FAIL_SSL_SET_BIO_TESTS       0
+#endif
+
+
+#define TOTAL_SSL_SET_BIO_TESTS TOTAL_NO_CONN_SSL_SET_BIO_TESTS \
+                                + TOTAL_CONN_SUCCESS_SSL_SET_BIO_TESTS \
+                                + TOTAL_CONN_FAIL_SSL_SET_BIO_TESTS
 
 static void setupbio(BIO **res, BIO *bio1, BIO *bio2, int type)
 {
@@ -1130,28 +1217,65 @@ static void setupbio(BIO **res, BIO *bio1, BIO *bio2, int type)
     }
 }
 
+
+/*
+ * Tests calls to SSL_set_bio() under various conditions.
+ *
+ * For the first 3 * 3 * 3 * 3 = 81 tests we do 2 calls to SSL_set_bio() with
+ * various combinations of valid BIOs or NULL being set for the rbio/wbio. We
+ * then do more tests where we create a successful connection first using our
+ * standard connection setup functions, and then call SSL_set_bio() with
+ * various combinations of valid BIOs or NULL. We then repeat these tests
+ * following a failed connection. In this last case we are looking to check that
+ * SSL_set_bio() functions correctly in the case where s->bbio is not NULL.
+ */
 static int test_ssl_set_bio(int idx)
 {
-    SSL_CTX *ctx;
+    SSL_CTX *sctx = NULL, *cctx = NULL;
     BIO *bio1 = NULL;
     BIO *bio2 = NULL;
     BIO *irbio = NULL, *iwbio = NULL, *nrbio = NULL, *nwbio = NULL;
-    SSL *ssl = NULL;
-    int initrbio, initwbio, newrbio, newwbio;
+    SSL *serverssl = NULL, *clientssl = NULL;
+    int initrbio, initwbio, newrbio, newwbio, conntype;
     int testresult = 0;
 
-    initrbio = idx % 3;
-    idx /= 3;
-    initwbio = idx % 3;
-    idx /= 3;
-    newrbio = idx % 3;
-    idx /= 3;
-    newwbio = idx;
-    if (!TEST_int_le(newwbio, 2))
-        return 0;
+    if (idx < TOTAL_NO_CONN_SSL_SET_BIO_TESTS) {
+        initrbio = idx % 3;
+        idx /= 3;
+        initwbio = idx % 3;
+        idx /= 3;
+        newrbio = idx % 3;
+        idx /= 3;
+        newwbio = idx % 3;
+        conntype = CONNTYPE_NO_CONNECTION;
+    } else {
+        idx -= TOTAL_NO_CONN_SSL_SET_BIO_TESTS;
+        initrbio = initwbio = USE_DEFAULT;
+        newrbio = idx % 2;
+        idx /= 2;
+        newwbio = idx % 2;
+        idx /= 2;
+        conntype = idx % 2;
+    }
 
-    if (!TEST_ptr(ctx = SSL_CTX_new(TLS_method()))
-                || !TEST_ptr(ssl = SSL_new(ctx)))
+    if (!TEST_true(create_ssl_ctx_pair(TLS_server_method(), TLS_client_method(),
+                                       TLS1_VERSION, TLS_MAX_VERSION,
+                                       &sctx, &cctx, cert, privkey)))
+        goto end;
+
+    if (conntype == CONNTYPE_CONNECTION_FAIL) {
+        /*
+         * We won't ever get here if either TLSv1.3 or TLSv1.2 is disabled
+         * because we reduced the number of tests in the definition of
+         * TOTAL_CONN_FAIL_SSL_SET_BIO_TESTS to avoid this scenario. By setting
+         * mismatched protocol versions we will force a connection failure.
+         */
+        SSL_CTX_set_min_proto_version(sctx, TLS1_3_VERSION);
+        SSL_CTX_set_max_proto_version(cctx, TLS1_2_VERSION);
+    }
+
+    if (!TEST_true(create_ssl_objects(sctx, cctx, &serverssl, &clientssl,
+                                      NULL, NULL)))
         goto end;
 
     if (initrbio == USE_BIO_1
@@ -1170,19 +1294,27 @@ static int test_ssl_set_bio(int idx)
             goto end;
     }
 
-    setupbio(&irbio, bio1, bio2, initrbio);
-    setupbio(&iwbio, bio1, bio2, initwbio);
+    if (initrbio != USE_DEFAULT) {
+        setupbio(&irbio, bio1, bio2, initrbio);
+        setupbio(&iwbio, bio1, bio2, initwbio);
+        SSL_set_bio(clientssl, irbio, iwbio);
 
-    /*
-     * We want to maintain our own refs to these BIO, so do an up ref for each
-     * BIO that will have ownership transferred in the SSL_set_bio() call
-     */
-    if (irbio != NULL)
-        BIO_up_ref(irbio);
-    if (iwbio != NULL && iwbio != irbio)
-        BIO_up_ref(iwbio);
+        /*
+         * We want to maintain our own refs to these BIO, so do an up ref for
+         * each BIO that will have ownership transferred in the SSL_set_bio()
+         * call
+         */
+        if (irbio != NULL)
+            BIO_up_ref(irbio);
+        if (iwbio != NULL && iwbio != irbio)
+            BIO_up_ref(iwbio);
+    }
 
-    SSL_set_bio(ssl, irbio, iwbio);
+    if (conntype != CONNTYPE_NO_CONNECTION
+            && !TEST_true(create_ssl_connection(serverssl, clientssl,
+                                                SSL_ERROR_NONE)
+                          == (conntype == CONNTYPE_CONNECTION_SUCCESS)))
+        goto end;
 
     setupbio(&nrbio, bio1, bio2, newrbio);
     setupbio(&nwbio, bio1, bio2, newwbio);
@@ -1201,12 +1333,11 @@ static int test_ssl_set_bio(int idx)
             && (nwbio != iwbio || (nwbio == iwbio && irbio == iwbio)))
         BIO_up_ref(nwbio);
 
-    SSL_set_bio(ssl, nrbio, nwbio);
+    SSL_set_bio(clientssl, nrbio, nwbio);
 
     testresult = 1;
 
  end:
-    SSL_free(ssl);
     BIO_free(bio1);
     BIO_free(bio2);
 
@@ -1216,7 +1347,10 @@ static int test_ssl_set_bio(int idx)
      * functions. If we haven't done enough then this will only be detected in
      * a crypto-mdebug build
      */
-    SSL_CTX_free(ctx);
+    SSL_free(serverssl);
+    SSL_free(clientssl);
+    SSL_CTX_free(sctx);
+    SSL_CTX_free(cctx);
     return testresult;
 }
 
@@ -1570,8 +1704,6 @@ static int setupearly_data_test(SSL_CTX **cctx, SSL_CTX **sctx, SSL **clientssl,
                                        TLS1_VERSION, TLS_MAX_VERSION,
                                        sctx, cctx, cert, privkey))
         || !TEST_true(SSL_CTX_set_max_early_data(*sctx,
-                                                 SSL3_RT_MAX_PLAIN_LENGTH))
-        || !TEST_true(SSL_CTX_set_max_early_data(*cctx,
                                                  SSL3_RT_MAX_PLAIN_LENGTH)))
         return 0;
 
@@ -3786,10 +3918,649 @@ static int test_pha_key_update(void)
 }
 #endif
 
+#if !defined(OPENSSL_NO_SRP) && !defined(OPENSSL_NO_TLS1_2)
+
+static SRP_VBASE *vbase = NULL;
+
+static int ssl_srp_cb(SSL *s, int *ad, void *arg)
+{
+    int ret = SSL3_AL_FATAL;
+    char *username;
+    SRP_user_pwd *user = NULL;
+
+    username = SSL_get_srp_username(s);
+    if (username == NULL) {
+        *ad = SSL_AD_INTERNAL_ERROR;
+        goto err;
+    }
+
+    user = SRP_VBASE_get1_by_user(vbase, username);
+    if (user == NULL) {
+        *ad = SSL_AD_INTERNAL_ERROR;
+        goto err;
+    }
+
+    if (SSL_set_srp_server_param(s, user->N, user->g, user->s, user->v,
+                                 user->info) <= 0) {
+        *ad = SSL_AD_INTERNAL_ERROR;
+        goto err;
+    }
+
+    ret = 0;
+
+ err:
+    SRP_user_pwd_free(user);
+    return ret;
+}
+
+static int create_new_vfile(char *userid, char *password, const char *filename)
+{
+    char *gNid = NULL;
+    OPENSSL_STRING *row = OPENSSL_zalloc(sizeof(row) * (DB_NUMBER + 1));
+    TXT_DB *db = NULL;
+    int ret = 0;
+    BIO *out = NULL, *dummy = BIO_new_mem_buf("", 0);
+    size_t i;
+
+    if (!TEST_ptr(dummy) || !TEST_ptr(row))
+        goto end;
+
+    gNid = SRP_create_verifier(userid, password, &row[DB_srpsalt],
+                               &row[DB_srpverifier], NULL, NULL);
+    if (!TEST_ptr(gNid))
+        goto end;
+
+    /*
+     * The only way to create an empty TXT_DB is to provide a BIO with no data
+     * in it!
+     */
+    db = TXT_DB_read(dummy, DB_NUMBER);
+    if (!TEST_ptr(db))
+        goto end;
+
+    out = BIO_new_file(filename, "w");
+    if (!TEST_ptr(out))
+        goto end;
+
+    row[DB_srpid] = OPENSSL_strdup(userid);
+    row[DB_srptype] = OPENSSL_strdup("V");
+    row[DB_srpgN] = OPENSSL_strdup(gNid);
+
+    if (!TEST_ptr(row[DB_srpid])
+            || !TEST_ptr(row[DB_srptype])
+            || !TEST_ptr(row[DB_srpgN])
+            || !TEST_true(TXT_DB_insert(db, row)))
+        goto end;
+
+    row = NULL;
+
+    if (!TXT_DB_write(out, db))
+        goto end;
+
+    ret = 1;
+ end:
+    if (row != NULL) {
+        for (i = 0; i < DB_NUMBER; i++)
+            OPENSSL_free(row[i]);
+    }
+    OPENSSL_free(row);
+    BIO_free(dummy);
+    BIO_free(out);
+    TXT_DB_free(db);
+
+    return ret;
+}
+
+static int create_new_vbase(char *userid, char *password)
+{
+    BIGNUM *verifier = NULL, *salt = NULL;
+    const SRP_gN *lgN = NULL;
+    SRP_user_pwd *user_pwd = NULL;
+    int ret = 0;
+
+    lgN = SRP_get_default_gN(NULL);
+    if (!TEST_ptr(lgN))
+        goto end;
+
+    if (!TEST_true(SRP_create_verifier_BN(userid, password, &salt, &verifier,
+                                          lgN->N, lgN->g)))
+        goto end;
+
+    user_pwd = OPENSSL_zalloc(sizeof(*user_pwd));
+    if (!TEST_ptr(user_pwd))
+        goto end;
+
+    user_pwd->N = lgN->N;
+    user_pwd->g = lgN->g;
+    user_pwd->id = OPENSSL_strdup(userid);
+    if (!TEST_ptr(user_pwd->id))
+        goto end;
+
+    user_pwd->v = verifier;
+    user_pwd->s = salt;
+    verifier = salt = NULL;
+
+    if (sk_SRP_user_pwd_insert(vbase->users_pwd, user_pwd, 0) == 0)
+        goto end;
+    user_pwd = NULL;
+
+    ret = 1;
+end:
+    SRP_user_pwd_free(user_pwd);
+    BN_free(salt);
+    BN_free(verifier);
+
+    return ret;
+}
+
+/*
+ * SRP tests
+ *
+ * Test 0: Simple successful SRP connection, new vbase
+ * Test 1: Connection failure due to bad password, new vbase
+ * Test 2: Simple successful SRP connection, vbase loaded from existing file
+ * Test 3: Connection failure due to bad password, vbase loaded from existing
+ *         file
+ * Test 4: Simple successful SRP connection, vbase loaded from new file
+ * Test 5: Connection failure due to bad password, vbase loaded from new file
+ */
+static int test_srp(int tst)
+{
+    char *userid = "test", *password = "password", *tstsrpfile;
+    SSL_CTX *cctx = NULL, *sctx = NULL;
+    SSL *clientssl = NULL, *serverssl = NULL;
+    int ret, testresult = 0;
+
+    vbase = SRP_VBASE_new(NULL);
+    if (!TEST_ptr(vbase))
+        goto end;
+
+    if (tst == 0 || tst == 1) {
+        if (!TEST_true(create_new_vbase(userid, password)))
+            goto end;
+    } else {
+        if (tst == 4 || tst == 5) {
+            if (!TEST_true(create_new_vfile(userid, password, tmpfilename)))
+                goto end;
+            tstsrpfile = tmpfilename;
+        } else {
+            tstsrpfile = srpvfile;
+        }
+        if (!TEST_int_eq(SRP_VBASE_init(vbase, tstsrpfile), SRP_NO_ERROR))
+            goto end;
+    }
+
+    if (!TEST_true(create_ssl_ctx_pair(TLS_server_method(), TLS_client_method(),
+                                       TLS1_VERSION, TLS_MAX_VERSION,
+                                       &sctx, &cctx, cert, privkey)))
+        goto end;
+
+    if (!TEST_int_gt(SSL_CTX_set_srp_username_callback(sctx, ssl_srp_cb), 0)
+            || !TEST_true(SSL_CTX_set_cipher_list(cctx, "SRP-AES-128-CBC-SHA"))
+            || !TEST_true(SSL_CTX_set_max_proto_version(sctx, TLS1_2_VERSION))
+            || !TEST_true(SSL_CTX_set_max_proto_version(cctx, TLS1_2_VERSION))
+            || !TEST_int_gt(SSL_CTX_set_srp_username(cctx, userid), 0))
+        goto end;
+
+    if (tst % 2 == 1) {
+        if (!TEST_int_gt(SSL_CTX_set_srp_password(cctx, "badpass"), 0))
+            goto end;
+    } else {
+        if (!TEST_int_gt(SSL_CTX_set_srp_password(cctx, password), 0))
+            goto end;
+    }
+
+    if (!TEST_true(create_ssl_objects(sctx, cctx, &serverssl, &clientssl,
+                                      NULL, NULL)))
+        goto end;
+
+    ret = create_ssl_connection(serverssl, clientssl, SSL_ERROR_NONE);
+    if (ret) {
+        if (!TEST_true(tst % 2 == 0))
+            goto end;
+    } else {
+        if (!TEST_true(tst % 2 == 1))
+            goto end;
+    }
+
+    testresult = 1;
+
+ end:
+    SRP_VBASE_free(vbase);
+    vbase = NULL;
+    SSL_free(serverssl);
+    SSL_free(clientssl);
+    SSL_CTX_free(sctx);
+    SSL_CTX_free(cctx);
+
+    return testresult;
+}
+#endif
+
+static int info_cb_failed = 0;
+static int info_cb_offset = 0;
+static int info_cb_this_state = -1;
+
+static struct info_cb_states_st {
+    int where;
+    const char *statestr;
+} info_cb_states[][60] = {
+    {
+        /* TLSv1.2 server followed by resumption */
+        {SSL_CB_HANDSHAKE_START, NULL}, {SSL_CB_LOOP, "PINIT "},
+        {SSL_CB_LOOP, "PINIT "}, {SSL_CB_LOOP, "TRCH"}, {SSL_CB_LOOP, "TWSH"},
+        {SSL_CB_LOOP, "TWSC"}, {SSL_CB_LOOP, "TWSKE"}, {SSL_CB_LOOP, "TWSD"},
+        {SSL_CB_EXIT, NULL}, {SSL_CB_LOOP, "TWSD"}, {SSL_CB_LOOP, "TRCKE"},
+        {SSL_CB_LOOP, "TRCCS"}, {SSL_CB_LOOP, "TRFIN"}, {SSL_CB_LOOP, "TWST"},
+        {SSL_CB_LOOP, "TWCCS"}, {SSL_CB_LOOP, "TWFIN"},
+        {SSL_CB_HANDSHAKE_DONE, NULL}, {SSL_CB_EXIT, NULL},
+        {SSL_CB_ALERT, NULL}, {SSL_CB_HANDSHAKE_START, NULL},
+        {SSL_CB_LOOP, "PINIT "}, {SSL_CB_LOOP, "PINIT "}, {SSL_CB_LOOP, "TRCH"},
+        {SSL_CB_LOOP, "TWSH"}, {SSL_CB_LOOP, "TWCCS"}, {SSL_CB_LOOP, "TWFIN"},
+        {SSL_CB_EXIT, NULL}, {SSL_CB_LOOP, "TWFIN"}, {SSL_CB_LOOP, "TRCCS"},
+        {SSL_CB_LOOP, "TRFIN"}, {SSL_CB_HANDSHAKE_DONE, NULL},
+        {SSL_CB_EXIT, NULL}, {0, NULL},
+    }, {
+        /* TLSv1.2 client followed by resumption */
+        {SSL_CB_HANDSHAKE_START, NULL}, {SSL_CB_LOOP, "PINIT "},
+        {SSL_CB_LOOP, "TWCH"}, {SSL_CB_EXIT, NULL}, {SSL_CB_LOOP, "TWCH"},
+        {SSL_CB_LOOP, "TRSH"}, {SSL_CB_LOOP, "TRSC"}, {SSL_CB_LOOP, "TRSKE"},
+        {SSL_CB_LOOP, "TRSD"}, {SSL_CB_LOOP, "TWCKE"}, {SSL_CB_LOOP, "TWCCS"},
+        {SSL_CB_LOOP, "TWFIN"}, {SSL_CB_EXIT, NULL}, {SSL_CB_LOOP, "TWFIN"},
+        {SSL_CB_LOOP, "TRST"}, {SSL_CB_LOOP, "TRCCS"}, {SSL_CB_LOOP, "TRFIN"},
+        {SSL_CB_HANDSHAKE_DONE, NULL}, {SSL_CB_EXIT, NULL}, {SSL_CB_ALERT, NULL},
+        {SSL_CB_HANDSHAKE_START, NULL}, {SSL_CB_LOOP, "PINIT "},
+        {SSL_CB_LOOP, "TWCH"}, {SSL_CB_EXIT, NULL}, {SSL_CB_LOOP, "TWCH"},
+        {SSL_CB_LOOP, "TRSH"}, {SSL_CB_LOOP, "TRCCS"}, {SSL_CB_LOOP, "TRFIN"},
+        {SSL_CB_LOOP, "TWCCS"},  {SSL_CB_LOOP, "TWFIN"},
+        {SSL_CB_HANDSHAKE_DONE, NULL}, {SSL_CB_EXIT, NULL}, {0, NULL},
+    }, {
+        /* TLSv1.3 server followed by resumption */
+        {SSL_CB_HANDSHAKE_START, NULL}, {SSL_CB_LOOP, "PINIT "},
+        {SSL_CB_LOOP, "PINIT "}, {SSL_CB_LOOP, "TRCH"}, {SSL_CB_LOOP, "TWSH"},
+        {SSL_CB_LOOP, "TWCCS"}, {SSL_CB_LOOP, "TWEE"}, {SSL_CB_LOOP, "TWSC"},
+        {SSL_CB_LOOP, "TRSCV"}, {SSL_CB_LOOP, "TWFIN"}, {SSL_CB_LOOP, "TED"},
+        {SSL_CB_EXIT, NULL}, {SSL_CB_LOOP, "TED"}, {SSL_CB_LOOP, "TRFIN"},
+        {SSL_CB_HANDSHAKE_DONE, NULL}, {SSL_CB_HANDSHAKE_START, NULL},
+        {SSL_CB_LOOP, "TWST"}, {SSL_CB_HANDSHAKE_DONE, NULL},
+        {SSL_CB_EXIT, NULL}, {SSL_CB_ALERT, NULL},
+        {SSL_CB_HANDSHAKE_START, NULL}, {SSL_CB_LOOP, "PINIT "},
+        {SSL_CB_LOOP, "PINIT "}, {SSL_CB_LOOP, "TRCH"}, {SSL_CB_LOOP, "TWSH"},
+        {SSL_CB_LOOP, "TWCCS"}, {SSL_CB_LOOP, "TWEE"}, {SSL_CB_LOOP, "TWFIN"},
+        {SSL_CB_LOOP, "TED"}, {SSL_CB_EXIT, NULL}, {SSL_CB_LOOP, "TED"},
+        {SSL_CB_LOOP, "TRFIN"}, {SSL_CB_HANDSHAKE_DONE, NULL},
+        {SSL_CB_HANDSHAKE_START, NULL}, {SSL_CB_LOOP, "TWST"},
+        {SSL_CB_HANDSHAKE_DONE, NULL}, {SSL_CB_EXIT, NULL}, {0, NULL},
+    }, {
+        /* TLSv1.3 client followed by resumption */
+        {SSL_CB_HANDSHAKE_START, NULL}, {SSL_CB_LOOP, "PINIT "},
+        {SSL_CB_LOOP, "TWCH"}, {SSL_CB_EXIT, NULL}, {SSL_CB_LOOP, "TWCH"},
+        {SSL_CB_LOOP, "TRSH"}, {SSL_CB_LOOP, "TREE"}, {SSL_CB_LOOP, "TRSC"},
+        {SSL_CB_LOOP, "TRSCV"}, {SSL_CB_LOOP, "TRFIN"}, {SSL_CB_LOOP, "TWCCS"},
+        {SSL_CB_LOOP, "TWFIN"},  {SSL_CB_HANDSHAKE_DONE, NULL},
+        {SSL_CB_EXIT, NULL}, {SSL_CB_HANDSHAKE_START, NULL},
+        {SSL_CB_LOOP, "SSLOK "}, {SSL_CB_LOOP, "SSLOK "}, {SSL_CB_LOOP, "TRST"},
+        {SSL_CB_HANDSHAKE_DONE, NULL},  {SSL_CB_EXIT, NULL},
+        {SSL_CB_ALERT, NULL}, {SSL_CB_HANDSHAKE_START, NULL},
+        {SSL_CB_LOOP, "PINIT "}, {SSL_CB_LOOP, "TWCH"}, {SSL_CB_EXIT, NULL},
+        {SSL_CB_LOOP, "TWCH"}, {SSL_CB_LOOP, "TRSH"},  {SSL_CB_LOOP, "TREE"},
+        {SSL_CB_LOOP, "TRFIN"}, {SSL_CB_LOOP, "TWCCS"}, {SSL_CB_LOOP, "TWFIN"},
+        {SSL_CB_HANDSHAKE_DONE, NULL}, {SSL_CB_EXIT, NULL},
+        {SSL_CB_HANDSHAKE_START, NULL}, {SSL_CB_LOOP, "SSLOK "},
+        {SSL_CB_LOOP, "SSLOK "}, {SSL_CB_LOOP, "TRST"},
+        {SSL_CB_HANDSHAKE_DONE, NULL}, {SSL_CB_EXIT, NULL}, {0, NULL},
+    }, {
+        /* TLSv1.3 server, early_data */
+        {SSL_CB_HANDSHAKE_START, NULL}, {SSL_CB_LOOP, "PINIT "},
+        {SSL_CB_LOOP, "PINIT "}, {SSL_CB_LOOP, "TRCH"}, {SSL_CB_LOOP, "TWSH"},
+        {SSL_CB_LOOP, "TWCCS"}, {SSL_CB_LOOP, "TWEE"}, {SSL_CB_LOOP, "TWFIN"},
+        {SSL_CB_HANDSHAKE_DONE, NULL}, {SSL_CB_EXIT, NULL},
+        {SSL_CB_HANDSHAKE_START, NULL}, {SSL_CB_LOOP, "TED"},
+        {SSL_CB_LOOP, "TED"}, {SSL_CB_LOOP, "TWEOED"}, {SSL_CB_LOOP, "TRFIN"},
+        {SSL_CB_HANDSHAKE_DONE, NULL}, {SSL_CB_HANDSHAKE_START, NULL},
+        {SSL_CB_LOOP, "TWST"}, {SSL_CB_HANDSHAKE_DONE, NULL},
+        {SSL_CB_EXIT, NULL}, {0, NULL},
+    }, {
+        /* TLSv1.3 client, early_data */
+        {SSL_CB_HANDSHAKE_START, NULL}, {SSL_CB_LOOP, "PINIT "},
+        {SSL_CB_LOOP, "TWCH"}, {SSL_CB_LOOP, "TWCCS"},
+        {SSL_CB_HANDSHAKE_DONE, NULL}, {SSL_CB_EXIT, NULL},
+        {SSL_CB_HANDSHAKE_START, NULL}, {SSL_CB_LOOP, "TED"},
+        {SSL_CB_LOOP, "TED"}, {SSL_CB_LOOP, "TRSH"}, {SSL_CB_LOOP, "TREE"},
+        {SSL_CB_LOOP, "TRFIN"}, {SSL_CB_LOOP, "TPEDE"}, {SSL_CB_LOOP, "TWEOED"},
+        {SSL_CB_LOOP, "TWFIN"}, {SSL_CB_HANDSHAKE_DONE, NULL},
+        {SSL_CB_EXIT, NULL}, {SSL_CB_HANDSHAKE_START, NULL},
+        {SSL_CB_LOOP, "SSLOK "}, {SSL_CB_LOOP, "SSLOK "}, {SSL_CB_LOOP, "TRST"},
+        {SSL_CB_HANDSHAKE_DONE, NULL}, {SSL_CB_EXIT, NULL}, {0, NULL},
+    }, {
+        {0, NULL},
+    }
+};
+
+static void sslapi_info_callback(const SSL *s, int where, int ret)
+{
+    struct info_cb_states_st *state = info_cb_states[info_cb_offset];
+
+    /* We do not ever expect a connection to fail in this test */
+    if (!TEST_false(ret == 0)) {
+        info_cb_failed = 1;
+        return;
+    }
+
+    /*
+     * Do some sanity checks. We never expect these things to happen in this
+     * test
+     */
+    if (!TEST_false((SSL_is_server(s) && (where & SSL_ST_CONNECT) != 0))
+            || !TEST_false(!SSL_is_server(s) && (where & SSL_ST_ACCEPT) != 0)
+            || !TEST_int_ne(state[++info_cb_this_state].where, 0)) {
+        info_cb_failed = 1;
+        return;
+    }
+
+    /* Now check we're in the right state */
+    if (!TEST_true((where & state[info_cb_this_state].where) != 0)) {
+        info_cb_failed = 1;
+        return;
+    }
+    if ((where & SSL_CB_LOOP) != 0
+            && !TEST_int_eq(strcmp(SSL_state_string(s),
+                            state[info_cb_this_state].statestr), 0)) {
+        info_cb_failed = 1;
+        return;
+    }
+
+    /* Check that, if we've got SSL_CB_HANDSHAKE_DONE we are not in init */
+    if ((where & SSL_CB_HANDSHAKE_DONE) && SSL_in_init((SSL *)s) != 0) {
+        info_cb_failed = 1;
+        return;
+    }
+}
+
+/*
+ * Test the info callback gets called when we expect it to.
+ *
+ * Test 0: TLSv1.2, server
+ * Test 1: TLSv1.2, client
+ * Test 2: TLSv1.3, server
+ * Test 3: TLSv1.3, client
+ * Test 4: TLSv1.3, server, early_data
+ * Test 5: TLSv1.3, client, early_data
+ */
+static int test_info_callback(int tst)
+{
+    SSL_CTX *cctx = NULL, *sctx = NULL;
+    SSL *clientssl = NULL, *serverssl = NULL;
+    SSL_SESSION *clntsess = NULL;
+    int testresult = 0;
+    int tlsvers;
+
+    if (tst < 2) {
+#ifndef OPENSSL_NO_TLS1_2
+        tlsvers = TLS1_2_VERSION;
+#else
+        return 1;
+#endif
+    } else {
+#ifndef OPENSSL_NO_TLS1_3
+        tlsvers = TLS1_3_VERSION;
+#else
+        return 1;
+#endif
+    }
+
+    /* Reset globals */
+    info_cb_failed = 0;
+    info_cb_this_state = -1;
+    info_cb_offset = tst;
+
+#ifndef OPENSSL_NO_TLS1_3
+    if (tst >= 4) {
+        SSL_SESSION *sess = NULL;
+        size_t written, readbytes;
+        unsigned char buf[80];
+
+        /* early_data tests */
+        if (!TEST_true(setupearly_data_test(&cctx, &sctx, &clientssl,
+                                            &serverssl, &sess, 0)))
+            goto end;
+
+        /* We don't actually need this reference */
+        SSL_SESSION_free(sess);
+
+        SSL_set_info_callback((tst % 2) == 0 ? serverssl : clientssl,
+                              sslapi_info_callback);
+
+        /* Write and read some early data and then complete the connection */
+        if (!TEST_true(SSL_write_early_data(clientssl, MSG1, strlen(MSG1),
+                                            &written))
+                || !TEST_size_t_eq(written, strlen(MSG1))
+                || !TEST_int_eq(SSL_read_early_data(serverssl, buf,
+                                                    sizeof(buf), &readbytes),
+                                SSL_READ_EARLY_DATA_SUCCESS)
+                || !TEST_mem_eq(MSG1, readbytes, buf, strlen(MSG1))
+                || !TEST_int_eq(SSL_get_early_data_status(serverssl),
+                                SSL_EARLY_DATA_ACCEPTED)
+                || !TEST_true(create_ssl_connection(serverssl, clientssl,
+                                                    SSL_ERROR_NONE))
+                || !TEST_false(info_cb_failed))
+            goto end;
+
+        testresult = 1;
+        goto end;
+    }
+#endif
+
+    if (!TEST_true(create_ssl_ctx_pair(TLS_server_method(),
+                                       TLS_client_method(),
+                                       tlsvers, tlsvers, &sctx, &cctx, cert,
+                                       privkey)))
+        goto end;
+
+    /*
+     * For even numbered tests we check the server callbacks. For odd numbers we
+     * check the client.
+     */
+    SSL_CTX_set_info_callback((tst % 2) == 0 ? sctx : cctx,
+                              sslapi_info_callback);
+
+    if (!TEST_true(create_ssl_objects(sctx, cctx, &serverssl,
+                                          &clientssl, NULL, NULL))
+        || !TEST_true(create_ssl_connection(serverssl, clientssl,
+                                            SSL_ERROR_NONE))
+        || !TEST_false(info_cb_failed))
+    goto end;
+
+
+
+    clntsess = SSL_get1_session(clientssl);
+    SSL_shutdown(clientssl);
+    SSL_shutdown(serverssl);
+    SSL_free(serverssl);
+    SSL_free(clientssl);
+    serverssl = clientssl = NULL;
+
+    /* Now do a resumption */
+    if (!TEST_true(create_ssl_objects(sctx, cctx, &serverssl, &clientssl, NULL,
+                                      NULL))
+            || !TEST_true(SSL_set_session(clientssl, clntsess))
+            || !TEST_true(create_ssl_connection(serverssl, clientssl,
+                                                SSL_ERROR_NONE))
+            || !TEST_true(SSL_session_reused(clientssl))
+            || !TEST_false(info_cb_failed))
+        goto end;
+
+    testresult = 1;
+
+ end:
+    SSL_free(serverssl);
+    SSL_free(clientssl);
+    SSL_SESSION_free(clntsess);
+    SSL_CTX_free(sctx);
+    SSL_CTX_free(cctx);
+    return testresult;
+}
+
+static int test_ssl_pending(int tst)
+{
+    SSL_CTX *cctx = NULL, *sctx = NULL;
+    SSL *clientssl = NULL, *serverssl = NULL;
+    int testresult = 0;
+    char msg[] = "A test message";
+    char buf[5];
+    size_t written, readbytes;
+
+    if (tst == 0) {
+        if (!TEST_true(create_ssl_ctx_pair(TLS_server_method(),
+                                           TLS_client_method(),
+                                           TLS1_VERSION, TLS_MAX_VERSION,
+                                           &sctx, &cctx, cert, privkey)))
+            goto end;
+    } else {
+#ifndef OPENSSL_NO_DTLS
+        if (!TEST_true(create_ssl_ctx_pair(DTLS_server_method(),
+                                           DTLS_client_method(),
+                                           DTLS1_VERSION, DTLS_MAX_VERSION,
+                                           &sctx, &cctx, cert, privkey)))
+            goto end;
+#else
+        return 1;
+#endif
+    }
+
+    if (!TEST_true(create_ssl_objects(sctx, cctx, &serverssl, &clientssl,
+                                             NULL, NULL))
+            || !TEST_true(create_ssl_connection(serverssl, clientssl,
+                                                SSL_ERROR_NONE)))
+        goto end;
+
+    if (!TEST_true(SSL_write_ex(serverssl, msg, sizeof(msg), &written))
+            || !TEST_size_t_eq(written, sizeof(msg))
+            || !TEST_true(SSL_read_ex(clientssl, buf, sizeof(buf), &readbytes))
+            || !TEST_size_t_eq(readbytes, sizeof(buf))
+            || !TEST_int_eq(SSL_pending(clientssl), (int)(written - readbytes)))
+        goto end;
+
+    testresult = 1;
+
+ end:
+    SSL_free(serverssl);
+    SSL_free(clientssl);
+    SSL_CTX_free(sctx);
+    SSL_CTX_free(cctx);
+
+    return testresult;
+}
+
+static struct {
+    unsigned int maxprot;
+    const char *clntciphers;
+    const char *clnttls13ciphers;
+    const char *srvrciphers;
+    const char *srvrtls13ciphers;
+    const char *shared;
+} shared_ciphers_data[] = {
+    {
+        TLS1_2_VERSION,
+        "AES128-SHA:AES256-SHA",
+        NULL,
+        "AES256-SHA:DHE-RSA-AES128-SHA",
+        NULL,
+        "AES256-SHA"
+    },
+    {
+        TLS1_2_VERSION,
+        "AES128-SHA:DHE-RSA-AES128-SHA:AES256-SHA",
+        NULL,
+        "AES128-SHA:DHE-RSA-AES256-SHA:AES256-SHA",
+        NULL,
+        "AES128-SHA:AES256-SHA"
+    },
+    {
+        TLS1_2_VERSION,
+        "AES128-SHA:AES256-SHA",
+        NULL,
+        "AES128-SHA:DHE-RSA-AES128-SHA",
+        NULL,
+        "AES128-SHA"
+    },
+#ifndef OPENSSL_NO_TLS1_3
+    {
+        TLS1_3_VERSION,
+        "AES128-SHA:AES256-SHA",
+        NULL,
+        "AES256-SHA:AES128-SHA256",
+        NULL,
+        "TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:"
+        "TLS_AES_128_GCM_SHA256:AES256-SHA"
+    },
+    {
+        TLS1_3_VERSION,
+        "AES128-SHA",
+        "TLS_AES_256_GCM_SHA384",
+        "AES256-SHA",
+        "TLS_AES_256_GCM_SHA384",
+        "TLS_AES_256_GCM_SHA384"
+    },
+#endif
+};
+
+static int test_ssl_get_shared_ciphers(int tst)
+{
+    SSL_CTX *cctx = NULL, *sctx = NULL;
+    SSL *clientssl = NULL, *serverssl = NULL;
+    int testresult = 0;
+    char buf[1024];
+
+    if (!TEST_true(create_ssl_ctx_pair(TLS_server_method(),
+                                       TLS_client_method(),
+                                       TLS1_VERSION,
+                                       shared_ciphers_data[tst].maxprot,
+                                       &sctx, &cctx, cert, privkey)))
+        goto end;
+
+    if (!TEST_true(SSL_CTX_set_cipher_list(cctx,
+                                        shared_ciphers_data[tst].clntciphers))
+            || (shared_ciphers_data[tst].clnttls13ciphers != NULL
+                && !TEST_true(SSL_CTX_set_ciphersuites(cctx,
+                                    shared_ciphers_data[tst].clnttls13ciphers)))
+            || !TEST_true(SSL_CTX_set_cipher_list(sctx,
+                                        shared_ciphers_data[tst].srvrciphers))
+            || (shared_ciphers_data[tst].srvrtls13ciphers != NULL
+                && !TEST_true(SSL_CTX_set_ciphersuites(sctx,
+                                    shared_ciphers_data[tst].srvrtls13ciphers))))
+        goto end;
+
+
+    if (!TEST_true(create_ssl_objects(sctx, cctx, &serverssl, &clientssl,
+                                             NULL, NULL))
+            || !TEST_true(create_ssl_connection(serverssl, clientssl,
+                                                SSL_ERROR_NONE)))
+        goto end;
+
+    if (!TEST_ptr(SSL_get_shared_ciphers(serverssl, buf, sizeof(buf)))
+            || !TEST_int_eq(strcmp(buf, shared_ciphers_data[tst].shared), 0)) {
+        TEST_info("Shared ciphers are: %s\n", buf);
+        goto end;
+    }
+
+    testresult = 1;
+
+ end:
+    SSL_free(serverssl);
+    SSL_free(clientssl);
+    SSL_CTX_free(sctx);
+    SSL_CTX_free(cctx);
+
+    return testresult;
+}
+
 int setup_tests(void)
 {
     if (!TEST_ptr(cert = test_get_argument(0))
-            || !TEST_ptr(privkey = test_get_argument(1)))
+            || !TEST_ptr(privkey = test_get_argument(1))
+            || !TEST_ptr(srpvfile = test_get_argument(2))
+            || !TEST_ptr(tmpfilename = test_get_argument(3)))
         return 0;
 
     if (getenv("OPENSSL_TEST_GETCOUNTS") != NULL) {
@@ -3871,6 +4642,12 @@ int setup_tests(void)
 #endif
     ADD_ALL_TESTS(test_ssl_clear, 2);
     ADD_ALL_TESTS(test_max_fragment_len_ext, OSSL_NELEM(max_fragment_len_test));
+#if !defined(OPENSSL_NO_SRP) && !defined(OPENSSL_NO_TLS1_2)
+    ADD_ALL_TESTS(test_srp, 6);
+#endif
+    ADD_ALL_TESTS(test_info_callback, 6);
+    ADD_ALL_TESTS(test_ssl_pending, 2);
+    ADD_ALL_TESTS(test_ssl_get_shared_ciphers, OSSL_NELEM(shared_ciphers_data));
     return 1;
 }
 

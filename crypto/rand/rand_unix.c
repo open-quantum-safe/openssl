@@ -7,6 +7,7 @@
  * https://www.openssl.org/source/license.html
  */
 
+#define _GNU_SOURCE
 #include "e_os.h"
 #include <stdio.h>
 #include "internal/cryptlib.h"
@@ -14,6 +15,63 @@
 #include "rand_lcl.h"
 #include "internal/rand_int.h"
 #include <stdio.h>
+#if defined(__linux)
+# include <sys/syscall.h>
+#endif
+#if defined(__FreeBSD__)
+# include <sys/types.h>
+# include <sys/sysctl.h>
+# include <sys/param.h>
+#endif
+#if defined(__OpenBSD__)
+# include <sys/param.h>
+#endif
+#ifdef OPENSSL_SYS_UNIX
+# include <sys/types.h>
+# include <unistd.h>
+# include <sys/time.h>
+
+static uint64_t get_time_stamp(void);
+static uint64_t get_timer_bits(void);
+
+/* Macro to convert two thirty two bit values into a sixty four bit one */
+# define TWO32TO64(a, b) ((((uint64_t)(a)) << 32) + (b))
+
+/*
+ * Check for the existence and support of POSIX timers.  The standard
+ * says that the _POSIX_TIMERS macro will have a positive value if they
+ * are available.
+ *
+ * However, we want an additional constraint: that the timer support does
+ * not require an extra library dependency.  Early versions of glibc
+ * require -lrt to be specified on the link line to access the timers,
+ * so this needs to be checked for.
+ *
+ * It is worse because some libraries define __GLIBC__ but don't
+ * support the version testing macro (e.g. uClibc).  This means
+ * an extra check is needed.
+ *
+ * The final condition is:
+ *      "have posix timers and either not glibc or glibc without -lrt"
+ *
+ * The nested #if sequences are required to avoid using a parameterised
+ * macro that might be undefined.
+ */
+# undef OSSL_POSIX_TIMER_OKAY
+# if defined(_POSIX_TIMERS) && _POSIX_TIMERS > 0
+#  if defined(__GLIBC__)
+#   if defined(__GLIBC_PREREQ)
+#    if __GLIBC_PREREQ(2, 17)
+#     define OSSL_POSIX_TIMER_OKAY
+#    endif
+#   endif
+#  else
+#   define OSSL_POSIX_TIMER_OKAY
+#  endif
+# endif
+#endif
+
+int syscall_random(void *buf, size_t buflen);
 
 #if (defined(OPENSSL_SYS_VXWORKS) || defined(OPENSSL_SYS_UEFI)) && \
         !defined(OPENSSL_RAND_SEED_NONE)
@@ -54,9 +112,6 @@
 size_t rand_pool_acquire_entropy(RAND_POOL *pool)
 {
     short int code;
-    gid_t curr_gid;
-    pid_t curr_pid;
-    uid_t curr_uid;
     int i, k;
     size_t bytes_needed;
     struct timespec ts;
@@ -69,18 +124,7 @@ size_t rand_pool_acquire_entropy(RAND_POOL *pool)
     extern void s$sleep2(long long *_duration, short int *_code);
 #  endif
 
-    /*
-     * Seed with the gid, pid, and uid, to ensure *some* variation between
-     * different processes.
-     */
-    curr_gid = getgid();
-    rand_pool_add(pool, &curr_gid, sizeof(curr_gid), 0);
-    curr_pid = getpid();
-    rand_pool_add(pool, &curr_pid, sizeof(curr_pid), 0);
-    curr_uid = getuid();
-    rand_pool_add(pool, &curr_uid, sizeof(curr_uid), 0);
-
-    bytes_needed = rand_pool_bytes_needed(pool, 2 /*entropy_per_byte*/);
+    bytes_needed = rand_pool_bytes_needed(pool, 4 /*entropy_factor*/);
 
     for (i = 0; i < bytes_needed; i++) {
         /*
@@ -119,25 +163,93 @@ size_t rand_pool_acquire_entropy(RAND_POOL *pool)
 #   error "Seeding uses urandom but DEVRANDOM is not configured"
 #  endif
 
+#  if defined(__GLIBC__) && defined(__GLIBC_PREREQ)
+#   if __GLIBC_PREREQ(2, 25)
+#    define OPENSSL_HAVE_GETRANDOM
+#   endif
+#  endif
+
+#  if (defined(__FreeBSD__) && __FreeBSD_version >= 1200061)
+#   define OPENSSL_HAVE_GETRANDOM
+#  endif
+
+#  if defined(OPENSSL_HAVE_GETRANDOM)
+#   include <sys/random.h>
+#  endif
+
 #  if defined(OPENSSL_RAND_SEED_OS)
 #   if !defined(DEVRANDOM)
 #    error "OS seeding requires DEVRANDOM to be configured"
 #   endif
+#   define OPENSSL_RAND_SEED_GETRANDOM
 #   define OPENSSL_RAND_SEED_DEVRANDOM
-#   if defined(__GLIBC__) && defined(__GLIBC_PREREQ)
-#    if __GLIBC_PREREQ(2, 25)
-#     define OPENSSL_RAND_SEED_GETRANDOM
-#    endif
-#   endif
-#  endif
-
-#  ifdef OPENSSL_RAND_SEED_GETRANDOM
-#   include <sys/random.h>
 #  endif
 
 #  if defined(OPENSSL_RAND_SEED_LIBRANDOM)
 #   error "librandom not (yet) supported"
 #  endif
+
+#  if defined(__FreeBSD__) && defined(KERN_ARND)
+/*
+ * sysctl_random(): Use sysctl() to read a random number from the kernel
+ * Returns the size on success, 0 on failure.
+ */
+static size_t sysctl_random(char *buf, size_t buflen)
+{
+    int mib[2];
+    size_t done = 0;
+    size_t len;
+
+    /*
+     * Old implementations returned longs, newer versions support variable
+     * sizes up to 256 byte. The code below would not work properly when
+     * the sysctl returns long and we want to request something not a multiple
+     * of longs, which should never be the case.
+     */
+    if (!ossl_assert(buflen % sizeof(long) == 0))
+        return 0;
+
+    mib[0] = CTL_KERN;
+    mib[1] = KERN_ARND;
+
+    do {
+        len = buflen;
+        if (sysctl(mib, 2, buf, &len, NULL, 0) == -1)
+            return done;
+        done += len;
+        buf += len;
+        buflen -= len;
+    } while (buflen > 0);
+
+    return done;
+}
+#  endif
+
+/*
+ * syscall_random(): Try to get random data using a system call
+ * returns the number of bytes returned in buf, or <= 0 on error.
+ */
+int syscall_random(void *buf, size_t buflen)
+{
+#  if defined(OPENSSL_HAVE_GETRANDOM)
+    return (int)getrandom(buf, buflen, 0);
+#  endif
+
+#  if defined(__linux) && defined(SYS_getrandom)
+    return (int)syscall(SYS_getrandom, buf, buflen, 0);
+#  endif
+
+#  if defined(__FreeBSD__) && defined(KERN_ARND)
+    return (int)sysctl_random(buf, buflen);
+#  endif
+
+   /* Supported since OpenBSD 5.6 */
+#  if defined(__OpenBSD__) && OpenBSD >= 201411
+    return getentropy(buf, buflen);
+#  endif
+
+    return -1;
+}
 
 /*
  * Try the various seeding methods in turn, exit when successful.
@@ -166,12 +278,12 @@ size_t rand_pool_acquire_entropy(RAND_POOL *pool)
     unsigned char *buffer;
 
 #   ifdef OPENSSL_RAND_SEED_GETRANDOM
-    bytes_needed = rand_pool_bytes_needed(pool, 8 /*entropy_per_byte*/);
+    bytes_needed = rand_pool_bytes_needed(pool, 1 /*entropy_factor*/);
     buffer = rand_pool_add_begin(pool, bytes_needed);
     if (buffer != NULL) {
         size_t bytes = 0;
 
-        if (getrandom(buffer, bytes_needed, 0) == (int)bytes_needed)
+        if (syscall_random(buffer, bytes_needed) == (int)bytes_needed)
             bytes = bytes_needed;
 
         rand_pool_add_end(pool, bytes, 8 * bytes);
@@ -188,7 +300,7 @@ size_t rand_pool_acquire_entropy(RAND_POOL *pool)
 #   endif
 
 #   ifdef OPENSSL_RAND_SEED_DEVRANDOM
-    bytes_needed = rand_pool_bytes_needed(pool, 8 /*entropy_per_byte*/);
+    bytes_needed = rand_pool_bytes_needed(pool, 1 /*entropy_factor*/);
     if (bytes_needed > 0) {
         static const char *paths[] = { DEVRANDOM, NULL };
         FILE *fp;
@@ -211,7 +323,7 @@ size_t rand_pool_acquire_entropy(RAND_POOL *pool)
             if (entropy_available > 0)
                 return entropy_available;
 
-            bytes_needed = rand_pool_bytes_needed(pool, 8 /*entropy_per_byte*/);
+            bytes_needed = rand_pool_bytes_needed(pool, 1 /*entropy_factor*/);
         }
     }
 #   endif
@@ -229,7 +341,7 @@ size_t rand_pool_acquire_entropy(RAND_POOL *pool)
 #   endif
 
 #   ifdef OPENSSL_RAND_SEED_EGD
-    bytes_needed = rand_pool_bytes_needed(pool, 8 /*entropy_per_byte*/);
+    bytes_needed = rand_pool_bytes_needed(pool, 1 /*entropy_factor*/);
     if (bytes_needed > 0) {
         static const char *paths[] = { DEVRANDOM_EGD, NULL };
         int i;
@@ -256,5 +368,126 @@ size_t rand_pool_acquire_entropy(RAND_POOL *pool)
 #  endif
 }
 # endif
+#endif
 
+#ifdef OPENSSL_SYS_UNIX
+int rand_pool_add_nonce_data(RAND_POOL *pool)
+{
+    struct {
+        pid_t pid;
+        CRYPTO_THREAD_ID tid;
+        uint64_t time;
+    } data = { 0 };
+
+    /*
+     * Add process id, thread id, and a high resolution timestamp to
+     * ensure that the nonce is unique whith high probability for
+     * different process instances.
+     */
+    data.pid = getpid();
+    data.tid = CRYPTO_THREAD_get_current_id();
+    data.time = get_time_stamp();
+
+    return rand_pool_add(pool, (unsigned char *)&data, sizeof(data), 0);
+}
+
+int rand_pool_add_additional_data(RAND_POOL *pool)
+{
+    struct {
+        CRYPTO_THREAD_ID tid;
+        uint64_t time;
+    } data = { 0 };
+
+    /*
+     * Add some noise from the thread id and a high resolution timer.
+     * The thread id adds a little randomness if the drbg is accessed
+     * concurrently (which is the case for the <master> drbg).
+     */
+    data.tid = CRYPTO_THREAD_get_current_id();
+    data.time = get_timer_bits();
+
+    return rand_pool_add(pool, (unsigned char *)&data, sizeof(data), 0);
+}
+
+
+
+/*
+ * Get the current time with the highest possible resolution
+ *
+ * The time stamp is added to the nonce, so it is optimized for not repeating.
+ * The current time is ideal for this purpose, provided the computer's clock
+ * is synchronized.
+ */
+static uint64_t get_time_stamp(void)
+{
+# if defined(OSSL_POSIX_TIMER_OKAY)
+    {
+        struct timespec ts;
+
+        if (clock_gettime(CLOCK_REALTIME, &ts) == 0)
+            return TWO32TO64(ts.tv_sec, ts.tv_nsec);
+    }
+# endif
+# if defined(__unix__) \
+     || (defined(_POSIX_C_SOURCE) && _POSIX_C_SOURCE >= 200112L)
+    {
+        struct timeval tv;
+
+        if (gettimeofday(&tv, NULL) == 0)
+            return TWO32TO64(tv.tv_sec, tv.tv_usec);
+    }
+# endif
+    return time(NULL);
+}
+
+/*
+ * Get an arbitrary timer value of the highest possible resolution
+ *
+ * The timer value is added as random noise to the additional data,
+ * which is not considered a trusted entropy sourec, so any result
+ * is acceptable.
+ */
+static uint64_t get_timer_bits(void)
+{
+    uint64_t res = OPENSSL_rdtsc();
+
+    if (res != 0)
+        return res;
+
+# if defined(__sun) || defined(__hpux)
+    return gethrtime();
+# elif defined(_AIX)
+    {
+        timebasestruct_t t;
+
+        read_wall_time(&t, TIMEBASE_SZ);
+        return TWO32TO64(t.tb_high, t.tb_low);
+    }
+# elif defined(OSSL_POSIX_TIMER_OKAY)
+    {
+        struct timespec ts;
+
+#  ifdef CLOCK_BOOTTIME
+#   define CLOCK_TYPE CLOCK_BOOTTIME
+#  elif defined(_POSIX_MONOTONIC_CLOCK)
+#   define CLOCK_TYPE CLOCK_MONOTONIC
+#  else
+#   define CLOCK_TYPE CLOCK_REALTIME
+#  endif
+
+        if (clock_gettime(CLOCK_TYPE, &ts) == 0)
+            return TWO32TO64(ts.tv_sec, ts.tv_nsec);
+    }
+# endif
+# if defined(__unix__) \
+     || (defined(_POSIX_C_SOURCE) && _POSIX_C_SOURCE >= 200112L)
+    {
+        struct timeval tv;
+
+        if (gettimeofday(&tv, NULL) == 0)
+            return TWO32TO64(tv.tv_sec, tv.tv_usec);
+    }
+# endif
+    return time(NULL);
+}
 #endif

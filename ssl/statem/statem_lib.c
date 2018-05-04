@@ -1033,6 +1033,10 @@ WORK_STATE tls_finish_handshake(SSL *s, WORK_STATE wst, int clearbufs, int stop)
             && s->post_handshake_auth == SSL_PHA_REQUESTED)
         s->post_handshake_auth = SSL_PHA_EXT_SENT;
 
+    /*
+     * Only set if there was a Finished message and this isn't after a TLSv1.3
+     * post handshake exchange
+     */
     if (s->statem.cleanuphand) {
         /* skipped if we just sent a HelloRequest */
         s->renegotiate = 0;
@@ -1069,14 +1073,6 @@ WORK_STATE tls_finish_handshake(SSL *s, WORK_STATE wst, int clearbufs, int stop)
                               &discard, s->session_ctx->lock);
         }
 
-        if (s->info_callback != NULL)
-            cb = s->info_callback;
-        else if (s->ctx->info_callback != NULL)
-            cb = s->ctx->info_callback;
-
-        if (cb != NULL)
-            cb(s, SSL_CB_HANDSHAKE_DONE, 1);
-
         if (SSL_IS_DTLS(s)) {
             /* done with handshaking */
             s->d1->handshake_read_seq = 0;
@@ -1086,10 +1082,23 @@ WORK_STATE tls_finish_handshake(SSL *s, WORK_STATE wst, int clearbufs, int stop)
         }
     }
 
-    if (!stop)
-        return WORK_FINISHED_CONTINUE;
+    if (s->info_callback != NULL)
+        cb = s->info_callback;
+    else if (s->ctx->info_callback != NULL)
+        cb = s->ctx->info_callback;
 
+    /* The callback may expect us to not be in init at handshake done */
     ossl_statem_set_in_init(s, 0);
+
+    if (cb != NULL)
+        cb(s, SSL_CB_HANDSHAKE_DONE, 1);
+
+    if (!stop) {
+        /* If we've got more work to do we go back into init */
+        ossl_statem_set_in_init(s, 1);
+        return WORK_FINISHED_CONTINUE;
+    }
+
     return WORK_FINISHED_STOP;
 }
 
@@ -1994,6 +2003,13 @@ int ssl_get_min_max_version(const SSL *s, int *min_version, int *max_version)
 int ssl_set_client_hello_version(SSL *s)
 {
     int ver_min, ver_max, ret;
+
+    /*
+     * In a renegotiation we always send the same client_version that we sent
+     * last time, regardless of which version we eventually negotiated.
+     */
+    if (!SSL_IS_FIRST_HANDSHAKE(s))
+        return 0;
 
     ret = ssl_get_min_max_version(s, &ver_min, &ver_max);
 
