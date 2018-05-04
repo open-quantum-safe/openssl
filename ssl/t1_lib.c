@@ -20,6 +20,7 @@
 #include "internal/nelem.h"
 #include "ssl_locl.h"
 #include <openssl/ct.h>
+#include "ssl_oqs_extra.h"
 
 SSL3_ENC_METHOD const TLSv1_enc_data = {
     tls1_enc,
@@ -166,6 +167,22 @@ static const TLS_GROUP_INFO nid_list[] = {
     {NID_brainpoolP512r1, 256, TLS_CURVE_PRIME}, /* brainpool512r1 (28) */
     {EVP_PKEY_X25519, 128, TLS_CURVE_CUSTOM}, /* X25519 (29) */
     {EVP_PKEY_X448, 224, TLS_CURVE_CUSTOM}, /* X448 (30) */
+    /* OQS "groups". The values are arbitraty, since the TLS does not specify values
+       for non finite field and elliptic curve "groups". For now, we use sequentially
+       incremented values, because some OpenSSL code looks at the index of an element
+       in this table to determine its value.
+     */
+    {NID_OQS_Frodo, 144 /* classical */, TLS_CURVE_CUSTOM}, /* OQS Frodo (31) */
+    {NID_OQS_SIKE_503, 126 /* classical */, TLS_CURVE_CUSTOM}, /* OQS SIKE 503 (32) */
+    {NID_OQS_SIKE_751, 188 /* classical */, TLS_CURVE_CUSTOM}, /* OQS SIKE 751 (33) */
+    {NID_OQS_Newhope, 229 /* classical */, TLS_CURVE_CUSTOM}, /* OQS Newhope (34) */
+    {NID_OQS_NTRU, 256 /* classical */, TLS_CURVE_CUSTOM}, /* OQS NTRU (35) */
+    /* Hybrid curves */
+    {NID_OQS_p256_Frodo, 128 /* classical, min(p256,frodo) */, TLS_CURVE_CUSTOM}, /* p256 + OQS Frodo hybrid (36) */
+    {NID_OQS_p256_SIKE_503, 126 /* classical, min(p256,sike503) */, TLS_CURVE_CUSTOM}, /* p256 + OQS SIKE 503 hybrid (37) */
+    {NID_OQS_p256_SIKE_751, 128 /* classical, min(p256,sike751) */, TLS_CURVE_CUSTOM}, /* p256 + OQS SIKE 751 hybrid (38) */
+    {NID_OQS_p256_Newhope, 128 /* classical, min(p256,newhope) */, TLS_CURVE_CUSTOM}, /* p256 + OQS Newhope hybrid (39) */
+    {NID_OQS_p256_NTRU, 128 /* classical, min(p256,ntru) */, TLS_CURVE_CUSTOM}, /* p256 + OQS NTRU hybrid (40) */
 };
 
 static const unsigned char ecformats_default[] = {
@@ -181,6 +198,18 @@ static const uint16_t eccurves_default[] = {
     30,                      /* X448 (30) */
     25,                      /* secp521r1 (25) */
     24,                      /* secp384r1 (24) */
+    /* FIXMEOQS: what should the code points be? TLS1.3 only specify DH and EC groups.
+       Also, shouldn't be in the default list; need to be added to s->ext.supportedgroups */
+    31,                      /* OQS Frodo (31) */
+    32,                      /* OQS Sike503 (32) */
+    33,                      /* OQS Sike751 (33) */
+    34,                      /* OQS Newhope (34) */
+    35,                      /* OQS NTRU (35) */
+    36,                      /* p256 + OQS Frodo hybrid (36) */
+    37,                      /* p256 + OQS Sike503 hybrid (37) */
+    38,                      /* p256 + OQS Sike751 hybrid (38) */
+    39,                      /* p256 + OQS Newhope hybrid (39) */
+    40,                      /* p256 + OQS NTRU hybrid (40) */
 };
 
 static const uint16_t suiteb_curves[] = {
@@ -392,6 +421,10 @@ static int nid_cb(const char *elem, int len, void *arg)
         nid = OBJ_sn2nid(etmp);
     if (nid == NID_undef)
         nid = OBJ_ln2nid(etmp);
+    /* OQS note: parse oqs algs */
+    if (nid == NID_undef) {
+      nid = OQS_nid_from_string(etmp);
+    }
     if (nid == NID_undef)
         return 0;
     for (i = 0; i < narg->nidcnt; i++)

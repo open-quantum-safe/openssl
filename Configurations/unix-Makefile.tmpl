@@ -237,12 +237,15 @@ CNF_CPPFLAGS={- our $cppflags2 =
                                               @{$config{includes}}),
                               @{$config{cppflags}}) -}
 CNF_CFLAGS={- join(' ', $target{cflags} || (),
+                        "-Ivendor/liboqs/include",
                         @{$config{cflags}}) -}
 CNF_CXXFLAGS={- join(' ', $target{cxxflags} || (),
                           @{$config{cxxflags}}) -}
 CNF_LDFLAGS={- join(' ', $target{lflags} || (),
+                         "-Lvendor/liboqs",
                          @{$config{lflags}}) -}
 CNF_EX_LIBS={- join(' ', $target{ex_libs} || (),
+                         "-loqs",
                          @{$config{ex_libs}}) -}
 
 # Variables starting with LIB_ are used to build library object files
@@ -337,7 +340,7 @@ LANG=C
 
 # The main targets ###################################################
 
-{- dependmagic('all'); -}: build_libs_nodep build_engines_nodep build_programs_nodep link-utils
+{- dependmagic('all'); -}: build_liboqs build_libs_nodep build_engines_nodep build_programs_nodep link-utils
 {- dependmagic('build_libs'); -}: build_libs_nodep
 {- dependmagic('build_engines'); -}: build_engines_nodep
 {- dependmagic('build_programs'); -}: build_programs_nodep
@@ -358,6 +361,9 @@ build_all_generated: $(GENERATED_MANDATORY) $(GENERATED)
 	@echo "         target system doesn't have $(PERL),"
 	@echo "         then make will fail..."
 	@ : {- output_on() if $disabled{makedepend}; "" -}
+
+build_liboqs: build_generated
+	cd vendor/liboqs && autoreconf -i && ./configure --enable-shared && $(MAKE)
 
 test: tests
 {- dependmagic('tests'); -}: build_programs_nodep build_engines_nodep link-utils
