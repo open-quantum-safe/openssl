@@ -30,7 +30,7 @@ The following key exchange / key encapsulation mechanisms from liboqs are suppor
 - sike503, sike751
 - sidh503, sidh751
 - frodo640aes, frodo640cshake, frodo976aes, frodo976cshake
-- bike1l1, bike1l3, bike1l5, bike2l1, bike2l3, bike2l5, bike3l1, bike3l3, bike3l5 (not currently on Windows)
+- bike1l1, bike1l3, bike1l5, bike3l1, bike3l3, bike3l5 (not currently on Windows)
 - newhope512cca, newhope1024cca
 
 ### Authentication mechanisms
@@ -148,7 +148,7 @@ To run a basic TLS server with all OQS ciphersuites enabled:
 
 	apps/openssl s_server -cert <SIGALG>.crt -key <SIGALG>.key -HTTP -tls1_3
 
-In another terminal window, you can run a TLS client for any or all of the supported ciphersuites (`<KEXALG>` = `sike503`, `sike751`, `sidh503`, `sidh751`, `frodo640aes`, `frodo640cshake`, `frodo976aes`, `frodo976cshake`, `bike1l1`, `bike1l3`, `bike1l5`, `bike2l1`, `bike2l3`, `bike2l5`, `bike3l1`, `bike3l3`, `bike3l5`, `newhope512cca`, `newhope1024cca`) or the hybrid ciphersuites (`p256-<KEXALG>`, only the NIST p256 curve in combination with L1 PQC schemes are supported for now), for example:
+In another terminal window, you can run a TLS client for any or all of the supported ciphersuites (`<KEXALG>` = `sike503`, `sike751`, `sidh503`, `sidh751`, `frodo640aes`, `frodo640cshake`, `frodo976aes`, `frodo976cshake`, `bike1l1`, `bike1l3`, `bike1l5`, `bike3l1`, `bike3l3`, `bike3l5`, `newhope512cca`, `newhope1024cca`) or the hybrid ciphersuites (`p256-<KEXALG>`, only the NIST p256 curve in combination with L1 PQC schemes are supported for now), for example:
 
     apps/openssl s_client -curves <KEXALG> -connect localhost:4433
 

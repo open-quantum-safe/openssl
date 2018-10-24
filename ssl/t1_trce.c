@@ -541,9 +541,11 @@ static const ssl_trace_tbl ssl_groups_tbl[] = {
     {OQS_KEM_CURVEID(NID_OQS_BIKE1_L1), "bike1l1"},
     {OQS_KEM_CURVEID(NID_OQS_BIKE1_L3), "bike1l3"},
     {OQS_KEM_CURVEID(NID_OQS_BIKE1_L5), "bike1l5"},
+    /* temporarily disable bike2, see github issue 42
     {OQS_KEM_CURVEID(NID_OQS_BIKE2_L1), "bike2l1"},
     {OQS_KEM_CURVEID(NID_OQS_BIKE2_L3), "bike2l3"},
     {OQS_KEM_CURVEID(NID_OQS_BIKE2_L5), "bike2l5"},
+    */
     {OQS_KEM_CURVEID(NID_OQS_BIKE3_L1), "bike3l1"},
     {OQS_KEM_CURVEID(NID_OQS_BIKE3_L3), "bike3l3"},
     {OQS_KEM_CURVEID(NID_OQS_BIKE3_L5), "bike3l5"},
@@ -555,7 +557,9 @@ static const ssl_trace_tbl ssl_groups_tbl[] = {
     {OQS_KEM_CURVEID(NID_OQS_p256_Frodo_640_AES), "p256 - frodo640aes hybrid"},
     {OQS_KEM_CURVEID(NID_OQS_p256_Frodo_640_cshake), "p256 - frodo640cshake hybrid"},
     {OQS_KEM_CURVEID(NID_OQS_p256_BIKE1_L1), "p256 - bike1l1 hybrid"},
+    /* temporarily disable bike2, see github issue 42
     {OQS_KEM_CURVEID(NID_OQS_p256_BIKE2_L1), "p256 - bike2l1 hybrid"},
+    */
     {OQS_KEM_CURVEID(NID_OQS_p256_BIKE3_L1), "p256 - bike3l1 hybrid"},
     /* ADD_MORE_OQS_KEM_HERE (L1 schemes) */
     {0xFF01, "arbitrary_explicit_prime_curves"},

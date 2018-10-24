@@ -414,9 +414,10 @@ int ssl_print_groups(BIO *out, SSL *s, int noshared)
 				  (id == 0x0208 ? "bike1l1" :		\
 				  (id == 0x0209 ? "bike1l3" :		\
 				  (id == 0x020a ? "bike1l5" :		\
-				  (id == 0x020b ? "bike2l1" :		\
-				  (id == 0x020c ? "bike2l3" :		\
-				  (id == 0x020d ? "bike2l5" :		\
+				  /* temporarily disable bike2, see github issue 42 */ \
+				  /* (id == 0x020b ? "bike2l1" : */ \
+				  /* (id == 0x020c ? "bike2l3" : */ \
+				  /* (id == 0x020d ? "bike2l5" : */ \
 				  (id == 0x020e ? "bike3l1" :		\
 				  (id == 0x020f ? "bike3l3" :		\
 				  (id == 0x0210 ? "bike3l5" :		\
@@ -428,11 +429,12 @@ int ssl_print_groups(BIO *out, SSL *s, int noshared)
 				  (id == 0x0302 ? "p256 - frodo640aes hybrid" : \
 				  (id == 0x0303 ? "p256 - frodo640cshake hybrid" : \
 				  (id == 0x0304 ? "p256 - bike1l1 hybrid" : \
-				  (id == 0x0305 ? "p256 - bike2l1 hybrid" : \
+				  /* temporarily disable bike2, see github issue 42 */ \
+				  /* (id == 0x0305 ? "p256 - bike2l1 hybrid" : */ \
 				  (id == 0x0306 ? "p256 - bike3l1 hybrid" : \
 				  (id == 0x0307 ? "p256 - newhope512cca hybrid" : \
 				  /* ADD_MORE_OQS_KEM_HERE (L1 schemes) */ \
-				   0)))))))))))))))))))))))))))
+				   0)))))))))))))))))))))))
 
 int ssl_print_tmp_key(BIO *out, SSL *s)
 {

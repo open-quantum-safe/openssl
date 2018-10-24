@@ -435,9 +435,11 @@
 #define NID_OQS_BIKE1_L1         (NID_OQS_START + 8)
 #define NID_OQS_BIKE1_L3         (NID_OQS_START + 9)
 #define NID_OQS_BIKE1_L5         (NID_OQS_START + 10)
+/* temporarily disable bike2, see github issue 42
 #define NID_OQS_BIKE2_L1         (NID_OQS_START + 11)
 #define NID_OQS_BIKE2_L3         (NID_OQS_START + 12)
 #define NID_OQS_BIKE2_L5         (NID_OQS_START + 13)
+*/
 #define NID_OQS_BIKE3_L1         (NID_OQS_START + 14)
 #define NID_OQS_BIKE3_L3         (NID_OQS_START + 15)
 #define NID_OQS_BIKE3_L5         (NID_OQS_START + 16)
@@ -452,7 +454,9 @@
 #define NID_OQS_p256_Frodo_640_AES    (NID_HYBRID_START + 2)
 #define NID_OQS_p256_Frodo_640_cshake (NID_HYBRID_START + 3)
 #define NID_OQS_p256_BIKE1_L1         (NID_HYBRID_START + 4)
+/* temporarily disable bike2, see github issue 42
 #define NID_OQS_p256_BIKE2_L1         (NID_HYBRID_START + 5)
+*/
 #define NID_OQS_p256_BIKE3_L1         (NID_HYBRID_START + 6)
 #define NID_OQS_p256_NEWHOPE_512_CCA  (NID_HYBRID_START + 7)
 /* ADD_MORE_OQS_KEM_HERE (L1 schemes, update counter below) */
@@ -475,27 +479,29 @@
 			     (nid == NID_OQS_BIKE1_L1         ? 0x0208 : \
 			     (nid == NID_OQS_BIKE1_L3         ? 0x0209 : \
 			     (nid == NID_OQS_BIKE1_L5         ? 0x020a : \
-			     (nid == NID_OQS_BIKE2_L1         ? 0x020b : \
-			     (nid == NID_OQS_BIKE2_L3         ? 0x020c : \
-			     (nid == NID_OQS_BIKE2_L5         ? 0x020d : \
+			     /* temporarily disable bike2, see github issue 42 */ \
+			     /* (nid == NID_OQS_BIKE2_L1         ? 0x020b : */ \
+			     /* (nid == NID_OQS_BIKE2_L3         ? 0x020c :*/  \
+			     /* (nid == NID_OQS_BIKE2_L5         ? 0x020d :*/ \
 			     (nid == NID_OQS_BIKE3_L1         ? 0x020e : \
 			     (nid == NID_OQS_BIKE3_L3         ? 0x020f : \
 			     (nid == NID_OQS_BIKE3_L5         ? 0x0210 : \
 			     (nid == NID_OQS_NEWHOPE_512_CCA  ? 0x0211 : \
 			     (nid == NID_OQS_NEWHOPE_1024_CCA ? 0x0212 : \
 			     /* ADD_MORE_OQS_KEM_HERE */ \
-			      0)))))))))))))))))))
+			      0))))))))))))))))
 
 #define OQS_KEM_HYBRID_CURVEID(nid) (nid == NID_OQS_p256_SIKE_503         ? 0x0300 : \
 				    (nid == NID_OQS_p256_SIDH_503         ? 0x0301 : \
 				    (nid == NID_OQS_p256_Frodo_640_AES    ? 0x0302 : \
 				    (nid == NID_OQS_p256_Frodo_640_cshake ? 0x0303 : \
 				    (nid == NID_OQS_p256_BIKE1_L1         ? 0x0304 : \
-				    (nid == NID_OQS_p256_BIKE2_L1         ? 0x0305 : \
+				    /* temporarily disable bike2, see github issue 42 */ \
+				    /* (nid == NID_OQS_p256_BIKE2_L1         ? 0x0305 : */ \
 				    (nid == NID_OQS_p256_BIKE3_L1         ? 0x0306 : \
 				    (nid == NID_OQS_p256_NEWHOPE_512_CCA  ? 0x0307 : \
 				    /* ADD_MORE_OQS_KEM_HERE (L1 schemes) */ \
-			            0))))))))
+			            0)))))))
 
 #define OQS_KEM_NID(curveID)  ((curveID == 0x0200 || curveID == 0x0300) ? NID_OQS_SIKE_503 : \
 			      ( curveID == 0x0201                       ? NID_OQS_SIKE_751 : \
@@ -508,16 +514,17 @@
 			      ((curveID == 0x0208 || curveID == 0x0304) ? NID_OQS_BIKE1_L1 : \
 			      ( curveID == 0x0209                       ? NID_OQS_BIKE1_L3 : \
 			      ( curveID == 0x020a                       ? NID_OQS_BIKE1_L5 : \
-			      ((curveID == 0x020b || curveID == 0x0305) ? NID_OQS_BIKE2_L1 : \
-			      ( curveID == 0x020c                       ? NID_OQS_BIKE2_L3 : \
-			      ( curveID == 0x020d                       ? NID_OQS_BIKE2_L5 : \
+			      /* temporarily disable bike2, see github issue 42 */ \
+			      /* ((curveID == 0x020b || curveID == 0x0305) ? NID_OQS_BIKE2_L1 :	*/ \
+			      /* ( curveID == 0x020c                       ? NID_OQS_BIKE2_L3 : */ \
+			      /* ( curveID == 0x020d                       ? NID_OQS_BIKE2_L5 : */ \
 			      ((curveID == 0x020e || curveID == 0x0306) ? NID_OQS_BIKE3_L1 : \
 			      ( curveID == 0x020f                       ? NID_OQS_BIKE3_L3 : \
 			      ( curveID == 0x0210                       ? NID_OQS_BIKE3_L5 : \
 			      ( curveID == 0x0211 || curveID == 0x0307) ? NID_OQS_NEWHOPE_512_CCA : \
 			      ( curveID == 0x0212                       ? NID_OQS_NEWHOPE_1024_CCA : \
 			      /* ADD_MORE_OQS_KEM_HERE */ \
-			      0 ))))))))))))))))))
+			      0 )))))))))))))))
 
 
 /* Returns true if the curve ID is for an OQS KEX */
@@ -538,16 +545,17 @@
 			     (nid == NID_OQS_BIKE1_L1         ? OQS_KEM_alg_bike1_l1 : \
 			     (nid == NID_OQS_BIKE1_L3         ? OQS_KEM_alg_bike1_l3 : \
 			     (nid == NID_OQS_BIKE1_L5         ? OQS_KEM_alg_bike1_l5 : \
-			     (nid == NID_OQS_BIKE2_L1         ? OQS_KEM_alg_bike2_l1 : \
-			     (nid == NID_OQS_BIKE2_L3         ? OQS_KEM_alg_bike2_l3 : \
-			     (nid == NID_OQS_BIKE2_L5         ? OQS_KEM_alg_bike2_l5 : \
+			     /* temporarily disable bike2, see github issue 42 */ \
+			     /* (nid == NID_OQS_BIKE2_L1         ? OQS_KEM_alg_bike2_l1 : */ \
+			     /* (nid == NID_OQS_BIKE2_L3         ? OQS_KEM_alg_bike2_l3 : */ \
+			     /* (nid == NID_OQS_BIKE2_L5         ? OQS_KEM_alg_bike2_l5 : */ \
 			     (nid == NID_OQS_BIKE3_L1         ? OQS_KEM_alg_bike3_l1 : \
 			     (nid == NID_OQS_BIKE3_L3         ? OQS_KEM_alg_bike3_l3: \
 			     (nid == NID_OQS_BIKE3_L5         ? OQS_KEM_alg_bike3_l5 : \
 			     (nid == NID_OQS_NEWHOPE_512_CCA  ? OQS_KEM_alg_newhope_512_cca_kem : \
 			     (nid == NID_OQS_NEWHOPE_1024_CCA ? OQS_KEM_alg_newhope_1024_cca_kem : \
 			     /* ADD_MORE_OQS_KEM_HERE */ \
-			      "")))))))))))))))))))
+			      ""))))))))))))))))
 
 /* Returns the classical nid for an hybrid alg (FIXMEOQS: only secp256r1 (23) is supported for now) */
 #define OQS_KEM_CLASSICAL_CURVEID(curveID) (IS_OQS_KEM_HYBRID_CURVEID(curveID) ? 23 : 0)

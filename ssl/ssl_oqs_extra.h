@@ -26,12 +26,14 @@ static int OQS_nid_from_string(const char *value) {
     nid = NID_OQS_BIKE1_L3;
   } else if (memcmp(value,"bike1l5", len) == 0) {
     nid = NID_OQS_BIKE1_L5;
+/* temporarily disable bike2, see github issue 42
   } else if (memcmp(value,"bike2l1", len) == 0) {
     nid = NID_OQS_BIKE2_L1;
   } else if (memcmp(value,"bike2l3", len) == 0) {
     nid = NID_OQS_BIKE2_L3;
   } else if (memcmp(value,"bike2l5", len) == 0) {
     nid = NID_OQS_BIKE2_L5;
+*/
   } else if (memcmp(value,"bike3l1", len) == 0) {
     nid = NID_OQS_BIKE3_L1;
   } else if (memcmp(value,"bike3l3", len) == 0) {
@@ -54,8 +56,10 @@ static int OQS_nid_from_string(const char *value) {
     nid = NID_OQS_p256_Frodo_640_cshake;
   } else if (memcmp(value,"p256-bike1l1", len) == 0) {
     nid = NID_OQS_p256_BIKE1_L1;
+/* temporarily disable bike2, see github issue 42
   } else if (memcmp(value,"p256-bike2l1", len) == 0) {
     nid = NID_OQS_p256_BIKE2_L1;
+*/
   } else if (memcmp(value,"p256-bike3l1", len) == 0) {
     nid = NID_OQS_p256_BIKE3_L1;
   } else if (memcmp(value,"p256-newhope512cca", len) == 0) {

@@ -184,9 +184,10 @@ static const TLS_GROUP_INFO oqs_nid_list[] = {
     {NID_OQS_BIKE1_L1, 128, TLS_CURVE_CUSTOM}, /* bike1l1 (0x0208) */
     {NID_OQS_BIKE1_L3, 192, TLS_CURVE_CUSTOM}, /* bike1l3 (0x0209) */
     {NID_OQS_BIKE1_L5, 256, TLS_CURVE_CUSTOM}, /* bike1l5 (0x020a) */
-    {NID_OQS_BIKE2_L1, 128, TLS_CURVE_CUSTOM}, /* bike2l1 (0x020b) */
-    {NID_OQS_BIKE2_L3, 192, TLS_CURVE_CUSTOM}, /* bike2l3 (0x020c) */
-    {NID_OQS_BIKE2_L5, 256, TLS_CURVE_CUSTOM}, /* bike2l5 (0x020d) */
+    // temporarily disable bike2, see github issue 42
+    // {NID_OQS_BIKE2_L1, 128, TLS_CURVE_CUSTOM}, /* bike2l1 (0x020b) */
+    // {NID_OQS_BIKE2_L3, 192, TLS_CURVE_CUSTOM}, /* bike2l3 (0x020c) */
+    // {NID_OQS_BIKE2_L5, 256, TLS_CURVE_CUSTOM}, /* bike2l5 (0x020d) */
     {NID_OQS_BIKE3_L1, 128, TLS_CURVE_CUSTOM}, /* bike3l1 (0x020e) */
     {NID_OQS_BIKE3_L3, 192, TLS_CURVE_CUSTOM}, /* bike3l3 (0x020f) */
     {NID_OQS_BIKE3_L5, 256, TLS_CURVE_CUSTOM}, /* bike3l5 (0x0210) */
@@ -201,7 +202,8 @@ static const TLS_GROUP_INFO oqs_hybrid_nid_list[] = {
     {NID_OQS_p256_Frodo_640_AES, 128, TLS_CURVE_CUSTOM}, /* p256 + frodo640aes hybrid (0x0302) */
     {NID_OQS_p256_Frodo_640_cshake, 128, TLS_CURVE_CUSTOM}, /* p256 + frodo640cshake hybrid (0x0303) */
     {NID_OQS_p256_BIKE1_L1, 128, TLS_CURVE_CUSTOM}, /* p256 + bike1l1 hybrid (0x0304) */
-    {NID_OQS_p256_BIKE2_L1, 128, TLS_CURVE_CUSTOM}, /* p256 + bike2l1 hybrid (0x0305) */
+    // temporarily disable bike2, see github issue 42
+    // {NID_OQS_p256_BIKE2_L1, 128, TLS_CURVE_CUSTOM}, /* p256 + bike2l1 hybrid (0x0305) */
     {NID_OQS_p256_BIKE3_L1, 128, TLS_CURVE_CUSTOM}, /* p256 + bike3l1 hybrid (0x0306) */
     {NID_OQS_p256_NEWHOPE_512_CCA, 128, TLS_CURVE_CUSTOM}, /* p256 + newhope512cca hybrid (0x0307) */
     /* ADD_MORE_OQS_KEM_HERE (L1 schemes) */
@@ -233,9 +235,10 @@ static const uint16_t eccurves_default[] = {
     0x0208, /* OQS bike1l1 */
     0x0209, /* OQS bike1l3 */
     0x020a, /* OQS bike1l5 */
-    0x020b, /* OQS bike2l1 */
-    0x020c, /* OQS bike2l3 */
-    0x020d, /* OQS bike2l5 */
+    // temporarily disable bike2, see github issue 42
+    // 0x020b, /* OQS bike2l1 */
+    // 0x020c, /* OQS bike2l3 */
+    // 0x020d, /* OQS bike2l5 */
     0x020e, /* OQS bike3l1 */
     0x020f, /* OQS bike3l3 */
     0x0210, /* OQS bike3l5 */
@@ -247,7 +250,8 @@ static const uint16_t eccurves_default[] = {
     0x0302, /* p256 - OQS frodo640aes hybrid */
     0x0303, /* p256 - OQS frodo640cshake hybrid */
     0x0304, /* p256 - OQS bike1l1 hybrid */
-    0x0305, /* p256 - OQS bike2l1 hybrid */
+    // temporarily disable bike2, see github issue 42
+    // 0x0305, /* p256 - OQS bike2l1 hybrid */
     0x0306, /* p256 - OQS bike3l1 hybrid */
     0x0307, /* p256 - OQS newhope512cca hybrid */
     /* ADD_MORE_OQS_KEM_HERE (L1 schemes) */
