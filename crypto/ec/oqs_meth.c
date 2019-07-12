@@ -92,6 +92,12 @@ static char* get_oqs_alg_name(int openssl_nid)
     case NID_qteslaIIIspeed:
     case NID_p384_qteslaIIIspeed:
       return OQS_SIG_alg_qTESLA_III_speed;
+    case NID_dilithium2:
+      return OQS_SIG_alg_dilithium_2;
+    case NID_dilithium3:
+      return OQS_SIG_alg_dilithium_3;
+    case NID_dilithium4:
+      return OQS_SIG_alg_dilithium_4;
     /* ADD_MORE_OQS_SIG_HERE */
     default:
       return NULL;
@@ -165,7 +171,7 @@ static int get_classical_key_len(oqs_key_type_t keytype, int classical_id) {
     case NID_secp384r1:
       return (keytype == KEY_TYPE_PRIVATE) ? 167 : 97;
     default:
-      return -1;
+      return 0;
     }
 }
 
@@ -180,7 +186,7 @@ static int get_classical_sig_len(int classical_id)
     case NID_secp384r1:
       return 104;
     default:
-      return -1;
+      return 0;
     }
 }
 
@@ -199,6 +205,12 @@ static int get_oqs_security_bits(int openssl_nid)
       return 192;
     case NID_qteslaIIIspeed:
       return 192;
+    case NID_dilithium2:
+      return 128;
+    case NID_dilithium3:
+      return 128;
+    case NID_dilithium4:
+      return 192;
     /* hybrid schemes */
     case NID_p256_picnicL1FS:
       return 128;
@@ -214,7 +226,7 @@ static int get_oqs_security_bits(int openssl_nid)
       return 192;
     /* ADD_MORE_OQS_SIG_HERE */
     default:
-      return -1;
+      return 0;
     }
 }
 
@@ -608,7 +620,7 @@ static int oqs_priv_encode(PKCS8_PRIV_KEY_INFO *p8, const EVP_PKEY *pkey)
     if (is_hybrid) {
       unsigned char *classical_privkey = buf + SIZE_OF_UINT32; /* i2d moves the target pointer, so we copy into a temp var (leaving space for key len) */
       int actual_classical_privkey_len = i2d_PrivateKey(oqs_key->classical_pkey, &classical_privkey);
-      if (actual_classical_privkey_len < 0 || actual_classical_privkey_len > max_classical_privkey_len) {
+      if (actual_classical_privkey_len < 0 || (uint32_t) actual_classical_privkey_len > max_classical_privkey_len) {
 	/* something went wrong, or we didn't allocate enough space */
 	OPENSSL_free(buf);
         ECerr(EC_F_OQS_PRIV_ENCODE, ERR_R_FATAL);
@@ -789,7 +801,10 @@ static int oqs_item_verify(EVP_MD_CTX *ctx, const ASN1_ITEM *it, void *asn,
 	 nid != NID_qteslaIIIsize &&
 	 nid != NID_p384_qteslaIIIsize &&
 	 nid != NID_qteslaIIIspeed &&
-	 nid != NID_p384_qteslaIIIspeed
+	 nid != NID_p384_qteslaIIIspeed &&
+   nid != NID_dilithium2 &&
+   nid != NID_dilithium3 &&
+   nid != NID_dilithium4
 	 /* ADD_MORE_OQS_SIG_HERE */
 	 ) || ptype != V_ASN1_UNDEF) {
         ECerr(EC_F_OQS_ITEM_VERIFY, EC_R_UNKNOWN_NID);
@@ -1003,7 +1018,7 @@ static int pkey_oqs_digestsign(EVP_MD_CTX *ctx, unsigned char *sig,
         ECerr(EC_F_PKEY_OQS_DIGESTSIGN, EC_R_SIGNING_FAILED);
         goto end;
       }
-      if (actual_classical_sig_len > get_classical_sig_len(classical_id)) {
+      if (actual_classical_sig_len > (size_t) get_classical_sig_len(classical_id)) {
 	/* sig is bigger than expected! */
         ECerr(EC_F_PKEY_OQS_DIGESTSIGN, EC_R_BUFFER_LENGTH_WRONG);
         goto end;
@@ -1149,6 +1164,9 @@ DEFINE_OQS_EVP_METHODS(picnicL1FS, NID_picnicL1FS, "picnicL1FS", "OpenSSL Picnic
 DEFINE_OQS_EVP_METHODS(qteslaI, NID_qteslaI, "qteslaI", "OpenSSL qTESLA-I algorithm")
 DEFINE_OQS_EVP_METHODS(qteslaIIIsize, NID_qteslaIIIsize, "qteslaIIIsize", "OpenSSL qTESLA-III-size algorithm")
 DEFINE_OQS_EVP_METHODS(qteslaIIIspeed, NID_qteslaIIIspeed, "qteslaIIIspeed", "OpenSSL qTESLA-III-speed algorithm")
+DEFINE_OQS_EVP_METHODS(dilithium2, NID_dilithium2, "dilithium2", "OpenSSL Dilithium-2 algorithm")
+DEFINE_OQS_EVP_METHODS(dilithium3, NID_dilithium3, "dilithium3", "OpenSSL Dilithium-3 algorithm")
+DEFINE_OQS_EVP_METHODS(dilithium4, NID_dilithium4, "dilithium4", "OpenSSL Dilithium-4 algorithm")
 /* ADD_MORE_OQS_SIG_HERE */
 /* hybrid schemes */
 DEFINE_OQS_EVP_METHODS(p256_picnicL1FS, NID_p256_picnicL1FS, "p256_picnicL1FS", "OpenSSL hybrid p256 Picnic L1 FS algorithm")
