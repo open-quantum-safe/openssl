@@ -27,6 +27,13 @@ ED448		    undef	ED448
 picnicL1FS          undef     picnicL1FS
 p256_picnicL1FS     undef     p256_picnicL1FS
 rsa3072_picnicL1FS  undef     rsa3072_picnicL1FS
+picnic2L1FS          undef     picnic2L1FS
+p256_picnic2L1FS     undef     p256_picnic2L1FS
+rsa3072_picnic2L1FS  undef     rsa3072_picnic2L1FS
+picnic2L3FS          undef     picnic2L3FS
+p384_picnic2L3FS     undef     p384_picnic2L3FS
+picnic2L5FS          undef     picnic2L5FS
+p521_picnic2L5FS     undef     p521_picnic2L5FS
 qteslaI             undef     qteslaI
 p256_qteslaI        undef     p256_qteslaI
 rsa3072_qteslaI     undef     rsa3072_qteslaI

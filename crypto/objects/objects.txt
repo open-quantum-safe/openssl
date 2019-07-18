@@ -1683,6 +1683,13 @@ Microsoft 89 2                      : MSRPQC
 MSRPQC 1 1                          : picnicL1FS : picnicL1FS
 MSRPQC 1 2                          : p256_picnicL1FS : p256_picnicL1FS
 MSRPQC 1 3                          : rsa3072_picnicL1FS : rsa3072_picnicL1FS
+MSRPQC 1 4                          : picnic2L1FS : picnic2L1FS
+MSRPQC 1 5                          : p256_picnic2L1FS : p256_picnic2L1FS
+MSRPQC 1 6                          : rsa3072_picnic2L1FS : rsa3072_picnic2L1FS
+MSRPQC 1 7                          : picnic2L3FS : picnic2L3FS
+MSRPQC 1 8                          : p384_picnic2L3FS : p384_picnic2L3FS
+MSRPQC 1 9                          : picnic2L5FS : picnic2L5FS
+MSRPQC 1 10                         : p521_picnic2L5FS : p521_picnic2L5FS
 MSRPQC 2 1                          : qteslaI : qteslaI
 MSRPQC 2 2                          : p256_qteslaI : p256_qteslaI
 MSRPQC 2 3                          : rsa3072_qteslaI : rsa3072_qteslaI

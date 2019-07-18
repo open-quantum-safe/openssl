@@ -89,6 +89,9 @@ extern const EVP_PKEY_ASN1_METHOD siphash_asn1_meth;
 #if !defined(OQS_NIST_BRANCH)
 /* OQS sig schemes */
 extern const EVP_PKEY_ASN1_METHOD picnicL1FS_asn1_meth;
+extern const EVP_PKEY_ASN1_METHOD picnic2L1FS_asn1_meth;
+extern const EVP_PKEY_ASN1_METHOD picnic2L3FS_asn1_meth;
+extern const EVP_PKEY_ASN1_METHOD picnic2L5FS_asn1_meth;
 extern const EVP_PKEY_ASN1_METHOD qteslaI_asn1_meth;
 extern const EVP_PKEY_ASN1_METHOD qteslaIIIsize_asn1_meth;
 extern const EVP_PKEY_ASN1_METHOD qteslaIIIspeed_asn1_meth;
@@ -99,6 +102,10 @@ extern const EVP_PKEY_ASN1_METHOD dilithium4_asn1_meth;
 /* OQS hybrid schemes */
 extern const EVP_PKEY_ASN1_METHOD p256_picnicL1FS_asn1_meth;
 extern const EVP_PKEY_ASN1_METHOD rsa3072_picnicL1FS_asn1_meth;
+extern const EVP_PKEY_ASN1_METHOD p256_picnic2L1FS_asn1_meth;
+extern const EVP_PKEY_ASN1_METHOD rsa3072_picnic2L1FS_asn1_meth;
+extern const EVP_PKEY_ASN1_METHOD p384_picnic2L3FS_asn1_meth;
+extern const EVP_PKEY_ASN1_METHOD p521_picnic2L5FS_asn1_meth;
 extern const EVP_PKEY_ASN1_METHOD p256_qteslaI_asn1_meth;
 extern const EVP_PKEY_ASN1_METHOD rsa3072_qteslaI_asn1_meth;
 extern const EVP_PKEY_ASN1_METHOD p384_qteslaIIIsize_asn1_meth;

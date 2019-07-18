@@ -641,6 +641,9 @@ static const ssl_trace_tbl ssl_sigalg_tbl[] = {
 #if !defined(OQS_NIST_BRANCH)
     /* OQS sig schemes */
     {TLSEXT_SIGALG_picnicL1FS, "picnicL1FS"},
+    {TLSEXT_SIGALG_picnic2L1FS, "picnic2L1FS"},
+    {TLSEXT_SIGALG_picnic2L3FS, "picnic2L3FS"},
+    {TLSEXT_SIGALG_picnic2L5FS, "picnic2L5FS"},
     {TLSEXT_SIGALG_qteslaI, "qteslaI"},
     {TLSEXT_SIGALG_qteslaIIIsize, "qteslaIIIsize"},
     {TLSEXT_SIGALG_qteslaIIIspeed, "qteslaIIIspeed"},
@@ -651,6 +654,10 @@ static const ssl_trace_tbl ssl_sigalg_tbl[] = {
     /* OQS hybrid schemes */
     {TLSEXT_SIGALG_p256_picnicL1FS, "p256_picnicL1FS"},
     {TLSEXT_SIGALG_rsa3072_picnicL1FS, "rsa3072_picnicL1FS"},
+    {TLSEXT_SIGALG_p256_picnic2L1FS, "p256_picnic2L1FS"},
+    {TLSEXT_SIGALG_rsa3072_picnic2L1FS, "rsa3072_picnic2L1FS"},
+    {TLSEXT_SIGALG_p384_picnic2L3FS, "p384_picnic2L3FS"},
+    {TLSEXT_SIGALG_p521_picnic2L5FS, "p521_picnic2L5FS"},
     {TLSEXT_SIGALG_p256_qteslaI, "p256_qteslaI"},
     {TLSEXT_SIGALG_rsa3072_qteslaI, "rsa3072_qteslaI"},
     {TLSEXT_SIGALG_p384_qteslaIIIsize, "p256_qteslaIIIsize"},

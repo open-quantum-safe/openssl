@@ -115,6 +115,9 @@ extern const EVP_PKEY_METHOD siphash_pkey_meth;
 #if !defined(OQS_NIST_BRANCH)
 /* OQS sig schemes */
 extern const EVP_PKEY_METHOD picnicL1FS_pkey_meth;
+extern const EVP_PKEY_METHOD picnic2L1FS_pkey_meth;
+extern const EVP_PKEY_METHOD picnic2L3FS_pkey_meth;
+extern const EVP_PKEY_METHOD picnic2L5FS_pkey_meth;
 extern const EVP_PKEY_METHOD qteslaI_pkey_meth;
 extern const EVP_PKEY_METHOD qteslaIIIsize_pkey_meth;
 extern const EVP_PKEY_METHOD qteslaIIIspeed_pkey_meth;
@@ -125,6 +128,10 @@ extern const EVP_PKEY_METHOD dilithium4_pkey_meth;
 /* OQS hybrid schemes */
 extern const EVP_PKEY_METHOD p256_picnicL1FS_pkey_meth;
 extern const EVP_PKEY_METHOD rsa3072_picnicL1FS_pkey_meth;
+extern const EVP_PKEY_METHOD p256_picnic2L1FS_pkey_meth;
+extern const EVP_PKEY_METHOD rsa3072_picnic2L1FS_pkey_meth;
+extern const EVP_PKEY_METHOD p384_picnic2L3FS_pkey_meth;
+extern const EVP_PKEY_METHOD p521_picnic2L5FS_pkey_meth;
 extern const EVP_PKEY_METHOD p256_qteslaI_pkey_meth;
 extern const EVP_PKEY_METHOD rsa3072_qteslaI_pkey_meth;
 extern const EVP_PKEY_METHOD p384_qteslaIIIsize_pkey_meth;

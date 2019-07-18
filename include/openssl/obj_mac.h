@@ -5220,52 +5220,87 @@
 #define NID_rsa3072_picnicL1FS          1199
 #define OBJ_rsa3072_picnicL1FS          OBJ_MSRPQC,1L,3L
 
+#define SN_picnic2L1FS          "picnic2L1FS"
+#define LN_picnic2L1FS          "picnic2L1FS"
+#define NID_picnic2L1FS         1200
+#define OBJ_picnic2L1FS         OBJ_MSRPQC,1L,4L
+
+#define SN_p256_picnic2L1FS             "p256_picnic2L1FS"
+#define LN_p256_picnic2L1FS             "p256_picnic2L1FS"
+#define NID_p256_picnic2L1FS            1201
+#define OBJ_p256_picnic2L1FS            OBJ_MSRPQC,1L,5L
+
+#define SN_rsa3072_picnic2L1FS          "rsa3072_picnic2L1FS"
+#define LN_rsa3072_picnic2L1FS          "rsa3072_picnic2L1FS"
+#define NID_rsa3072_picnic2L1FS         1202
+#define OBJ_rsa3072_picnic2L1FS         OBJ_MSRPQC,1L,6L
+
+#define SN_picnic2L3FS          "picnic2L3FS"
+#define LN_picnic2L3FS          "picnic2L3FS"
+#define NID_picnic2L3FS         1203
+#define OBJ_picnic2L3FS         OBJ_MSRPQC,1L,7L
+
+#define SN_p384_picnic2L3FS             "p384_picnic2L3FS"
+#define LN_p384_picnic2L3FS             "p384_picnic2L3FS"
+#define NID_p384_picnic2L3FS            1204
+#define OBJ_p384_picnic2L3FS            OBJ_MSRPQC,1L,8L
+
+#define SN_picnic2L5FS          "picnic2L5FS"
+#define LN_picnic2L5FS          "picnic2L5FS"
+#define NID_picnic2L5FS         1205
+#define OBJ_picnic2L5FS         OBJ_MSRPQC,1L,9L
+
+#define SN_p521_picnic2L5FS             "p521_picnic2L5FS"
+#define LN_p521_picnic2L5FS             "p521_picnic2L5FS"
+#define NID_p521_picnic2L5FS            1206
+#define OBJ_p521_picnic2L5FS            OBJ_MSRPQC,1L,10L
+
 #define SN_qteslaI              "qteslaI"
 #define LN_qteslaI              "qteslaI"
-#define NID_qteslaI             1200
+#define NID_qteslaI             1207
 #define OBJ_qteslaI             OBJ_MSRPQC,2L,1L
 
 #define SN_p256_qteslaI         "p256_qteslaI"
 #define LN_p256_qteslaI         "p256_qteslaI"
-#define NID_p256_qteslaI                1201
+#define NID_p256_qteslaI                1208
 #define OBJ_p256_qteslaI                OBJ_MSRPQC,2L,2L
 
 #define SN_rsa3072_qteslaI              "rsa3072_qteslaI"
 #define LN_rsa3072_qteslaI              "rsa3072_qteslaI"
-#define NID_rsa3072_qteslaI             1202
+#define NID_rsa3072_qteslaI             1209
 #define OBJ_rsa3072_qteslaI             OBJ_MSRPQC,2L,3L
 
 #define SN_qteslaIIIsize                "qteslaIIIsize"
 #define LN_qteslaIIIsize                "qteslaIIIsize"
-#define NID_qteslaIIIsize               1203
+#define NID_qteslaIIIsize               1210
 #define OBJ_qteslaIIIsize               OBJ_MSRPQC,2L,4L
 
 #define SN_p384_qteslaIIIsize           "p384_qteslaIIIsize"
 #define LN_p384_qteslaIIIsize           "p384_qteslaIIIsize"
-#define NID_p384_qteslaIIIsize          1204
+#define NID_p384_qteslaIIIsize          1211
 #define OBJ_p384_qteslaIIIsize          OBJ_MSRPQC,2L,5L
 
 #define SN_qteslaIIIspeed               "qteslaIIIspeed"
 #define LN_qteslaIIIspeed               "qteslaIIIspeed"
-#define NID_qteslaIIIspeed              1205
+#define NID_qteslaIIIspeed              1212
 #define OBJ_qteslaIIIspeed              OBJ_MSRPQC,2L,6L
 
 #define SN_p384_qteslaIIIspeed          "p384_qteslaIIIspeed"
 #define LN_p384_qteslaIIIspeed          "p384_qteslaIIIspeed"
-#define NID_p384_qteslaIIIspeed         1206
+#define NID_p384_qteslaIIIspeed         1213
 #define OBJ_p384_qteslaIIIspeed         OBJ_MSRPQC,2L,7L
 
 #define SN_dilithium2           "dilithium2"
 #define LN_dilithium2           "dilithium2"
-#define NID_dilithium2          1207
+#define NID_dilithium2          1214
 #define OBJ_dilithium2          1L,3L,6L,1L,4L,1L,772L,1L,2L,2L,2L
 
 #define SN_dilithium3           "dilithium3"
 #define LN_dilithium3           "dilithium3"
-#define NID_dilithium3          1208
+#define NID_dilithium3          1215
 #define OBJ_dilithium3          1L,3L,6L,1L,4L,1L,772L,1L,2L,2L,3L
 
 #define SN_dilithium4           "dilithium4"
 #define LN_dilithium4           "dilithium4"
-#define NID_dilithium4          1209
+#define NID_dilithium4          1216
 #define OBJ_dilithium4          1L,3L,6L,1L,4L,1L,772L,1L,2L,2L,4L

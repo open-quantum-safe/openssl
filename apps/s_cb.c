@@ -248,6 +248,12 @@ static const char *get_sigtype(int nid)
      /* OQS sig schemes */
      case NID_picnicL1FS:
         return "Picnic L1 FS";
+     case NID_picnic2L1FS:
+        return "Picnic2 L1 FS";
+     case NID_picnic2L3FS:
+        return "Picnic2 L3 FS";
+     case NID_picnic2L5FS:
+        return "Picnic2 L5 FS";
      case NID_qteslaI:
         return "qTESLA-I";
      case NID_qteslaIIIsize:
@@ -265,6 +271,14 @@ static const char *get_sigtype(int nid)
         return "ECDSA p256 - Picnic L1 FS";
      case NID_rsa3072_picnicL1FS:
         return "RSA3072 - Picnic L1 FS";
+     case NID_p256_picnic2L1FS:
+        return "ECDSA p256 - Picnic2 L1 FS";
+     case NID_rsa3072_picnic2L1FS:
+        return "RSA3072 - Picnic2 L1 FS";
+     case NID_p384_picnic2L3FS:
+        return "ECDSA p384 - Picnic2 L3 FS";
+     case NID_p521_picnic2L5FS:
+        return "ECDSA p521 - Picnic2 L5 FS";
      case NID_p256_qteslaI:
         return "ECDSA p256 - qTESLA-I";
      case NID_rsa3072_qteslaI:

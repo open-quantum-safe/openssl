@@ -808,6 +808,9 @@ static const uint16_t tls12_sigalgs[] = {
 #if !defined(OQS_NIST_BRANCH)
     /* OQS sig schemes*/
     TLSEXT_SIGALG_picnicL1FS,
+    TLSEXT_SIGALG_picnic2L1FS,
+    TLSEXT_SIGALG_picnic2L3FS,
+    TLSEXT_SIGALG_picnic2L5FS,
     TLSEXT_SIGALG_qteslaI,
     TLSEXT_SIGALG_qteslaIIIsize,
     TLSEXT_SIGALG_qteslaIIIspeed,
@@ -818,6 +821,10 @@ static const uint16_t tls12_sigalgs[] = {
     /* OQS hybrid schemes*/
     TLSEXT_SIGALG_p256_picnicL1FS,
     TLSEXT_SIGALG_rsa3072_picnicL1FS,
+    TLSEXT_SIGALG_p256_picnic2L1FS,
+    TLSEXT_SIGALG_rsa3072_picnic2L1FS,
+    TLSEXT_SIGALG_p384_picnic2L3FS,
+    TLSEXT_SIGALG_p521_picnic2L5FS,    
     TLSEXT_SIGALG_p256_qteslaI,
     TLSEXT_SIGALG_rsa3072_qteslaI,
     TLSEXT_SIGALG_p384_qteslaIIIsize,
@@ -957,6 +964,15 @@ static const SIGALG_LOOKUP sigalg_lookup_tbl[] = {
     {"picnicL1FS", TLSEXT_SIGALG_picnicL1FS,
      NID_undef, -1, EVP_PKEY_PICNICL1FS, SSL_PKEY_PICNICL1FS,
      NID_undef, NID_undef},
+    {"picnic2L1FS", TLSEXT_SIGALG_picnic2L1FS,
+     NID_undef, -1, EVP_PKEY_PICNIC2L1FS, SSL_PKEY_PICNIC2L1FS,
+     NID_undef, NID_undef},
+    {"picnic2L3FS", TLSEXT_SIGALG_picnic2L3FS,
+     NID_undef, -1, EVP_PKEY_PICNIC2L3FS, SSL_PKEY_PICNIC2L3FS,
+     NID_undef, NID_undef},
+    {"picnic2L5FS", TLSEXT_SIGALG_picnic2L5FS,
+     NID_undef, -1, EVP_PKEY_PICNIC2L5FS, SSL_PKEY_PICNIC2L5FS,
+     NID_undef, NID_undef},
     {"qteslaI", TLSEXT_SIGALG_qteslaI,
      NID_undef, -1, EVP_PKEY_QTESLAI, SSL_PKEY_QTESLAI,
      NID_undef, NID_undef},
@@ -982,6 +998,18 @@ static const SIGALG_LOOKUP sigalg_lookup_tbl[] = {
      NID_undef, NID_undef},
     {"rsa3072_picnicL1FS", TLSEXT_SIGALG_rsa3072_picnicL1FS,
      NID_undef, -1, EVP_PKEY_RSA3072_PICNICL1FS, SSL_PKEY_RSA3072_PICNICL1FS,
+     NID_undef, NID_undef},
+    {"p256_picnic2L1FS", TLSEXT_SIGALG_p256_picnic2L1FS,
+     NID_undef, -1, EVP_PKEY_P256_PICNIC2L1FS, SSL_PKEY_P256_PICNIC2L1FS,
+     NID_undef, NID_undef},
+    {"rsa3072_picnic2L1FS", TLSEXT_SIGALG_rsa3072_picnic2L1FS,
+     NID_undef, -1, EVP_PKEY_RSA3072_PICNIC2L1FS, SSL_PKEY_RSA3072_PICNIC2L1FS,
+     NID_undef, NID_undef},
+    {"p384_picnic2L3FS", TLSEXT_SIGALG_p384_picnic2L3FS,
+     NID_undef, -1, EVP_PKEY_P384_PICNIC2L3FS, SSL_PKEY_P384_PICNIC2L3FS,
+     NID_undef, NID_undef},
+    {"p521_picnic2L5FS", TLSEXT_SIGALG_p521_picnic2L5FS,
+     NID_undef, -1, EVP_PKEY_P521_PICNIC2L5FS, SSL_PKEY_P521_PICNIC2L5FS,
      NID_undef, NID_undef},
     {"p256_qteslaI", TLSEXT_SIGALG_p256_qteslaI,
      NID_undef, -1, EVP_PKEY_P256_QTESLAI, SSL_PKEY_P256_QTESLAI,
@@ -2603,6 +2631,9 @@ void tls1_set_cert_validity(SSL *s)
 #if !defined(OQS_NIST_BRANCH)
     /* OQS sig schemes */
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_PICNICL1FS);
+    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_PICNIC2L1FS);
+    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_PICNIC2L3FS);
+    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_PICNIC2L5FS);
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_QTESLAI);
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_QTESLAIIISIZE);
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_QTESLAIIISPEED);
@@ -2613,6 +2644,10 @@ void tls1_set_cert_validity(SSL *s)
     /* OQS hybrid schemes */
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_P256_PICNICL1FS);
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_RSA3072_PICNICL1FS);
+    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_P256_PICNIC2L1FS);
+    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_RSA3072_PICNIC2L1FS);
+    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_P384_PICNIC2L3FS);
+    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_P521_PICNIC2L5FS);
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_P256_QTESLAI);
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_RSA3072_QTESLAI);
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_QTESLAIIISIZE);

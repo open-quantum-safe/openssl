@@ -82,6 +82,16 @@ static char* get_oqs_alg_name(int openssl_nid)
     case NID_p256_picnicL1FS:
     case NID_rsa3072_picnicL1FS:
       return OQS_SIG_alg_picnic_L1_FS;
+    case NID_picnic2L1FS:
+    case NID_p256_picnic2L1FS:
+    case NID_rsa3072_picnic2L1FS:
+      return OQS_SIG_alg_picnic2_L1_FS;
+    case NID_picnic2L3FS:
+    case NID_p384_picnic2L3FS:
+      return OQS_SIG_alg_picnic2_L3_FS;
+    case NID_picnic2L5FS:
+    case NID_p521_picnic2L5FS:
+      return OQS_SIG_alg_picnic2_L5_FS;
     case NID_qteslaI:
     case NID_p256_qteslaI:
     case NID_rsa3072_qteslaI:
@@ -110,6 +120,10 @@ static int is_oqs_hybrid_alg(int openssl_nid)
     {
     case NID_p256_picnicL1FS:
     case NID_rsa3072_picnicL1FS:
+    case NID_p256_picnic2L1FS:
+    case NID_rsa3072_picnic2L1FS:
+    case NID_p384_picnic2L3FS:
+    case NID_p521_picnic2L5FS:
     case NID_p256_qteslaI:
     case NID_rsa3072_qteslaI:
     case NID_p384_qteslaIIIsize:
@@ -127,14 +141,19 @@ static int get_classical_nid(int hybrid_id)
  switch (hybrid_id)
     {
     case NID_rsa3072_picnicL1FS:
+    case NID_rsa3072_picnic2L1FS:
     case NID_rsa3072_qteslaI:
       return NID_rsaEncryption;
     case NID_p256_picnicL1FS:
+    case NID_p256_picnic2L1FS:
     case NID_p256_qteslaI:
       return NID_X9_62_prime256v1;
+    case NID_p384_picnic2L3FS:
     case NID_p384_qteslaIIIsize:
     case NID_p384_qteslaIIIspeed:
       return NID_secp384r1;
+    case NID_p521_picnic2L5FS:
+      return NID_secp521r1;
     /* ADD_MORE_OQS_SIG_HERE hybrid only */
     default:
       return 0;
@@ -148,6 +167,13 @@ static int get_oqs_nid(int hybrid_id)
     case NID_rsa3072_picnicL1FS:
     case NID_p256_picnicL1FS:
       return NID_picnicL1FS;
+    case NID_rsa3072_picnic2L1FS:
+    case NID_p256_picnic2L1FS:
+      return NID_picnic2L1FS;
+    case NID_p384_picnic2L3FS:
+      return NID_picnic2L3FS;
+    case NID_p521_picnic2L5FS:
+      return NID_picnic2L5FS;
     case NID_rsa3072_qteslaI:
     case NID_p256_qteslaI:
       return NID_qteslaI;
@@ -199,6 +225,12 @@ static int get_oqs_security_bits(int openssl_nid)
     {
     case NID_picnicL1FS:
       return 128;
+    case NID_picnic2L1FS:
+      return 128;
+    case NID_picnic2L3FS:
+      return 192;
+    case NID_picnic2L5FS:
+      return 256;
     case NID_qteslaI:
       return 128;
     case NID_qteslaIIIsize:
@@ -215,7 +247,15 @@ static int get_oqs_security_bits(int openssl_nid)
     case NID_p256_picnicL1FS:
       return 128;
     case NID_rsa3072_picnicL1FS:
+      return 128;
+    case NID_p256_picnic2L1FS:
+      return 128;
+    case NID_rsa3072_picnic2L1FS:
+      return 128;
+    case NID_p384_picnic2L3FS:
       return 192;
+    case NID_p521_picnic2L5FS:
+      return 256;
     case NID_p256_qteslaI:
       return 128;
     case NID_rsa3072_qteslaI:
@@ -795,6 +835,13 @@ static int oqs_item_verify(EVP_MD_CTX *ctx, const ASN1_ITEM *it, void *asn,
 	(nid != NID_picnicL1FS &&
 	 nid != NID_p256_picnicL1FS &&
 	 nid != NID_rsa3072_picnicL1FS &&
+	 nid != NID_picnic2L1FS &&
+	 nid != NID_p256_picnic2L1FS &&
+	 nid != NID_rsa3072_picnic2L1FS &&
+	 nid != NID_picnic2L3FS &&
+	 nid != NID_p384_picnic2L3FS &&
+	 nid != NID_picnic2L5FS &&
+	 nid != NID_p521_picnic2L5FS &&
 	 nid != NID_qteslaI &&
 	 nid != NID_p256_qteslaI &&
 	 nid != NID_rsa3072_qteslaI &&
@@ -802,9 +849,9 @@ static int oqs_item_verify(EVP_MD_CTX *ctx, const ASN1_ITEM *it, void *asn,
 	 nid != NID_p384_qteslaIIIsize &&
 	 nid != NID_qteslaIIIspeed &&
 	 nid != NID_p384_qteslaIIIspeed &&
-   nid != NID_dilithium2 &&
-   nid != NID_dilithium3 &&
-   nid != NID_dilithium4
+	 nid != NID_dilithium2 &&
+	 nid != NID_dilithium3 &&
+	 nid != NID_dilithium4
 	 /* ADD_MORE_OQS_SIG_HERE */
 	 ) || ptype != V_ASN1_UNDEF) {
         ECerr(EC_F_OQS_ITEM_VERIFY, EC_R_UNKNOWN_NID);
@@ -1161,6 +1208,9 @@ DEFINE_OQS_EVP_PKEY_METHOD(ALG, NID_ALG)                              \
 DEFINE_OQS_EVP_PKEY_ASN1_METHOD(ALG, NID_ALG, SHORT_NAME, LONG_NAME)
 
 DEFINE_OQS_EVP_METHODS(picnicL1FS, NID_picnicL1FS, "picnicL1FS", "OpenSSL Picnic L1 FS algorithm")
+DEFINE_OQS_EVP_METHODS(picnic2L1FS, NID_picnic2L1FS, "picnic2L1FS", "OpenSSL Picnic2 L1 FS algorithm")
+DEFINE_OQS_EVP_METHODS(picnic2L3FS, NID_picnic2L3FS, "picnic2L3FS", "OpenSSL Picnic2 L3 FS algorithm")
+DEFINE_OQS_EVP_METHODS(picnic2L5FS, NID_picnic2L5FS, "picnic2L5FS", "OpenSSL Picnic2 L5 FS algorithm")
 DEFINE_OQS_EVP_METHODS(qteslaI, NID_qteslaI, "qteslaI", "OpenSSL qTESLA-I algorithm")
 DEFINE_OQS_EVP_METHODS(qteslaIIIsize, NID_qteslaIIIsize, "qteslaIIIsize", "OpenSSL qTESLA-III-size algorithm")
 DEFINE_OQS_EVP_METHODS(qteslaIIIspeed, NID_qteslaIIIspeed, "qteslaIIIspeed", "OpenSSL qTESLA-III-speed algorithm")
@@ -1171,6 +1221,10 @@ DEFINE_OQS_EVP_METHODS(dilithium4, NID_dilithium4, "dilithium4", "OpenSSL Dilith
 /* hybrid schemes */
 DEFINE_OQS_EVP_METHODS(p256_picnicL1FS, NID_p256_picnicL1FS, "p256_picnicL1FS", "OpenSSL hybrid p256 Picnic L1 FS algorithm")
 DEFINE_OQS_EVP_METHODS(rsa3072_picnicL1FS, NID_rsa3072_picnicL1FS, "rsa3072_picnicL1FS", "OpenSSL hybrid RSA3072 Picnic L1 FS algorithm")
+DEFINE_OQS_EVP_METHODS(p256_picnic2L1FS, NID_p256_picnic2L1FS, "p256_picnic2L1FS", "OpenSSL hybrid p256 Picnic2 L1 FS algorithm")
+DEFINE_OQS_EVP_METHODS(rsa3072_picnic2L1FS, NID_rsa3072_picnic2L1FS, "rsa3072_picnic2L1FS", "OpenSSL hybrid RSA3072 Picnic2 L1 FS algorithm")
+DEFINE_OQS_EVP_METHODS(p384_picnic2L3FS, NID_p384_picnic2L3FS, "p384_picnic2L3FS", "OpenSSL hybrid p384 Picnic2 L3 FS algorithm")
+DEFINE_OQS_EVP_METHODS(p521_picnic2L5FS, NID_p521_picnic2L5FS, "p521_picnic2L5FS", "OpenSSL hybrid p521 Picnic2 L5 FS algorithm")
 DEFINE_OQS_EVP_METHODS(p256_qteslaI, NID_p256_qteslaI, "p256_qteslaI", "OpenSSL hybrid p256 qTESLA-I algorithm")
 DEFINE_OQS_EVP_METHODS(rsa3072_qteslaI, NID_rsa3072_qteslaI, "rsa3072_qteslaI", "OpenSSL hybrid RSA3072 qTESLA-I algorithm")
 DEFINE_OQS_EVP_METHODS(p384_qteslaIIIsize, NID_p384_qteslaIIIsize, "p384_qteslaIIIsize", "OpenSSL hybrid p384 qTESLA-III-size algorithm")
