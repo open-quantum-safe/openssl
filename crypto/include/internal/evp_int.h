@@ -121,6 +121,8 @@ extern const EVP_PKEY_METHOD qteslaIIIspeed_pkey_meth;
 extern const EVP_PKEY_METHOD dilithium2_pkey_meth;
 extern const EVP_PKEY_METHOD dilithium3_pkey_meth;
 extern const EVP_PKEY_METHOD dilithium4_pkey_meth;
+extern const EVP_PKEY_METHOD falcon512_pkey_meth;
+extern const EVP_PKEY_METHOD falcon1024_pkey_meth;
 /* ADD_MORE_OQS_SIG_HERE */
 /* OQS hybrid schemes */
 extern const EVP_PKEY_METHOD p256_picnicL1FS_pkey_meth;

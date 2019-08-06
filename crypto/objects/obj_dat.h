@@ -10,7 +10,7 @@
  */
 
 /* Serialized OID's */
-static const unsigned char so[7921] = {
+static const unsigned char so[7941] = {
     0x2A,0x86,0x48,0x86,0xF7,0x0D,                 /* [    0] OBJ_rsadsi */
     0x2A,0x86,0x48,0x86,0xF7,0x0D,0x01,            /* [    6] OBJ_pkcs */
     0x2A,0x86,0x48,0x86,0xF7,0x0D,0x02,0x02,       /* [   13] OBJ_md2 */
@@ -1091,9 +1091,11 @@ static const unsigned char so[7921] = {
     0x2B,0x06,0x01,0x04,0x01,0x86,0x04,0x01,0x02,0x02,0x02,  /* [ 7887] OBJ_dilithium2 */
     0x2B,0x06,0x01,0x04,0x01,0x86,0x04,0x01,0x02,0x02,0x03,  /* [ 7898] OBJ_dilithium3 */
     0x2B,0x06,0x01,0x04,0x01,0x86,0x04,0x01,0x02,0x02,0x04,  /* [ 7909] OBJ_dilithium4 */
+    0x2B,0x06,0x01,0x04,0x01,0x86,0x04,0x01,0x08,0x01,  /* [ 7920] OBJ_falcon512 */
+    0x2B,0x06,0x01,0x04,0x01,0x86,0x04,0x01,0x08,0x02,  /* [ 7930] OBJ_falcon1024 */
 };
 
-#define NUM_NID 1210
+#define NUM_NID 1212
 static const ASN1_OBJECT nid_objs[NUM_NID] = {
     {"UNDEF", "undefined", NID_undef},
     {"rsadsi", "RSA Data Security, Inc.", NID_rsadsi, 6, &so[0]},
@@ -2305,9 +2307,11 @@ static const ASN1_OBJECT nid_objs[NUM_NID] = {
     {"dilithium2", "dilithium2", NID_dilithium2, 11, &so[7887]},
     {"dilithium3", "dilithium3", NID_dilithium3, 11, &so[7898]},
     {"dilithium4", "dilithium4", NID_dilithium4, 11, &so[7909]},
+    {"falcon512", "falcon512", NID_falcon512, 10, &so[7920]},
+    {"falcon1024", "falcon1024", NID_falcon1024, 10, &so[7930]},
 };
 
-#define NUM_SN 1201
+#define NUM_SN 1203
 static const unsigned int sn_objs[NUM_SN] = {
      364,    /* "AD_DVCS" */
      419,    /* "AES-128-CBC" */
@@ -2758,6 +2762,8 @@ static const unsigned int sn_objs[NUM_SN] = {
      126,    /* "extendedKeyUsage" */
      372,    /* "extendedStatus" */
      867,    /* "facsimileTelephoneNumber" */
+    1211,    /* "falcon1024" */
+    1210,    /* "falcon512" */
      462,    /* "favouriteDrink" */
     1126,    /* "ffdhe2048" */
     1127,    /* "ffdhe3072" */
@@ -3512,7 +3518,7 @@ static const unsigned int sn_objs[NUM_SN] = {
     1093,    /* "x509ExtAdmission" */
 };
 
-#define NUM_LN 1201
+#define NUM_LN 1203
 static const unsigned int ln_objs[NUM_LN] = {
      363,    /* "AD Time Stamping" */
      405,    /* "ANSI X9.62" */
@@ -3998,6 +4004,8 @@ static const unsigned int ln_objs[NUM_LN] = {
      885,    /* "enhancedSearchGuide" */
       56,    /* "extendedCertificateAttributes" */
      867,    /* "facsimileTelephoneNumber" */
+    1211,    /* "falcon1024" */
+    1210,    /* "falcon512" */
      462,    /* "favouriteDrink" */
     1126,    /* "ffdhe2048" */
     1127,    /* "ffdhe3072" */
@@ -4717,7 +4725,7 @@ static const unsigned int ln_objs[NUM_LN] = {
      125,    /* "zlib compression" */
 };
 
-#define NUM_OBJ 1086
+#define NUM_OBJ 1088
 static const unsigned int obj_objs[NUM_OBJ] = {
        0,    /* OBJ_undef                        0 */
      181,    /* OBJ_iso                          1 */
@@ -5686,6 +5694,8 @@ static const unsigned int obj_objs[NUM_OBJ] = {
      138,    /* OBJ_ms_efs                       1 3 6 1 4 1 311 10 3 4 */
      648,    /* OBJ_ms_smartcard_login           1 3 6 1 4 1 311 20 2 2 */
      649,    /* OBJ_ms_upn                       1 3 6 1 4 1 311 20 2 3 */
+    1210,    /* OBJ_falcon512                    1 3 6 1 4 1 772 1 8 1 */
+    1211,    /* OBJ_falcon1024                   1 3 6 1 4 1 772 1 8 2 */
      951,    /* OBJ_ct_precert_scts              1 3 6 1 4 1 11129 2 4 2 */
      952,    /* OBJ_ct_precert_poison            1 3 6 1 4 1 11129 2 4 3 */
      953,    /* OBJ_ct_precert_signer            1 3 6 1 4 1 11129 2 4 4 */

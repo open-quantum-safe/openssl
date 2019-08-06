@@ -260,6 +260,10 @@ static const char *get_sigtype(int nid)
         return "Dilithium-3";
      case NID_dilithium4:
         return "Dilithium-4"; 
+     case NID_falcon512:
+        return "Falcon-512";
+     case NID_falcon1024:
+        return "Falcon-1024";        
      /* ADD_MORE_OQS_SIG_HERE */
      case NID_p256_picnicL1FS:
         return "ECDSA p256 - Picnic L1 FS";

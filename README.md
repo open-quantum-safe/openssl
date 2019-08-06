@@ -52,6 +52,7 @@ The following signature schemes from liboqs are supported (assuming they have be
 - **Dilithium**: `dilithium2`, `dilithium3`, `dilithium4` (not currently on Windows) 
 - **Picnic**: `picnicL1FS`
 - **qTesla**: `qteslaI`, `qteslaIIIsize`, `qteslaIIIspeed` (not currently on Windows) 
+- **falcon**: `falcon512`, `falcon1024`
 
 The following hybrid schemes are supported, using either the NIST P-256 curve or 3072-bit RSA for L1 schemes, or the NIST P-384 curve for L3 schemes:
 
@@ -178,7 +179,7 @@ See the [liboqs documentation](https://github.com/open-quantum-safe/liboqs/) for
 
 OpenSSL contains a basic TLS server (`s_server`) and TLS client (`s_client`) which can be used to demonstrate and test SSL/TLS connections.
 
-To run a server, you first need to generate a X.509 certificate, using either a classical (`rsa`), post-quantum (`picnicl1fs`, `qteslaI`, `qteslaIIIsize`, `qteslaIIIspeed`, `dilithium2`, `dilithium3`, `dilithium4`), or hybrid (`p256_picnicl1fs`, `rsa3072_picnicl1fs`, `p256_qteslaI`, `rsa3072_qteslaI`, `p384_qteslaIIIsize`, `p384_qteslaIIIspeed`) algorithm. The server certificate can either be self-signed or part of a chain. In either case, you need to generate a self-signed root CA certificate using the following command, replacing `<SIGALG>` with one supported algorithm:
+To run a server, you first need to generate a X.509 certificate, using either a classical (`rsa`), post-quantum (`picnicl1fs`, `qteslaI`, `qteslaIIIsize`, `qteslaIIIspeed`, `dilithium2`, `dilithium3`, `dilithium4`, `falcon512`, `falcon1024`), or hybrid (`p256_picnicl1fs`, `rsa3072_picnicl1fs`, `p256_qteslaI`, `rsa3072_qteslaI`, `p384_qteslaIIIsize`, `p384_qteslaIIIspeed`) algorithm. The server certificate can either be self-signed or part of a chain. In either case, you need to generate a self-signed root CA certificate using the following command, replacing `<SIGALG>` with one supported algorithm:
 
 	apps/openssl req -x509 -new -newkey <SIGALG> -keyout <SIGALG>_CA.key -out <SIGALG>_CA.crt -nodes -subj "/CN=oqstest CA" -days 365 -config apps/openssl.cnf
 

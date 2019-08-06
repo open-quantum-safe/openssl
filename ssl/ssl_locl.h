@@ -218,6 +218,10 @@
 # define SSL_aDILITHIUM3         0x00080000U
 /* Dilithium 4 auth */
 # define SSL_aDILITHIUM4         0x00100000U
+/* fALCON 512 auth */
+# define SSL_aFALCON512          0x00200000U
+/* fALCON 1024 auth */
+# define SSL_aFALCON1024         0x00400000U
 /* ADD_MORE_OQS_SIG_HERE */
 /* OQS hybrid schemes */
 /* ECDSA P256 - Picnic L1 FS auth */
@@ -425,6 +429,8 @@
 # define SSL_PKEY_DILITHIUM2     19
 # define SSL_PKEY_DILITHIUM3     20
 # define SSL_PKEY_DILITHIUM4     21
+# define SSL_PKEY_FALCON512      22
+# define SSL_PKEY_FALCON1024     23
 /* ADD_MORE_OQS_SIG_HERE */
 /* OQS hybrid schemes */
 # define SSL_PKEY_P256_PICNICL1FS     13
@@ -434,7 +440,7 @@
 # define SSL_PKEY_P384_QTESLAIIISIZE  17
 # define SSL_PKEY_P384_QTESLAIIISPEED 18
 /* ADD_MORE_OQS_SIG_HERE */
-# define SSL_PKEY_NUM            22
+# define SSL_PKEY_NUM            24
 #else
 # define SSL_PKEY_NUM            9
 #endif
@@ -2396,6 +2402,8 @@ typedef enum downgrade_en {
 #define TLSEXT_SIGALG_dilithium2                                0xfe0a /* private use code point */
 #define TLSEXT_SIGALG_dilithium3                                0xfe0b /* private use code point */
 #define TLSEXT_SIGALG_dilithium4                                0xfe0c /* private use code point */
+#define TLSEXT_SIGALG_falcon512                                 0xfe0e /* private use code point */
+#define TLSEXT_SIGALG_falcon1024                                0xfe0f /* private use code point */
 /* ADD_MORE_OQS_SIG_HERE */
 /* OQS hybrid schemes */
 #define TLSEXT_SIGALG_p256_picnicL1FS                           0xfe04 /* private use code point */

@@ -56,6 +56,8 @@ int X509_certificate_type(const X509 *x, const EVP_PKEY *pkey)
     case EVP_PKEY_DILITHIUM2:
     case EVP_PKEY_DILITHIUM3:
     case EVP_PKEY_DILITHIUM4:
+    case EVP_PKEY_FALCON512:
+    case EVP_PKEY_FALCON1024:        
     /* ADD_MORE_OQS_SIG_HERE */
     case EVP_PKEY_P256_PICNICL1FS:
     case EVP_PKEY_RSA3072_PICNICL1FS:

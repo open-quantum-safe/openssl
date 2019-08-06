@@ -5269,3 +5269,13 @@
 #define LN_dilithium4           "dilithium4"
 #define NID_dilithium4          1209
 #define OBJ_dilithium4          1L,3L,6L,1L,4L,1L,772L,1L,2L,2L,4L
+
+#define SN_falcon512            "falcon512"
+#define LN_falcon512            "falcon512"
+#define NID_falcon512           1210
+#define OBJ_falcon512           1L,3L,6L,1L,4L,1L,772L,1L,8L,1L
+
+#define SN_falcon1024           "falcon1024"
+#define LN_falcon1024           "falcon1024"
+#define NID_falcon1024          1211
+#define OBJ_falcon1024          1L,3L,6L,1L,4L,1L,772L,1L,8L,2L

@@ -98,6 +98,10 @@ static char* get_oqs_alg_name(int openssl_nid)
       return OQS_SIG_alg_dilithium_3;
     case NID_dilithium4:
       return OQS_SIG_alg_dilithium_4;
+    case NID_falcon512:
+      return OQS_SIG_alg_falcon_512;
+    case NID_falcon1024:
+      return OQS_SIG_alg_falcon_1024;         
     /* ADD_MORE_OQS_SIG_HERE */
     default:
       return NULL;
@@ -211,6 +215,10 @@ static int get_oqs_security_bits(int openssl_nid)
       return 128;
     case NID_dilithium4:
       return 192;
+    case NID_falcon512:
+      return 114;  
+    case NID_falcon1024:
+      return 263;           
     /* hybrid schemes */
     case NID_p256_picnicL1FS:
       return 128;
@@ -804,7 +812,9 @@ static int oqs_item_verify(EVP_MD_CTX *ctx, const ASN1_ITEM *it, void *asn,
 	 nid != NID_p384_qteslaIIIspeed &&
    nid != NID_dilithium2 &&
    nid != NID_dilithium3 &&
-   nid != NID_dilithium4
+   nid != NID_dilithium4 &&
+   nid != NID_falcon512 &&
+   nid != NID_falcon1024
 	 /* ADD_MORE_OQS_SIG_HERE */
 	 ) || ptype != V_ASN1_UNDEF) {
         ECerr(EC_F_OQS_ITEM_VERIFY, EC_R_UNKNOWN_NID);
@@ -1167,6 +1177,8 @@ DEFINE_OQS_EVP_METHODS(qteslaIIIspeed, NID_qteslaIIIspeed, "qteslaIIIspeed", "Op
 DEFINE_OQS_EVP_METHODS(dilithium2, NID_dilithium2, "dilithium2", "OpenSSL Dilithium-2 algorithm")
 DEFINE_OQS_EVP_METHODS(dilithium3, NID_dilithium3, "dilithium3", "OpenSSL Dilithium-3 algorithm")
 DEFINE_OQS_EVP_METHODS(dilithium4, NID_dilithium4, "dilithium4", "OpenSSL Dilithium-4 algorithm")
+DEFINE_OQS_EVP_METHODS(falcon512, NID_falcon512, "falcon512", "OpenSSL Falcon-512 algorithm")
+DEFINE_OQS_EVP_METHODS(falcon1024, NID_falcon1024, "falcon1024", "OpenSSL Falcon-1024 algorithm")
 /* ADD_MORE_OQS_SIG_HERE */
 /* hybrid schemes */
 DEFINE_OQS_EVP_METHODS(p256_picnicL1FS, NID_p256_picnicL1FS, "p256_picnicL1FS", "OpenSSL hybrid p256 Picnic L1 FS algorithm")

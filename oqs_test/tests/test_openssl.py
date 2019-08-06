@@ -13,7 +13,7 @@ kex_algs_master_111 = [
     'p256-frodo640aes','p256-frodo640shake','p256-frodo976aes','p256-frodo976shake','p256-frodo1344aes','p256-frodo1344shake','p256-bike1l1','p256-bike1l3','p256-bike1l5','p256-bike2l1','p256-bike2l3','p256-bike2l5','p256-bike3l1','p256-bike3l3','p256-bike3l5','p256-kyber512','p256-kyber768','p256-kyber1024','p256-newhope512cca','p256-newhope1024cca','p256-ntru_hps2048509','p256-ntru_hps2048677','p256-ntru_hps4096821','p256-ntru_hrss701','p256-lightsaber','p256-saber','p256-firesaber','p256-sidhp434','p256-sidhp503','p256-sidhp610','p256-sidhp751','p256-sikep434','p256-sikep503','p256-sikep610','p256-sikep751',
     ##### OQS_TEMPLATE_FRAGMENT_KEX_ALGS_MASTER_END
     ]
-sig_algs_master_111 = ['rsa', 'ecdsa', 'picnicl1fs', 'qteslaI', 'qteslaIIIsize', 'qteslaIIIspeed', 'rsa3072_picnicl1fs', 'rsa3072_qteslaI', 'p256_picnicl1fs', 'p256_qteslaI', 'p384_qteslaIIIsize', 'p384_qteslaIIIspeed', 'dilithium2', 'dilithium3', 'dilithium4'] # ADD_MORE_OQS_SIG_HERE
+sig_algs_master_111 = ['rsa', 'ecdsa', 'picnicl1fs', 'qteslaI', 'qteslaIIIsize', 'qteslaIIIspeed', 'rsa3072_picnicl1fs', 'rsa3072_qteslaI', 'p256_picnicl1fs', 'p256_qteslaI', 'p384_qteslaIIIsize', 'p384_qteslaIIIspeed', 'dilithium2', 'dilithium3', 'dilithium4', 'falcon512', 'falcon1024'] # ADD_MORE_OQS_SIG_HERE
 
 kex_algs = kex_algs_master_111
 sig_algs = sig_algs_master_111
