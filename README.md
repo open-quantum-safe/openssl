@@ -234,11 +234,12 @@ Contributors to OQS-OpenSSL\_1\_1\_1 include:
 - Dimitris Sikeridis (University of New Mexico / Cisco Systems)
 - Douglas Stebila (University of Waterloo)
 - Goutam Tamvada (University of Waterloo)
+- Michael Baentsch (IBM Research Zurich)
 
 ## Acknowledgments
 
 Financial support for the development of Open Quantum Safe has been provided by Amazon Web Services and the Tutte Institute for Mathematics and Computing.
 
-We'd like to make a special acknowledgement to the companies who have dedicated programmer time to contribute source code to OQS, including Amazon Web Services, Cisco Systems, evolutionQ, and Microsoft Research.
+We'd like to make a special acknowledgement to the companies who have dedicated programmer time to contribute source code to OQS, including Amazon Web Services, Cisco Systems, evolutionQ, Microsoft Research and IBM Research.
 
 Research projects which developed specific components of OQS have been supported by various research grants, including funding from the Natural Sciences and Engineering Research Council of Canada (NSERC); see [here](https://openquantumsafe.org/papers/SAC-SteMos16.pdf) and [here](https://openquantumsafe.org/papers/NISTPQC-CroPaqSte19.pdf) for funding acknowledgments.
