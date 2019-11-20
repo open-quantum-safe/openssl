@@ -38,6 +38,7 @@ This fork is currently in sync with the [OpenSSL\_1\_1\_1d tag](https://github.c
 - hybrid (quantum-safe + elliptic curve) key exchange in TLS 1.3
 - quantum-safe authentication in TLS 1.3
 - hybrid (quantum-safe + elliptic curve) authentication in TLS 1.3
+- CMS support (sign & verify using any of the [supported quantum-safe signature algorithms](#authentication))
 
 For more information, see the [release notes](RELEASE.md).
 
