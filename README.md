@@ -219,13 +219,13 @@ OpenSSL has facilities to perform signing operations pursuant [RFC 5652](https:/
 
 Building on the artifacts created in the TLS setup above (CA and server certificate creation using a specific (QS) SIG algorithm), the following command can be used to generate a (QS-)signed file from some inputfile:
 
-                apps/openssl cms -in inputfile -sign -signer <SIG>_srv.crt -inkey <SIG>_srv.key -nodetach -outform pem -binary -out signedfile.cms 
+	apps/openssl cms -in inputfile -sign -signer <SIG>_srv.crt -inkey <SIG>_srv.key -nodetach -outform pem -binary -out signedfile.cms 
 
 This command can be used to verify (and extract the contents) of the CMS file resultant from the command above:
 
-                apps/openssl cms -verify -CAfile <SIG>_CA.crt -inform pem -in signedfile.cms -crlfeol -out signeddatafile
+	apps/openssl cms -verify -CAfile <SIG>_CA.crt -inform pem -in signedfile.cms -crlfeol -out signeddatafile
 
-It would be expected that the contents of <inputfile> and the resultant <signeddatafile> are the same.
+It would be expected that the contents of `inputfile` and the resultant `signeddatafile` are the same.
 
 
 ## Third Party Integrations
