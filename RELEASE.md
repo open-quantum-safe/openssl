@@ -34,7 +34,7 @@ Update to use NIST Round 2 submissions added to liboqs 0.2.1.
 
 ### Digital signature schemes
 
-- The OQS signature schemes are now also utilized to drive first parts of OpenSSL's CMS capabilities (e.g., to demonstrate quantum-safe code signing). An implementation of all [CMS](https://datatracker.ietf.org/doc/rfc5652) features is not yet available and will be done as the need arises.
+- The OQS signature schemes are now also utilized to drive [CMS](https://datatracker.ietf.org/doc/rfc5652)' sign/verify features (e.g., to demonstrate quantum-safe code signing). 
 
 Future work
 -----------
