@@ -83,7 +83,7 @@ The following hybrid algorithms are supported only for L1 schemes; they combine 
 
 The following digital signature algorithms from liboqs are supported (assuming they have been enabled in liboqs):
 
-- `oqsdefault` (see [here](https://github.com/open-quantum-safe/openssl/wiki/Using-liboqs-algorithms-that-are-not-in-the-forks#oqsdefault) for what this denotes)
+- `oqs_sig_default` (see [here](https://github.com/open-quantum-safe/openssl/wiki/Using-liboqs-algorithms-that-are-not-in-the-forks#oqsdefault) for what this denotes)
 - **Dilithium**: `dilithium2`, `dilithium3`, `dilithium4` (not currently on Windows)
 - **Picnic**: `picnicl1fs`
 - **qTesla**: `qteslapi`, `qteslapiii`

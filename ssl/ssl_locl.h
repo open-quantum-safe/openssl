@@ -204,11 +204,11 @@
 # define SSL_aGOST12             0x00000080U
 ///// OQS_TEMPLATE_FRAGMENT_DEFINE_SIG_MASKS_START
 /* OQS Default Signature Algorithm auth */
-#define SSL_aOQSDEFAULT 0x00000100
+#define SSL_aOQSSIGDEFAULT 0x00000100
 /* ECDSA p256 - OQS Default Signature Algorithm auth */
-#define SSL_aP256OQSDEFAULT 0x00000200
+#define SSL_aP256OQSSIGDEFAULT 0x00000200
 /* RSA3072 - OQS Default Signature Algorithm auth */
-#define SSL_aRSA3072OQSDEFAULT 0x00000400
+#define SSL_aRSA3072OQSSIGDEFAULT 0x00000400
 /* Dilithium-2 auth */
 #define SSL_aDILITHIUM2 0x00000800
 /* ECDSA p256 - Dilithium-2 auth */
@@ -427,9 +427,9 @@
 # define SSL_PKEY_ED25519        7
 # define SSL_PKEY_ED448          8
 ///// OQS_TEMPLATE_FRAGMENT_DEFINE_SSL_PKEYS_START
-#define SSL_PKEY_OQSDEFAULT 9
-#define SSL_PKEY_P256_OQSDEFAULT 10
-#define SSL_PKEY_RSA3072_OQSDEFAULT 11
+#define SSL_PKEY_OQS_SIG_DEFAULT 9
+#define SSL_PKEY_P256_OQS_SIG_DEFAULT 10
+#define SSL_PKEY_RSA3072_OQS_SIG_DEFAULT 11
 #define SSL_PKEY_DILITHIUM2 12
 #define SSL_PKEY_P256_DILITHIUM2 13
 #define SSL_PKEY_RSA3072_DILITHIUM2 14
@@ -473,16 +473,16 @@
 
 
 /* Returns true if the nid is for an OQS KEM */
-#define NID_OQS_START NID_OQS_KEM_DEFAULT
+#define NID_OQS_START NID_oqs_kem_default
 #define NID_OQS_END NID_sikep751
-#define NID_HYBRID_START NID_p256_OQS_KEM_DEFAULT
+#define NID_HYBRID_START NID_p256_oqs_kem_default
 #define NID_HYBRID_END NID_p256_sikep751
 #define IS_OQS_KEM_NID(nid) (nid >= NID_OQS_START && nid <= NID_OQS_END)
 
 /* Returns the curve ID for an OQS KEM NID */
 ///// OQS_TEMPLATE_FRAGMENT_OQS_KEM_CURVEID_START
 #define OQS_KEM_CURVEID(nid) \
-  (nid == NID_OQS_KEM_DEFAULT ? 0x01FF : \
+  (nid == NID_oqs_kem_default ? 0x01FF : \
   (nid == NID_frodo640aes ? 0x0200 : \
   (nid == NID_frodo640shake ? 0x0201 : \
   (nid == NID_frodo976aes ? 0x0202 : \
@@ -519,7 +519,7 @@
 
 ///// OQS_TEMPLATE_FRAGMENT_OQS_KEM_HYBRID_CURVEID_START
 #define OQS_KEM_HYBRID_CURVEID(nid) \
-  (nid == NID_p256_OQS_KEM_DEFAULT      ? 0x02FF : \
+  (nid == NID_p256_oqs_kem_default      ? 0x02FF : \
   (nid == NID_p256_frodo640aes ? 0x0300 : \
   (nid == NID_p256_frodo640shake ? 0x0301 : \
   (nid == NID_p256_frodo976aes ? 0x0302 : \
@@ -557,7 +557,7 @@
   /* Returns the non-hybrid OQS KEM NID for a PQ or hybrid curve ID */
 ///// OQS_TEMPLATE_FRAGMENT_OQS_KEM_NID_START
 #define OQS_KEM_NID(curveID) \
-  (curveID == 0x01FF || curveID == 0x02FF ? NID_OQS_KEM_DEFAULT : \
+  (curveID == 0x01FF || curveID == 0x02FF ? NID_oqs_kem_default : \
   (curveID == 0x0200 || curveID == 0x0300 ? NID_frodo640aes : \
   (curveID == 0x0201 || curveID == 0x0301 ? NID_frodo640shake : \
   (curveID == 0x0202 || curveID == 0x0302 ? NID_frodo976aes : \
@@ -595,7 +595,7 @@
   /* Returns the hybrid OQS KEM NID for a hybrid curve ID */ /* FIXMEOQS: template this */
 ///// OQS_TEMPLATE_FRAGMENT_OQS_HYBRID_KEM_NID_START
 #define OQS_HYBRID_KEM_NID(curveID) \
-  (curveID == 0x02FF ? NID_p256_OQS_KEM_DEFAULT : \
+  (curveID == 0x02FF ? NID_p256_oqs_kem_default : \
   (curveID == 0x0300 ? NID_p256_frodo640aes : \
   (curveID == 0x0301 ? NID_p256_frodo640shake : \
   (curveID == 0x0302 ? NID_p256_frodo976aes : \
@@ -639,7 +639,7 @@
 /* Returns the OQS alg ID for OQS API */
 ///// OQS_TEMPLATE_FRAGMENT_OQS_ALG_NAME_START
 #define OQS_ALG_NAME(nid) \
-  (nid == NID_OQS_KEM_DEFAULT     ? OQS_KEM_alg_default : \
+  (nid == NID_oqs_kem_default     ? OQS_KEM_alg_default : \
   (nid == NID_frodo640aes ? OQS_KEM_alg_frodokem_640_aes : \
   (nid == NID_frodo640shake ? OQS_KEM_alg_frodokem_640_shake : \
   (nid == NID_frodo976aes ? OQS_KEM_alg_frodokem_976_aes : \
@@ -2336,11 +2336,11 @@ typedef enum downgrade_en {
 #define TLSEXT_SIGALG_ed448                                     0x0808
 
 ///// OQS_TEMPLATE_FRAGMENT_DEFINE_SIG_CODE_POINTS_START
-#define TLSEXT_SIGALG_oqsdefault \
+#define TLSEXT_SIGALG_oqs_sig_default \
       0xfe00 /* private use code point */
-#define TLSEXT_SIGALG_p256_oqsdefault \
+#define TLSEXT_SIGALG_p256_oqs_sig_default \
       0xfe01 /* private use code point */
-#define TLSEXT_SIGALG_rsa3072_oqsdefault \
+#define TLSEXT_SIGALG_rsa3072_oqs_sig_default \
       0xfe02 /* private use code point */
 #define TLSEXT_SIGALG_dilithium2 \
       0xfe03 /* private use code point */

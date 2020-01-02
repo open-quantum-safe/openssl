@@ -174,7 +174,7 @@ static const TLS_GROUP_INFO nid_list[] = {
 /* OQS groups. The values are arbitraty, since the TLS spec does not specify values for non finite field and elliptic curve "groups". Security level is classical.
  */
 static const TLS_GROUP_INFO oqs_nid_list[] = {
-    {NID_OQS_KEM_DEFAULT, 128, TLS_CURVE_CUSTOM}, /* OQS KEM default (0x01FF) */
+    {NID_oqs_kem_default, 128, TLS_CURVE_CUSTOM}, /* OQS KEM default (0x01FF) */
 ///// OQS_TEMPLATE_FRAGMENT_OQS_NID_LIST_START
     {NID_frodo640aes, 128, TLS_CURVE_CUSTOM}, /* frodo640aes (0x0200) */
     {NID_frodo640shake, 128, TLS_CURVE_CUSTOM}, /* frodo640shake (0x0201) */
@@ -210,7 +210,7 @@ static const TLS_GROUP_INFO oqs_nid_list[] = {
 };
     /* Hybrid OQS groups. Security level is classical. */
 static const TLS_GROUP_INFO oqs_hybrid_nid_list[] = {
-    {NID_p256_OQS_KEM_DEFAULT, 128, TLS_CURVE_CUSTOM}, /* p256 + OQS KEM default hybrid (0x02FF) */
+    {NID_p256_oqs_kem_default, 128, TLS_CURVE_CUSTOM}, /* p256 + OQS KEM default hybrid (0x02FF) */
 ///// OQS_TEMPLATE_FRAGMENT_OQS_NID_LIST_HYBRID_START
     {NID_p256_frodo640aes, 128, TLS_CURVE_CUSTOM}, /* p256 + frodo640aes hybrid (0x0200) */
     {NID_p256_frodo640shake, 128, TLS_CURVE_CUSTOM}, /* p256 + frodo640shake hybrid (0x0201) */
@@ -820,9 +820,9 @@ static const uint16_t tls12_sigalgs[] = {
     TLSEXT_SIGALG_ed448,
 #endif
 ///// OQS_TEMPLATE_FRAGMENT_DEFINE_TLS12_SIGALGS_START
-    TLSEXT_SIGALG_oqsdefault,
-    TLSEXT_SIGALG_p256_oqsdefault,
-    TLSEXT_SIGALG_rsa3072_oqsdefault,
+    TLSEXT_SIGALG_oqs_sig_default,
+    TLSEXT_SIGALG_p256_oqs_sig_default,
+    TLSEXT_SIGALG_rsa3072_oqs_sig_default,
     TLSEXT_SIGALG_dilithium2,
     TLSEXT_SIGALG_p256_dilithium2,
     TLSEXT_SIGALG_rsa3072_dilithium2,
@@ -970,14 +970,14 @@ static const SIGALG_LOOKUP sigalg_lookup_tbl[] = {
      NID_undef, NID_undef},
 #endif
 ///// OQS_TEMPLATE_FRAGMENT_POPULATE_SIGALG_TBL_START
-    {"oqsdefault", TLSEXT_SIGALG_oqsdefault,
-     NID_undef, -1, EVP_PKEY_OQSDEFAULT, SSL_PKEY_OQSDEFAULT,
+    {"oqs_sig_default", TLSEXT_SIGALG_oqs_sig_default,
+     NID_undef, -1, EVP_PKEY_OQS_SIG_DEFAULT, SSL_PKEY_OQS_SIG_DEFAULT,
      NID_undef, NID_undef},
-    {"p256_oqsdefault", TLSEXT_SIGALG_p256_oqsdefault,
-     NID_undef, -1, EVP_PKEY_P256_OQSDEFAULT, SSL_PKEY_P256_OQSDEFAULT,
+    {"p256_oqs_sig_default", TLSEXT_SIGALG_p256_oqs_sig_default,
+     NID_undef, -1, EVP_PKEY_P256_OQS_SIG_DEFAULT, SSL_PKEY_P256_OQS_SIG_DEFAULT,
      NID_undef, NID_undef},
-    {"rsa3072_oqsdefault", TLSEXT_SIGALG_rsa3072_oqsdefault,
-     NID_undef, -1, EVP_PKEY_RSA3072_OQSDEFAULT, SSL_PKEY_RSA3072_OQSDEFAULT,
+    {"rsa3072_oqs_sig_default", TLSEXT_SIGALG_rsa3072_oqs_sig_default,
+     NID_undef, -1, EVP_PKEY_RSA3072_OQS_SIG_DEFAULT, SSL_PKEY_RSA3072_OQS_SIG_DEFAULT,
      NID_undef, NID_undef},
     {"dilithium2", TLSEXT_SIGALG_dilithium2,
      NID_undef, -1, EVP_PKEY_DILITHIUM2, SSL_PKEY_DILITHIUM2,
@@ -2659,9 +2659,9 @@ void tls1_set_cert_validity(SSL *s)
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_ED25519);
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_ED448);
 ///// OQS_TEMPLATE_FRAGMENT_ADD_CERT_CHAIN_CHECKS_START
-    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_OQSDEFAULT);
-    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_P256_OQSDEFAULT);
-    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_RSA3072_OQSDEFAULT);
+    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_OQS_SIG_DEFAULT);
+    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_P256_OQS_SIG_DEFAULT);
+    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_RSA3072_OQS_SIG_DEFAULT);
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_DILITHIUM2);
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_P256_DILITHIUM2);
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_RSA3072_DILITHIUM2);

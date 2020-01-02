@@ -530,7 +530,7 @@ static const ssl_trace_tbl ssl_groups_tbl[] = {
     /* OQS groups, using private code points. The TLS 1.3 spec only reserves
        FF and EC ranges for code points; we'll update our values if/when
        this gets updated for PQC. */
-    {OQS_KEM_CURVEID(NID_OQS_KEM_DEFAULT), "OQS KEM default"},
+    {OQS_KEM_CURVEID(NID_oqs_kem_default), "OQS KEM default"},
 ///// OQS_TEMPLATE_FRAGMENT_SSL_GROUPS_TBL_START
     {OQS_KEM_CURVEID(NID_frodo640aes), "frodo640aes"},
     {OQS_KEM_CURVEID(NID_frodo640shake), "frodo640shake"},
@@ -563,7 +563,7 @@ static const ssl_trace_tbl ssl_groups_tbl[] = {
     {OQS_KEM_CURVEID(NID_sikep610), "sikep610"},
     {OQS_KEM_CURVEID(NID_sikep751), "sikep751"},
 ///// OQS_TEMPLATE_FRAGMENT_SSL_GROUPS_TBL_END
-    {OQS_KEM_CURVEID(NID_p256_OQS_KEM_DEFAULT), "p256 - OQS KEM default hybrid"},
+    {OQS_KEM_CURVEID(NID_p256_oqs_kem_default), "p256 - OQS KEM default hybrid"},
 ///// OQS_TEMPLATE_FRAGMENT_SSL_GROUPS_TBL_HYBRID_START
     {OQS_KEM_CURVEID(NID_p256_frodo640aes), "p256 - frodo640aes hybrid"},
     {OQS_KEM_CURVEID(NID_p256_frodo640shake), "p256 - frodo640shake hybrid"},
@@ -642,9 +642,9 @@ static const ssl_trace_tbl ssl_sigalg_tbl[] = {
     {TLSEXT_SIGALG_gostr34102012_512_gostr34112012_512, "gost2012_512"},
     {TLSEXT_SIGALG_gostr34102001_gostr3411, "gost2001_gost94"},
 ///// OQS_TEMPLATE_FRAGMENT_POPULATE_SIGALG_TBL_START
-    {TLSEXT_SIGALG_oqsdefault, "oqsdefault"},
-    {TLSEXT_SIGALG_p256_oqsdefault, "p256_oqsdefault"},
-    {TLSEXT_SIGALG_rsa3072_oqsdefault, "rsa3072_oqsdefault"},
+    {TLSEXT_SIGALG_oqs_sig_default, "oqs_sig_default"},
+    {TLSEXT_SIGALG_p256_oqs_sig_default, "p256_oqs_sig_default"},
+    {TLSEXT_SIGALG_rsa3072_oqs_sig_default, "rsa3072_oqs_sig_default"},
     {TLSEXT_SIGALG_dilithium2, "dilithium2"},
     {TLSEXT_SIGALG_p256_dilithium2, "p256_dilithium2"},
     {TLSEXT_SIGALG_rsa3072_dilithium2, "rsa3072_dilithium2"},

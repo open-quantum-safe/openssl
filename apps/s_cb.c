@@ -245,11 +245,11 @@ static const char *get_sigtype(int nid)
         return "gost2012_512";
 
 ///// OQS_TEMPLATE_FRAGMENT_SIG_NAME_STR_START
-    case NID_oqsdefault:
+    case NID_oqs_sig_default:
         return "OQS Default Signature Algorithm";
-    case NID_p256_oqsdefault:
+    case NID_p256_oqs_sig_default:
         return "ECDSA p256 - OQS Default Signature Algorithm";
-    case NID_rsa3072_oqsdefault:
+    case NID_rsa3072_oqs_sig_default:
         return "RSA3072 - OQS Default Signature Algorithm";
     case NID_dilithium2:
         return "Dilithium-2";
