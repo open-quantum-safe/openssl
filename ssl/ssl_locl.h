@@ -474,9 +474,9 @@
 
 /* Returns true if the nid is for an OQS KEM */
 #define NID_OQS_START NID_oqs_kem_default
-#define NID_OQS_END NID_sikep751
+#define NID_OQS_END NID_bike1l3fo
 #define NID_HYBRID_START NID_p256_oqs_kem_default
-#define NID_HYBRID_END NID_p256_sikep751
+#define NID_HYBRID_END NID_p256_bike1l3fo
 #define IS_OQS_KEM_NID(nid) (nid >= NID_OQS_START && nid <= NID_OQS_END)
 
 /* Returns the curve ID for an OQS KEM NID */
@@ -631,10 +631,10 @@
 ///// OQS_TEMPLATE_FRAGMENT_OQS_HYBRID_KEM_NID_END
 
 /* Returns true if the curve ID is for an OQS KEM */
-#define IS_OQS_KEM_CURVEID(id) (id >= 0x01FF && id <= 0x0222)
+#define IS_OQS_KEM_CURVEID(id) (id >= 0x01FF && id <= 0x0224)
 
 /* Returns true if the curve ID is for an OQS hybrid KEM */
-#define IS_OQS_KEM_HYBRID_CURVEID(id) (id >= 0x02FF && id <= 0x0322)
+#define IS_OQS_KEM_HYBRID_CURVEID(id) (id >= 0x02FF && id <= 0x0324)
 
 /* Returns the OQS alg ID for OQS API */
 ///// OQS_TEMPLATE_FRAGMENT_OQS_ALG_NAME_START
