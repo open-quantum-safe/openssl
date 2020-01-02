@@ -592,7 +592,7 @@
   )))))))))))))))))))))))))))))))
 ///// OQS_TEMPLATE_FRAGMENT_OQS_KEM_NID_END
 
-  /* Returns the hybrid OQS KEM NID for a hybrid curve ID */ /* FIXMEOQS: template this */
+  /* Returns the hybrid OQS KEM NID for a hybrid curve ID */
 ///// OQS_TEMPLATE_FRAGMENT_OQS_HYBRID_KEM_NID_START
 #define OQS_HYBRID_KEM_NID(curveID) \
   (curveID == 0x02FF ? NID_p256_oqs_kem_default : \
