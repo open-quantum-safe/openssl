@@ -204,45 +204,45 @@
 # define SSL_aGOST12             0x00000080U
 ///// OQS_TEMPLATE_FRAGMENT_DEFINE_SIG_MASKS_START
 /* OQS Default Signature Algorithm auth */
-#define SSL_aOQSSIGDEFAULT 0x00000100
+#define SSL_aOQS_SIG_DEFAULT 0x00000100
 /* ECDSA p256 - OQS Default Signature Algorithm auth */
-#define SSL_aP256OQSSIGDEFAULT 0x00000200
+#define SSL_aP256_OQS_SIG_DEFAULT 0x00000200
 /* RSA3072 - OQS Default Signature Algorithm auth */
-#define SSL_aRSA3072OQSSIGDEFAULT 0x00000400
+#define SSL_aRSA3072_OQS_SIG_DEFAULT 0x00000400
 /* Dilithium-2 auth */
 #define SSL_aDILITHIUM2 0x00000800
 /* ECDSA p256 - Dilithium-2 auth */
-#define SSL_aP256DILITHIUM2 0x00001000
+#define SSL_aP256_DILITHIUM2 0x00001000
 /* RSA3072 - Dilithium-2 auth */
-#define SSL_aRSA3072DILITHIUM2 0x00002000
+#define SSL_aRSA3072_DILITHIUM2 0x00002000
 /* Dilithium-3 auth */
 #define SSL_aDILITHIUM3 0x00004000
 /* Dilithium-4 auth */
 #define SSL_aDILITHIUM4 0x00008000
 /* ECDSA p384 - Dilithium-4 auth */
-#define SSL_aP384DILITHIUM4 0x00010000
+#define SSL_aP384_DILITHIUM4 0x00010000
 /* Picnic L1 FS auth */
 #define SSL_aPICNICL1FS 0x00020000
 /* ECDSA p256 - Picnic L1 FS auth */
-#define SSL_aP256PICNICL1FS 0x00040000
+#define SSL_aP256_PICNICL1FS 0x00040000
 /* RSA3072 - Picnic L1 FS auth */
-#define SSL_aRSA3072PICNICL1FS 0x00080000
+#define SSL_aRSA3072_PICNICL1FS 0x00080000
 /* Picnic2 L1 FS auth */
 #define SSL_aPICNIC2L1FS 0x00100000
 /* ECDSA p256 - Picnic2 L1 FS auth */
-#define SSL_aP256PICNIC2L1FS 0x00200000
+#define SSL_aP256_PICNIC2L1FS 0x00200000
 /* RSA3072 - Picnic2 L1 FS auth */
-#define SSL_aRSA3072PICNIC2L1FS 0x00400000
+#define SSL_aRSA3072_PICNIC2L1FS 0x00400000
 /* qTesla-I-p auth */
 #define SSL_aQTESLAPI 0x00800000
 /* ECDSA p256 - qTesla-I-p auth */
-#define SSL_aP256QTESLAPI 0x01000000
+#define SSL_aP256_QTESLAPI 0x01000000
 /* RSA3072 - qTesla-I-p auth */
-#define SSL_aRSA3072QTESLAPI 0x02000000
+#define SSL_aRSA3072_QTESLAPI 0x02000000
 /* qTESLA-p-III auth */
 #define SSL_aQTESLAPIII 0x04000000
 /* ECDSA p384 - qTESLA-p-III auth */
-#define SSL_aP384QTESLAPIII 0x08000000
+#define SSL_aP384_QTESLAPIII 0x08000000
 ///// OQS_TEMPLATE_FRAGMENT_DEFINE_SIG_MASKS_END
 /* Any appropriate signature auth (for TLS 1.3 ciphersuites) */
 # define SSL_aANY                0x00000000U
@@ -639,7 +639,7 @@
 /* Returns the OQS alg ID for OQS API */
 ///// OQS_TEMPLATE_FRAGMENT_OQS_ALG_NAME_START
 #define OQS_ALG_NAME(nid) \
-  (nid == NID_oqs_kem_default     ? OQS_KEM_alg_default : \
+  (nid == NID_oqs_kem_default ? OQS_KEM_alg_default : \
   (nid == NID_frodo640aes ? OQS_KEM_alg_frodokem_640_aes : \
   (nid == NID_frodo640shake ? OQS_KEM_alg_frodokem_640_shake : \
   (nid == NID_frodo976aes ? OQS_KEM_alg_frodokem_976_aes : \
