@@ -527,11 +527,11 @@ clean: libclean
 	$(RM) openssl.pc libcrypto.pc libssl.pc liboqs.pc
 	-$(RM) `find . -type l \! -name '.*' -print`
 	$(RM) $(TARFILE)
-	-$(RM) -rf oqs
 
 distclean: clean
 	$(RM) configdata.pm
 	$(RM) Makefile
+	-$(RM) -rf oqs
 
 # We check if any depfile is newer than Makefile and decide to
 # concatenate only if that is true.
