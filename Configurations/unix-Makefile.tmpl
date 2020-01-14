@@ -527,6 +527,7 @@ clean: libclean
 	$(RM) openssl.pc libcrypto.pc libssl.pc liboqs.pc
 	-$(RM) `find . -type l \! -name '.*' -print`
 	$(RM) $(TARFILE)
+	-$(RM) -rf oqs
 
 distclean: clean
 	$(RM) configdata.pm
@@ -678,8 +679,10 @@ install_dev: install_runtime_libs
 	@$(ECHO) "install liboqs.pc -> $(DESTDIR)$(libdir)/pkgconfig/liboqs.pc"
 	@cp liboqs.pc $(DESTDIR)$(libdir)/pkgconfig
 	@install oqs/lib/liboqs.a $(DESTDIR)$(libdir)
+ifneq (,$(wildcard oqs/lib/liboqs.so.0.0.0))
 	@install oqs/lib/liboqs.so.0.0.0 $(DESTDIR)$(libdir)
 	@cd $(DESTDIR)$(libdir) && ln -sf liboqs.so.0.0.0 liboqs.so && cd -
+endif
 	@chmod 644 $(DESTDIR)$(libdir)/pkgconfig/liboqs.pc
 
 uninstall_dev: uninstall_runtime_libs
