@@ -571,10 +571,6 @@ static int nid_cb(const char *elem, int len, void *arg)
         nid = OBJ_sn2nid(etmp);
     if (nid == NID_undef)
         nid = OBJ_ln2nid(etmp);
-    /* /\* OQS note: parse oqs algs *\/ */
-    /* if (nid == NID_undef) { */
-    /*   nid = OQS_nid_from_string(etmp); */
-    /* } */
     if (nid == NID_undef)
         return 0;
     for (i = 0; i < narg->nidcnt; i++)
