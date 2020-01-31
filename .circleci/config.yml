@@ -53,21 +53,3 @@ jobs:
       ARCH: x64
       LIBOQS: master
       OPENSSL: 102
-
-workflows:
-  version: 2
-  build:
-    jobs:
-      - debian-buster-amd64
-      - ubuntu-xenial-x86_64
-  nightly:
-    triggers:
-      - schedule:
-          cron: "0 2 * * *"
-          filters:
-            branches:
-              only:
-                - OQS-OpenSSL_1_0_2-stable
-    jobs:
-      - debian-buster-amd64
-      - ubuntu-xenial-x86_64

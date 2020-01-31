@@ -1,7 +1,7 @@
-[![CircleCI](https://circleci.com/gh/open-quantum-safe/openssl/tree/OQS-OpenSSL_1_0_2-stable.svg?style=svg)](https://circleci.com/gh/open-quantum-safe/openssl/tree/OQS-OpenSSL_1_0_2-stable)
-
 OQS-OpenSSL\_1\_0\_2
 ==================================
+
+**ATTENTION: THIS BRANCH (OQS-OpenSSL\_1\_0\_2) IS NO LONGER MAINTAINED. SEE [DEPRECATION](#deprecation) SECTION BELOW FOR MORE INFORMATION.**
 
 [OpenSSL](https://openssl.org/) is an open-source implementation of the TLS protocol and various cryptographic algorithms ([View the original README](https://github.com/open-quantum-safe/openssl/blob/OQS-OpenSSL_1_0_2-stable/README).)
 
@@ -11,7 +11,7 @@ OQS-OpenSSL\_1\_0\_2 is a fork of OpenSSL 1.0.2 that adds quantum-safe key excha
 - [Status](#status)
   * [Limitations and Security](#limitations-and-security)
   * [Supported Key Exchange Methods](#supported-key-exchange-methods)
-- [Lifecycle](#lifecycle)
+- [Deprecation](#deprecation)
 - [Quickstart](#quickstart)
   * [Building](#building)
     * [Linux and macOS](#linux-and-macOS)
@@ -32,13 +32,13 @@ Both liboqs and this fork are part of the **Open Quantum Safe (OQS) project**, w
 
 ## Status
 
-This fork is currently in sync with the [OpenSSL\_1\_0\_2t tag](https://github.com/openssl/openssl/tree/OpenSSL_1_0_2t), and adds the following:
+This fork is based on the [OpenSSL\_1\_0\_2t tag](https://github.com/openssl/openssl/tree/OpenSSL_1_0_2t), and adds the following:
 
 - quantum-safe key exchange in TLS 1.2
 - hybrid (quantum-safe + elliptic curve) key exchange in TLS 1.2
 - quantum-safe key exchange primitives from liboqs in OpenSSL's `speed` command
 
-**This fork is at an experimental stage**, and has not received the same level of auditing and analysis that OpenSSL has received. See the [Limitations and Security](#limitations-and-security) section below for more information.
+**This fork should be considered experimental**, and has not received the same level of auditing and analysis that OpenSSL has received. See the [Limitations and Security](#limitations-and-security) section below for more information.
 
 **We do not recommend relying on this fork in a production environment or to protect any sensitive data.**
 
@@ -71,13 +71,9 @@ For each key exchange method `<KEX>` listed above, the fork makes available the 
 - `OQSKEM-<KEX>-RSA-AES256-GCM-SHA384`
 - `OQSKEM-<KEX>-ECDSA-AES256-GCM-SHA384`
 
-## Lifecycle
+## Deprecation
 
-**Release cycle:** We aim to make releases of OQS-OpenSSL\_1\_0\_2 on a bi-monthly basis, either when there has been a new release of OpenSSL 1.0.2 or when we have made changes to our fork.
-
-See the [liboqs README.md](https://github.com/open-quantum-safe/liboqs/blob/master/README.md) for information about the liboqs algorithm lifecycle.
-
-**TLS compatibility:** The ciphersuite numbers and message formats used for quantum-safe and hybrid key exchange are experimental, and may change between releases of OQS-OpenSSL\_1\_0\_2.
+The OpenSSL project stopped supporting the OpenSSL 1.0.2 series as of January 1, 2020.  As a result, we have decided to discontinue development and support on OQS-OpenSSL 1.0.2.  **This branch is no longer receiving bug fixes, algorithm updates, or any further changes.** Projects relying on post-quantum key exchange in TLS should switch to the OQS-OpenSSL\_1\_1\_1-stable branch.
 
 ## Quickstart
 
@@ -103,10 +99,11 @@ Then, get the source code of this fork (`<OPENSSL_DIR>` is a directory of your c
 
 #### Step 1: Build and install liboqs
 
-The following instructions will download and build liboqs, then install it into a subdirectory inside the OpenSSL folder.
+The following instructions will download and build liboqs, then install it into a subdirectory inside the OpenSSL folder.  As this branch has been deprecated, its compatibility with changes in liboqs is no longer being maintained.  The build instructions below point to the last release of liboqs known to work with OQS-OpenSSL-1.0.2.
 
 	git clone --branch master https://github.com/open-quantum-safe/liboqs.git
 	cd liboqs
+	git checkout ac03b344679ffec6666376c1d955e1c7e30937e3
 	autoreconf -i
 	./configure --prefix=<OPENSSL_DIR>/oqs --enable-shared=no --with-sha3=c
 	make -j
@@ -156,13 +153,16 @@ The above command uses `git`, but alternatively, an archive of the source code c
 
 Next, you must download and build liboqs using the master branch of liboqs (the nist branch is not currently supported on Windows).  The following instructions will download (using git, alternatively, [download](https://github.com/open-quantum-safe/liboqs/archive/master.zip) and unzip the project) and build liboqs, then copy the required files it into a subdirectory inside the OpenSSL folder.  The liboqs configuration (Debug/Release, x86/x64) must match the one of OpenSSL; the following instructions assume the x64 release configuration is used.  You may need to install dependencies before building liboqs; see the [liboqs master branch README.md](https://github.com/open-quantum-safe/liboqs/blob/master/README.md).
 
-    git clone --branch master https://github.com/open-quantum-safe/liboqs.git
-    msbuild liboqs\VisualStudio\liboqs.sln /p:Configuration=Release;Platform=x64
-    mkdir openssl\oqs
-    mkdir openssl\oqs\lib
-    mkdir openssl\oqs\include
-    xcopy liboqs\VisualStudio\x64\Release\oqs.lib openssl\oqs\lib\
-    xcopy /S liboqs\VisualStudio\include openssl\oqs\include\
+	git clone --branch master https://github.com/open-quantum-safe/liboqs.git
+	cd liboqs
+	git checkout ac03b344679ffec6666376c1d955e1c7e30937e3
+	cd ..
+	msbuild liboqs\VisualStudio\liboqs.sln /p:Configuration=Release;Platform=x64
+	mkdir openssl\oqs
+	mkdir openssl\oqs\lib
+	mkdir openssl\oqs\include
+	xcopy liboqs\VisualStudio\x64\Release\oqs.lib openssl\oqs\lib\
+	xcopy /S liboqs\VisualStudio\include openssl\oqs\include\
 
 ### Step 3: Build fork of OpenSSL
 
@@ -209,6 +209,7 @@ Contributors to OQS-OpenSSL\_1\_0\_2 include:
 - Tancrède Lepoint (SRI)
 - Shravan Mishra (University of Waterloo)
 - Christian Paquin (Microsoft Research)
+- Douglas Stebila (University of Waterloo)
 
 ## Acknowledgments
 

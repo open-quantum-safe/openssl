@@ -15,3 +15,5 @@ LIBOQS_BRANCH=${LIBOQS_BRANCH:-"master"}
 
 rm -rf tmp/liboqs
 git clone --branch ${LIBOQS_BRANCH} --single-branch ${LIBOQS_REPO} tmp/liboqs
+cd tmp/liboqs
+git checkout ac03b344679ffec6666376c1d955e1c7e30937e3

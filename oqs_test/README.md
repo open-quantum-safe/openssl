@@ -1,10 +1,6 @@
 OQS-OpenSSL Integration Testing
 ===============================
 
-[![CircleCI](https://circleci.com/gh/open-quantum-safe/openssl/tree/OQS-OpenSSL_1_0_2-stable.svg?style=svg)](https://circleci.com/gh/open-quantum-safe/openssl/tree/OQS-OpenSSL_1_0_2-stable)
-
----
-
 This directory contains scripts for testing the OQS fork of OpenSSL with liboqs, using all supported algorithms. The [README.md file for the OQS-OpenSSL fork](https://github.com/open-quantum-safe/openssl/blob/OQS-OpenSSL_1_0_2-stable/README.md) describes the various key exchange and authentication mechanisms supported.
 
 First make sure you have **installed the dependencies** for the target OS as indicated in the [top-level testing README](https://github.com/open-quantum-safe/openssl/blob/OQS-OpenSSL_1_0_2-stable/README.md).
@@ -35,12 +31,3 @@ where `<jobname>` is one of the following:
 
 - `ssl-amd64-buster-liboqs-master-openssl-102`
 - `ssl-x86_64-xenial-liboqs-master-openssl-102`
-
-By default, these jobs will use the current Github versions of liboqs and OQS-OpenSSL.  You can override these by passing environment variables to CircleCI:
-
-	circleci local execute --job <jobname> --env <NAME>=<VALUE> --env <NAME>=<VALUE> ...
-
-where `<NAME>` is one of the following:
-
-- `LIBOQS_REPO`: which repo to check out from, default `https://github.com/open-quantum-safe/liboqs.git`
-- `LIBOQS_BRANCH`: which branch to check out, default `master`
