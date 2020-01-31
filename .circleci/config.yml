@@ -60,7 +60,8 @@ workflows:
   build:
     jobs:
       - job1:
-          branches:
-            ignore:
-              - /.*1.0.2.*/
-              - /.*102.*/
+          filters:
+            branches:
+              ignore:
+                - /.*1.0.2.*/
+                - /.*102.*/
