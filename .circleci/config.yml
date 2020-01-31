@@ -53,3 +53,14 @@ jobs:
       ARCH: x64
       LIBOQS: master
       OPENSSL: 102
+
+workflows:
+  version: 2
+
+  build:
+    jobs:
+      - job1:
+          branches:
+            ignore:
+              - /.*1.0.2.*/
+              - /.*102.*/
