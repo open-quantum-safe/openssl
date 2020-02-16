@@ -34,7 +34,7 @@ jobs:
   debian-buster-amd64:
     <<: *openssljob
     environment:
-      IMAGE: dstebila/liboqs:debian-buster-amd64-0.1.0
+      IMAGE: openquantumsafe/ci-debian-buster-amd64:latest
       ARCH: x64
       LIBOQS: master
       OPENSSL: 111
