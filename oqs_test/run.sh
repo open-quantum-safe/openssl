@@ -20,4 +20,4 @@ scripts/clone_liboqs.sh
 scripts/build_liboqs.sh
 
 scripts/build_openssl.sh
-LD_LIBRARY_PATH=$(dirname $PWD) python3 -m nose --rednose --verbose
+LD_LIBRARY_PATH="$(dirname $PWD);oqs/lib" python3 -m nose --rednose --verbose
