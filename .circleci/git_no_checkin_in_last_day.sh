@@ -3,7 +3,7 @@
 # Detects whether there has been a Git commit in the last day on this
 # branch. Returns 1 if there has been a commit, 0 if there has not.
 
-r=`git log --name-only --since="1 second ago" -n 2`
+r=`git log --name-only --since="1 day ago" -n 2`
 if [ "x$r" == "x" ]; then 
 	echo "No openssl commit in the last day. Checking liboqs now."
 	if [ -d oqs_test/tmp/liboqs ]; then
