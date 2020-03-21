@@ -120,7 +120,7 @@ workflows:
     jobs:
       - macOS-shared-noconn    
       - ubuntu-bionic-x86_64-shared-noconn
-      - ubuntu-bionic-x86_64-noconn
+      - ubuntu-bionic-x86_64
   nightly:
     triggers:
       - schedule:
