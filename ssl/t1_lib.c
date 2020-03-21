@@ -1271,6 +1271,8 @@ static int sigalg_security_bits(const SIGALG_LOOKUP *lu)
             secbits = 128;
         else if (lu->sigalg == TLSEXT_SIGALG_ed448)
             secbits = 224;
+	else if (lu->sigalg >= TLSEXT_SIGALG_oqs_sig_default && lu->sigalg <= TLSEXT_SIGALG_p384_qteslapiii)
+	    return 128; // FIXMEOQS. Just testing to see if that fixes the issue. If so, we'll need to properly templatize this to detect OQS algs. The values are (statically) available in crypto/ec/oqs_meth.c, we'll need to expose them.
     }
     return secbits;
 }
