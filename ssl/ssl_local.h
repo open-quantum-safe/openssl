@@ -451,12 +451,6 @@
 #define SSL_PKEY_NUM 29
 ///// OQS_TEMPLATE_FRAGMENT_DEFINE_SSL_PKEYS_END
 
-/*
- * Pseudo-constant. GOST cipher suites can use different certs for 1
- * SSL_CIPHER. So let's see which one we have in fact.
- */
-# define SSL_PKEY_GOST_EC SSL_PKEY_NUM+1
-
 /*-
  * SSL_kRSA <- RSA_ENC
  * SSL_kDH  <- DH_ENC & (RSA_ENC | RSA_SIGN | DSA_SIGN)
