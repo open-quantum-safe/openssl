@@ -22,6 +22,7 @@ SERVER_PID=$!
 sleep 1
 
 echo "GET /" > get_command.tmp
+echo "Q" >> get_command.tmp
 
 apps/openssl s_client -curves "${KEXALG}" -CAfile ${SIGALG}_CA.crt -connect "localhost:${PORT}" < get_command.tmp > s_client_${PORT}.out 2>&1
 CLIENT_STATUS=$?
