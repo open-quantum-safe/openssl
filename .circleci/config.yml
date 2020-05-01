@@ -17,18 +17,18 @@ localCheckout: &localCheckout
     - checkout # change this from "checkout" to "*localCheckout" when running CircleCI locally
     - run:
         name: Clone liboqs
-        command: (cd oqs_test && scripts/clone_liboqs.sh) # unconditional checkout to test for changes there
+        command: (cd oqs-test && scripts/clone_liboqs.sh) # unconditional checkout to test for changes there
     - run:
         name: Build liboqs
-        command: .circleci/git_no_checkin_in_last_day.sh || (cd oqs_test && scripts/build_liboqs.sh)
+        command: .circleci/git_no_checkin_in_last_day.sh || (cd oqs-test && scripts/build_liboqs.sh)
     - run:
         name: Build OpenSSL
-        command: .circleci/git_no_checkin_in_last_day.sh || (cd oqs_test && scripts/build_openssl.sh)
+        command: .circleci/git_no_checkin_in_last_day.sh || (cd oqs-test && scripts/build_openssl.sh)
     - run:
         name: Run unit tests
-        command: mkdir -p oqs_test/test-results && .circleci/git_no_checkin_in_last_day.sh || (LD_LIBRARY_PATH="$(pwd):$(pwd)/oqs/lib" make test && cd oqs_test && LD_LIBRARY_PATH="$(dirname $PWD);$(dirname $PWD)/oqs/lib" python3 -m nose --rednose --verbose --with-xunit --xunit-file=test-results/nosetests.xml)
+        command: mkdir -p oqs-test/test-results && .circleci/git_no_checkin_in_last_day.sh || (LD_LIBRARY_PATH="$(pwd):$(pwd)/oqs/lib" make test && cd oqs-test && LD_LIBRARY_PATH="$(dirname $PWD);$(dirname $PWD)/oqs/lib" python3 -m nose --rednose --verbose --with-xunit --xunit-file=test-results/nosetests.xml)
     - store_test_results: # Note that this command will fail when running CircleCI locally, that is expected behaviour
-        path: oqs_test/test-results
+        path: oqs-test/test-results
 
 .macopenssl_job: &macopenssljob
     macos:
@@ -46,18 +46,18 @@ localCheckout: &localCheckout
               )
         - run:
             name: Clone liboqs
-            command: (cd oqs_test && scripts/clone_liboqs.sh) # unconditional checkout
+            command: (cd oqs-test && scripts/clone_liboqs.sh) # unconditional checkout
         - run:
             name: Build liboqs
-            command: .circleci/git_no_checkin_in_last_day.sh || (cd oqs_test && scripts/build_liboqs.sh)
+            command: .circleci/git_no_checkin_in_last_day.sh || (cd oqs-test && scripts/build_liboqs.sh)
         - run:
             name: Build OpenSSL
-            command: .circleci/git_no_checkin_in_last_day.sh || (cd oqs_test && scripts/build_openssl.sh)
+            command: .circleci/git_no_checkin_in_last_day.sh || (cd oqs-test && scripts/build_openssl.sh)
         - run:
             name: Run unit tests
-            command: mkdir -p oqs_test/test-results && .circleci/git_no_checkin_in_last_day.sh || (cd oqs_test && OQS_LIBPATH="$(dirname $PWD):$(dirname $PWD)/oqs/lib" python3 -m nose --rednose --verbose --with-xunit --xunit-file=test-results/nosetests.xml)
+            command: mkdir -p oqs-test/test-results && .circleci/git_no_checkin_in_last_day.sh || (cd oqs-test && OQS_LIBPATH="$(dirname $PWD):$(dirname $PWD)/oqs/lib" python3 -m nose --rednose --verbose --with-xunit --xunit-file=test-results/nosetests.xml)
         - store_test_results: # Note that this command will fail when running CircleCI locally, that is expected behaviour
-            path: oqs_test/test-results
+            path: oqs-test/test-results
 
 jobs:
   debian-buster-amd64:
@@ -130,9 +130,9 @@ workflows:
               only:
                 - OQS-OpenSSL_1_1_1-stable
     jobs:
-      - macOS-shared    
+      - macOS-shared
       - debian-buster-amd64
-      - macOS-static    
+      - macOS-static
       - ubuntu-bionic-x86_64-shared-noconn
       - ubuntu-bionic-x86_64
 
