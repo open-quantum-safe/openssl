@@ -15,7 +15,7 @@ if [ "x$r" == "x" ]; then
     if [ -d oqs-test/tmp/liboqs ]; then
             cd oqs-test/tmp/liboqs
             r=`git log --name-only --since="1 day ago" -n 2`
-            if [ "x$r" == "x" ]; then 
+            if [ "x$r" == "x" ]; then
                 echo "Also no liboqs commit in the last day. No build/test required. Exiting."
                 exit 0
             else

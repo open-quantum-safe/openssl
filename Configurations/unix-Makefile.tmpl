@@ -486,6 +486,15 @@ test: tests
 	@echo "Tests are not supported with your chosen Configure options"
 	@ : {- output_on() if !$disabled{tests}; "" -}
 
+run-basic-conn-tests: build_programs
+	env {- $config{target} =~ /^darwin/ ? 'DYLD_LIBRARY_PATH' : 'LD_LIBRARY_PATH' -}="$(shell pwd):$(shell pwd)/oqs/lib" python3 -m pytest --verbose oqs-test/test_conn_basic.py --ossl=apps/openssl --ossl-config=apps/openssl.cnf --test-artifacts-dir=oqs-test/tmp --junitxml=oqs-test/tmp/test-results/pytest/test-results.xml
+
+run-full-conn-tests: build_programs
+	env {- $config{target} =~ /^darwin/ ? 'DYLD_LIBRARY_PATH' : 'LD_LIBRARY_PATH' -}="$(shell pwd):$(shell pwd)/oqs/lib" python3 -m pytest --verbose oqs-test/test_conn_full.py --ossl=apps/openssl --ossl-config=apps/openssl.cnf --test-artifacts-dir=oqs-test/tmp --junitxml=oqs-test/tmp/test-results/pytest/test-results.xml
+
+run-cms-tests: build_programs
+	env {- $config{target} =~ /^darwin/ ? 'DYLD_LIBRARY_PATH' : 'LD_LIBRARY_PATH' -}="$(shell pwd):$(shell pwd)/oqs/lib" python3 -m pytest --verbose --numprocesses=auto oqs-test/test_cms.py --ossl=apps/openssl --ossl-config=apps/openssl.cnf --test-artifacts-dir=oqs-test/tmp --junitxml=oqs-test/tmp/test-results/pytest/test-results.xml
+
 list-tests:
 	@ : {- output_off() if $disabled{tests}; "" -}
 	@SRCTOP="$(SRCDIR)" \

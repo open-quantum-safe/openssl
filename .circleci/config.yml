@@ -7,7 +7,7 @@ localCheckout: &localCheckout
     PROJECT_PATH=$(cd ${CIRCLE_WORKING_DIRECTORY}; pwd)
     mkdir -p ${PROJECT_PATH}
     cd /tmp/_circleci_local_build_repo
-    git ls-files -z | xargs -0 -s 2090860 tar -c | tar -x -C ${PROJECT_PATH} 
+    git ls-files -z | xargs -0 -s 2090860 tar -c | tar -x -C ${PROJECT_PATH}
     cp -a /tmp/_circleci_local_build_repo/.git ${PROJECT_PATH}
 
 .openssl_job: &openssljob
@@ -17,18 +17,25 @@ localCheckout: &localCheckout
     - checkout # change this from "checkout" to "*localCheckout" when running CircleCI locally
     - run:
         name: Clone liboqs
-        command: (cd oqs-test && scripts/clone_liboqs.sh) # unconditional checkout to test for changes there
+        command: ./oqs-test/clone_liboqs.sh # unconditional checkout to test for changes there
     - run:
         name: Build liboqs
-        command: .circleci/git_no_checkin_in_last_day.sh || (cd oqs-test && scripts/build_liboqs.sh)
+        command: .circleci/git_no_checkin_in_last_day.sh || (./oqs-test/build_liboqs.sh)
     - run:
-        name: Build OpenSSL
-        command: .circleci/git_no_checkin_in_last_day.sh || (cd oqs-test && scripts/build_openssl.sh)
+        name: Configure and build OpenSSL
+        command: .circleci/git_no_checkin_in_last_day.sh || (./config ${OPENSSL_CONFIGURE_ARGS} && make -j2)
     - run:
-        name: Run unit tests
-        command: mkdir -p oqs-test/test-results && .circleci/git_no_checkin_in_last_day.sh || (LD_LIBRARY_PATH="$(pwd):$(pwd)/oqs/lib" make test && cd oqs-test && LD_LIBRARY_PATH="$(dirname $PWD);$(dirname $PWD)/oqs/lib" python3 -m nose --rednose --verbose --with-xunit --xunit-file=test-results/nosetests.xml)
+        name: Check that OpenSSL speed works for all KEMS
+        command: .circleci/git_no_checkin_in_last_day.sh || (env LD_LIBRARY_PATH=".:./oqs/lib" apps/openssl speed -seconds 1 oqskem)
+    - run:
+        name: Check that OpenSSL speed works for all signatures
+        # Disabling cleanup on Linux because of picnic-induced memory glitch:
+        command: .circleci/git_no_checkin_in_last_day.sh || (env LD_LIBRARY_PATH=".:./oqs/lib" OPENSSL_NO_CLEANUP=1 apps/openssl speed -seconds 1 oqssig)
+    - run:
+        name: Run connection and CMS tests
+        command: .circleci/git_no_checkin_in_last_day.sh && mkdir -p oqs-test/test-results || (make run-${CONN_TEST_TYPE}-conn-tests && make run-cms-tests)
     - store_test_results: # Note that this command will fail when running CircleCI locally, that is expected behaviour
-        path: oqs-test/test-results
+        path: oqs-test/tmp/test-results
 
 .macopenssl_job: &macopenssljob
     macos:
@@ -41,86 +48,69 @@ localCheckout: &localCheckout
               .circleci/git_no_checkin_in_last_day.sh || (
               brew update &&
               brew unlink python@2 &&
-              brew install cmake ninja doxygen astyle &&
-              pip3 install --user pytest pytest-xdist nose rednose
+              brew install cmake ninja &&
+              pip3 install --user pytest pytest-xdist
               )
         - run:
             name: Clone liboqs
-            command: (cd oqs-test && scripts/clone_liboqs.sh) # unconditional checkout
+            command: ./oqs-test/clone_liboqs.sh # unconditional checkout to test for changes there
         - run:
             name: Build liboqs
-            command: .circleci/git_no_checkin_in_last_day.sh || (cd oqs-test && scripts/build_liboqs.sh)
+            command: .circleci/git_no_checkin_in_last_day.sh || (./oqs-test/build_liboqs.sh)
         - run:
-            name: Build OpenSSL
-            command: .circleci/git_no_checkin_in_last_day.sh || (cd oqs-test && scripts/build_openssl.sh)
+            name: Configure and build OpenSSL
+            command: .circleci/git_no_checkin_in_last_day.sh || (./config ${OPENSSL_CONFIGURE_ARGS} && make -j2)
         - run:
-            name: Run unit tests
-            command: mkdir -p oqs-test/test-results && .circleci/git_no_checkin_in_last_day.sh || (cd oqs-test && OQS_LIBPATH="$(dirname $PWD):$(dirname $PWD)/oqs/lib" python3 -m nose --rednose --verbose --with-xunit --xunit-file=test-results/nosetests.xml)
+            name: Check that OpenSSL speed works for all KEMS
+            command: .circleci/git_no_checkin_in_last_day.sh || (env DYLD_LIBRARY_PATH=".:./oqs/lib" apps/openssl speed -seconds 1 oqskem)
+        - run:
+            name: Check that OpenSSL speed works for all signatures
+            # Test only the sig that doesn't cause memory problems on macOS:
+            command: .circleci/git_no_checkin_in_last_day.sh || (env DYLD_LIBRARY_PATH=".:./oqs/lib" apps/openssl speed -seconds 1 dilithium2)
+        - run:
+            name: Run connection and CMS tests
+            command: .circleci/git_no_checkin_in_last_day.sh && mkdir -p oqs-test/test-results || (make run-${CONN_TEST_TYPE}-conn-tests && make run-cms-tests)
         - store_test_results: # Note that this command will fail when running CircleCI locally, that is expected behaviour
-            path: oqs-test/test-results
+            path: oqs-test/tmp/test-results
 
 jobs:
-  debian-buster-amd64:
+  debian_buster-shared_oqs-static_ossl-full:
     <<: *openssljob
     environment:
       IMAGE: openquantumsafe/ci-debian-buster-amd64:latest
-      ARCH: x64
-      LIBOQS: master
-      OPENSSL: 111
-  ubuntu-bionic-x86_64:
+      LIBOQS_LIBTYPE: shared
+      CONN_TEST_TYPE: full
+      OPENSSL_CONFIGURE_ARGS: no-shared
+  ubuntu_bionic-shared_oqs-shared_ossl-full:
     <<: *openssljob
     environment:
       IMAGE: openquantumsafe/ci-ubuntu-bionic-x86_64:latest
-      ARCH: x64
-      LIBOQS: master
-      OPENSSL: 111
-  ubuntu-bionic-x86_64-noconn:
+      LIBOQS_LIBTYPE: shared
+      CONN_TEST_TYPE: full
+  ubuntu_bionic-static_oqs-static_ossl-basic:
     <<: *openssljob
     environment:
       IMAGE: openquantumsafe/ci-ubuntu-bionic-x86_64:latest
-      ARCH: x64
-      LIBOQS: master
-      OPENSSL: 111
-      SKIP_TESTS: connection
-  ubuntu-bionic-x86_64-shared:
-    <<: *openssljob
-    environment:
-      IMAGE: openquantumsafe/ci-ubuntu-bionic-x86_64:latest
-      ARCH: x64
-      LIBOQS: master
-      OPENSSL: 111
-      LIBTYPE: shared
-  ubuntu-bionic-x86_64-shared-noconn:
-    <<: *openssljob
-    environment:
-      IMAGE: openquantumsafe/ci-ubuntu-bionic-x86_64:latest
-      ARCH: x64
-      LIBOQS: master
-      OPENSSL: 111
-      LIBTYPE: shared
-      SKIP_TESTS: connection
-  macOS-shared-noconn:
+      OPENSSL_CONFIGURE_ARGS: no-shared
+      CONN_TEST_TYPE: basic
+  macOS-shared_oqs-shared_ossl-basic:
     <<: *macopenssljob
     environment:
-      LIBTYPE: shared
-      SKIP_TESTS: connection
-  macOS-shared:
+      LIBOQS_LIBTYPE: shared
+      CONN_TEST_TYPE: basic
+  macOS-static_oqs-static_ossl-full:
     <<: *macopenssljob
     environment:
-      LIBTYPE: shared
-  macOS-static:
-    <<: *macopenssljob
-    environment:
-      LIBTYPE: no-shared
-      SKIP_TESTS: connection
+      CONN_TEST_TYPE: full
+      OPENSSL_CONFIGURE_ARGS: no-shared
 
 workflows:
   version: 2
   build:
     jobs:
-      - macOS-shared-noconn    
-      - ubuntu-bionic-x86_64-shared
-      - ubuntu-bionic-x86_64-noconn
+      - macOS-shared_oqs-shared_ossl-basic
+      - ubuntu_bionic-shared_oqs-shared_ossl-full
+      - ubuntu_bionic-static_oqs-static_ossl-basic
   nightly:
     triggers:
       - schedule:
@@ -130,9 +120,9 @@ workflows:
               only:
                 - OQS-OpenSSL_1_1_1-stable
     jobs:
-      - macOS-shared
-      - debian-buster-amd64
-      - macOS-static
-      - ubuntu-bionic-x86_64-shared-noconn
-      - ubuntu-bionic-x86_64
+      - macOS-shared_oqs-shared_ossl-basic
+      - macOS-static_oqs-static_ossl-full
+      - debian_buster-shared_oqs-static_ossl-full
+      - ubuntu_bionic-shared_oqs-shared_ossl-full
+      - ubuntu_bionic-static_oqs-static_ossl-basic
 
