@@ -8,6 +8,7 @@ key_exchanges = [
 ##### OQS_TEMPLATE_FRAGMENT_KEX_ALGS_END
 ]
 signatures = [
+    'ecdsap256', 'rsa3072',
 ##### OQS_TEMPLATE_FRAGMENT_SIG_ALGS_START
     # post-quantum signatures
     'oqs_sig_default','dilithium2','dilithium3','dilithium4','picnicl1fs','picnic2l1fs','qteslapi','qteslapiii',

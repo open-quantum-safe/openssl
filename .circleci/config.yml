@@ -17,23 +17,19 @@ localCheckout: &localCheckout
     - checkout # change this from "checkout" to "*localCheckout" when running CircleCI locally
     - run:
         name: Clone liboqs
-        command: ./oqs-test/clone_liboqs.sh # unconditional checkout to test for changes there
+        command: ./oqs-scripts/clone_liboqs.sh # unconditional checkout to test for changes there
     - run:
         name: Build liboqs
-        command: .circleci/git_no_checkin_in_last_day.sh || (./oqs-test/build_liboqs.sh)
+        command: .circleci/git_no_checkin_in_last_day.sh || ./oqs-scripts/build_liboqs.sh
     - run:
-        name: Configure and build OpenSSL
-        command: .circleci/git_no_checkin_in_last_day.sh || (./config ${OPENSSL_CONFIGURE_ARGS} && make -j2)
+        name: Build OpenSSL
+        command: .circleci/git_no_checkin_in_last_day.sh || ./oqs-scripts/build_openssl.sh
     - run:
-        name: Check that OpenSSL speed works for all KEMS
-        command: .circleci/git_no_checkin_in_last_day.sh || (env LD_LIBRARY_PATH=".:./oqs/lib" apps/openssl speed -seconds 1 oqskem)
+        name: Run OpenSSL tests
+        command: .circleci/git_no_checkin_in_last_day.sh || make test
     - run:
-        name: Check that OpenSSL speed works for all signatures
-        # Disabling cleanup on Linux because of picnic-induced memory glitch:
-        command: .circleci/git_no_checkin_in_last_day.sh || (env LD_LIBRARY_PATH=".:./oqs/lib" OPENSSL_NO_CLEANUP=1 apps/openssl speed -seconds 1 oqssig)
-    - run:
-        name: Run connection and CMS tests
-        command: .circleci/git_no_checkin_in_last_day.sh && mkdir -p oqs-test/test-results || (make run-${CONN_TEST_TYPE}-conn-tests && make run-cms-tests)
+        name: Run OQS connection and CMS tests
+        command: .circleci/git_no_checkin_in_last_day.sh || (env LD_LIBRARY_PATH="$(pwd):$(pwd)/oqs/lib" python3 -m pytest --numprocesses=8 oqs-test/test_conn_full.py oqs-test/test_cms.py)
     - store_test_results: # Note that this command will fail when running CircleCI locally, that is expected behaviour
         path: oqs-test/tmp/test-results
 
@@ -53,64 +49,49 @@ localCheckout: &localCheckout
               )
         - run:
             name: Clone liboqs
-            command: ./oqs-test/clone_liboqs.sh # unconditional checkout to test for changes there
+            command: ./oqs-scripts/clone_liboqs.sh # unconditional checkout to test for changes there
         - run:
             name: Build liboqs
-            command: .circleci/git_no_checkin_in_last_day.sh || (./oqs-test/build_liboqs.sh)
+            command: .circleci/git_no_checkin_in_last_day.sh || ./oqs-scripts/build_liboqs.sh
         - run:
-            name: Configure and build OpenSSL
-            command: .circleci/git_no_checkin_in_last_day.sh || (./config ${OPENSSL_CONFIGURE_ARGS} && make -j2)
-        - run:
-            name: Check that OpenSSL speed works for all KEMS
-            command: .circleci/git_no_checkin_in_last_day.sh || (env DYLD_LIBRARY_PATH=".:./oqs/lib" apps/openssl speed -seconds 1 oqskem)
-        - run:
-            name: Check that OpenSSL speed works for all signatures
-            # Test only the sig that doesn't cause memory problems on macOS:
-            command: .circleci/git_no_checkin_in_last_day.sh || (env DYLD_LIBRARY_PATH=".:./oqs/lib" apps/openssl speed -seconds 1 dilithium2)
+            name: Build OpenSSL
+            command: .circleci/git_no_checkin_in_last_day.sh || ./oqs-scripts/build_openssl.sh
         - run:
             name: Run connection and CMS tests
-            command: .circleci/git_no_checkin_in_last_day.sh && mkdir -p oqs-test/test-results || (make run-${CONN_TEST_TYPE}-conn-tests && make run-cms-tests)
+            command: .circleci/git_no_checkin_in_last_day.sh || (env DYLD_LIBRARY_PATH="$(pwd):$(pwd)/oqs/lib" python3 -m pytest --numprocesses=4 oqs-test/test_conn_full.py oqs-test/test_cms.py)
         - store_test_results: # Note that this command will fail when running CircleCI locally, that is expected behaviour
             path: oqs-test/tmp/test-results
 
 jobs:
-  debian_buster-shared_oqs-static_ossl-full:
+  debian_buster-shared_oqs-static_ossl:
     <<: *openssljob
     environment:
       IMAGE: openquantumsafe/ci-debian-buster-amd64:latest
       LIBOQS_LIBTYPE: shared
-      CONN_TEST_TYPE: full
-      OPENSSL_CONFIGURE_ARGS: no-shared
-  ubuntu_bionic-shared_oqs-shared_ossl-full:
+  ubuntu_bionic-shared_oqs-shared_ossl:
     <<: *openssljob
     environment:
       IMAGE: openquantumsafe/ci-ubuntu-bionic-x86_64:latest
       LIBOQS_LIBTYPE: shared
-      CONN_TEST_TYPE: full
-  ubuntu_bionic-static_oqs-static_ossl-basic:
+      OPENSSL_LIBTYPE: shared
+  ubuntu_bionic-static_oqs-static_ossl:
     <<: *openssljob
     environment:
       IMAGE: openquantumsafe/ci-ubuntu-bionic-x86_64:latest
-      OPENSSL_CONFIGURE_ARGS: no-shared
-      CONN_TEST_TYPE: basic
-  macOS-shared_oqs-shared_ossl-basic:
+  macOS-shared_oqs-shared_ossl:
     <<: *macopenssljob
     environment:
       LIBOQS_LIBTYPE: shared
-      CONN_TEST_TYPE: basic
-  macOS-static_oqs-static_ossl-full:
+      OPENSSL_LIBTYPE: shared
+  macOS-static_oqs-static_ossl:
     <<: *macopenssljob
-    environment:
-      CONN_TEST_TYPE: full
-      OPENSSL_CONFIGURE_ARGS: no-shared
 
 workflows:
   version: 2
   build:
     jobs:
-      - macOS-shared_oqs-shared_ossl-basic
-      - ubuntu_bionic-shared_oqs-shared_ossl-full
-      - ubuntu_bionic-static_oqs-static_ossl-basic
+      - macOS-shared_oqs-shared_ossl
+      - ubuntu_bionic-static_oqs-static_ossl
   nightly:
     triggers:
       - schedule:
@@ -120,9 +101,9 @@ workflows:
               only:
                 - OQS-OpenSSL_1_1_1-stable
     jobs:
-      - macOS-shared_oqs-shared_ossl-basic
-      - macOS-static_oqs-static_ossl-full
-      - debian_buster-shared_oqs-static_ossl-full
-      - ubuntu_bionic-shared_oqs-shared_ossl-full
-      - ubuntu_bionic-static_oqs-static_ossl-basic
+      - macOS-shared_oqs-shared_ossl
+      - macOS-static_oqs-static_ossl
+      - debian_buster-shared_oqs-static_ossl
+      - ubuntu_bionic-shared_oqs-shared_ossl
+      - ubuntu_bionic-static_oqs-static_ossl
 

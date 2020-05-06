@@ -4,7 +4,7 @@
 # Build liboqs
 #
 # Environment variables:
-#  - OPENSSL_DIR: path to install liboqs, default `pwd`/oqs
+#  - OPENSSL_DIR: path to install liboqs, default ${PROJECT_ROOT}/oqs
 ###########
 
 set -exo pipefail
