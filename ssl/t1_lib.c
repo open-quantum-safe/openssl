@@ -309,11 +309,11 @@ static const uint16_t eccurves_default[] = {
 };
 
 /* OQS note: We introduced this list for use
- * by oqs_get_all_supported_groups(). See that
+ * by oqs_tls13_get_server_supported_groups(). See that
  * function's documentation in ssl_local.h
  * for the explanation.
  */
-static const uint16_t oqs_all_curves[] = {
+static const uint16_t oqs_all_tls13_server_groups[] = {
     29,                      /* X25519 (29) */
     23,                      /* secp256r1 (23) */
     30,                      /* X448 (30) */
@@ -462,12 +462,12 @@ static uint16_t tls1_nid2group_id(int nid)
     return 0;
 }
 
-void oqs_get_all_supported_groups(SSL *s, const uint16_t **pgroups,
-                                  size_t *pgroupslen)
+void oqs_tls13_get_server_supported_groups(SSL *s, const uint16_t **pgroups,
+                                           size_t *pgroupslen)
 {
     if (s->ext.supportedgroups == NULL) {
-        *pgroups = oqs_all_curves;
-        *pgroupslen = OSSL_NELEM(oqs_all_curves);
+        *pgroups = oqs_all_tls13_server_groups;
+        *pgroupslen = OSSL_NELEM(oqs_all_tls13_server_groups);
     } else {
         *pgroups = s->ext.supportedgroups;
         *pgroupslen = s->ext.supportedgroups_len;

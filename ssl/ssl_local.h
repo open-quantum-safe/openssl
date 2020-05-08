@@ -2920,7 +2920,7 @@ __owur int tls_curve_allowed(SSL *s, uint16_t curve, int op);
  * This function returns all supported key-exchange algorithms, and
  * is used by the server to determine the shared group.
  */
-void oqs_get_all_supported_groups(SSL *s, const uint16_t **pgroups,
+void oqs_tls13_get_server_supported_groups(SSL *s, const uint16_t **pgroups,
                                   size_t *pgroupslen);
 void tls1_get_supported_groups(SSL *s, const uint16_t **pgroups,
                                size_t *pgroupslen);

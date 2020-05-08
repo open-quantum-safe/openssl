@@ -16,9 +16,6 @@ def ossl_server_sig(ossl, ossl_config, test_artifacts_dir, request, worker_id):
     yield request.param
     # Teardown: stop ossl server
     ossl_server.kill()
-    output, error = ossl_server.communicate()
-    print(output)
-    print(error)
 
 @pytest.mark.parametrize('kex_name', oqs_algorithms.key_exchanges)
 def test_sig_kem_pair(ossl, ossl_server_sig, test_artifacts_dir, kex_name, worker_id):
