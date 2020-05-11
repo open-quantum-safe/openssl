@@ -29,7 +29,7 @@ localCheckout: &localCheckout
         command: .circleci/git_no_checkin_in_last_day.sh || make test
     - run:
         name: Run OQS connection and CMS tests
-        command: .circleci/git_no_checkin_in_last_day.sh || (env LD_LIBRARY_PATH="$(pwd):$(pwd)/oqs/lib" python3 -m pytest --numprocesses=8 oqs-test/test_conn_full.py oqs-test/test_cms.py)
+        command: .circleci/git_no_checkin_in_last_day.sh || (env LD_LIBRARY_PATH="$(pwd):$(pwd)/oqs/lib" python3 -m pytest --numprocesses=8 oqs-test/test_conn_full.py oqs-test/test_cms.py --junitxml=oqs-test/tmp/test-results/pytest/test-results.xml)
     - store_test_results: # Note that this command will fail when running CircleCI locally, that is expected behaviour
         path: oqs-test/tmp/test-results
 
@@ -58,7 +58,7 @@ localCheckout: &localCheckout
             command: .circleci/git_no_checkin_in_last_day.sh || ./oqs-scripts/build_openssl.sh
         - run:
             name: Run connection and CMS tests
-            command: .circleci/git_no_checkin_in_last_day.sh || (env DYLD_LIBRARY_PATH="$(pwd):$(pwd)/oqs/lib" python3 -m pytest --numprocesses=4 oqs-test/test_conn_full.py oqs-test/test_cms.py)
+            command: .circleci/git_no_checkin_in_last_day.sh || (env DYLD_LIBRARY_PATH="$(pwd):$(pwd)/oqs/lib" python3 -m pytest --numprocesses=4 oqs-test/test_conn_full.py oqs-test/test_cms.py --junitxml=oqs-test/tmp/test-results/pytest/test-results.xml)
         - store_test_results: # Note that this command will fail when running CircleCI locally, that is expected behaviour
             path: oqs-test/tmp/test-results
 
