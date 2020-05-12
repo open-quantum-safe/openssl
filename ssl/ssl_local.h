@@ -625,7 +625,7 @@
   /* Returns the hybrid OQS KEM NID for a hybrid curve ID */
 ///// OQS_TEMPLATE_FRAGMENT_OQS_HYBRID_KEM_NID_START
 #define OQS_HYBRID_KEM_NID(curveID) \
-  (curveID == 0x02FF ? NID_p256_oqs_kem_default : \
+  (curveID == 0x2FFF ? NID_p256_oqs_kem_default : \
   (curveID == 0x2F00 ? NID_p256_frodo640aes : \
   (curveID == 0x2F01 ? NID_p256_frodo640shake : \
   (curveID == 0x2F02 ? NID_p256_frodo976aes : \

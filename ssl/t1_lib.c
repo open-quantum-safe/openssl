@@ -228,7 +228,7 @@ static const TLS_GROUP_INFO oqs_nid_list[] = {
 };
     /* Hybrid OQS groups. Security level is classical. */
 static const TLS_GROUP_INFO oqs_hybrid_nid_list[] = {
-    {NID_p256_oqs_kem_default, 128, TLS_CURVE_CUSTOM}, /* p256 + OQS KEM default hybrid (0x02FF) */
+    {NID_p256_oqs_kem_default, 128, TLS_CURVE_CUSTOM}, /* p256 + OQS KEM default hybrid (0x2FFF) */
 ///// OQS_TEMPLATE_FRAGMENT_OQS_NID_LIST_HYBRID_START
     {NID_p256_frodo640aes, 128, TLS_CURVE_CUSTOM}, /* p256 + frodo640aes hybrid (0x0200) */
     {NID_p256_frodo640shake, 128, TLS_CURVE_CUSTOM}, /* p256 + frodo640shake hybrid (0x0201) */
