@@ -320,7 +320,7 @@ static const uint16_t oqs_all_tls13_server_groups[] = {
     25,                      /* secp521r1 (25) */
     24,                      /* secp384r1 (24) */
     0x01FF, /* oqs_kem_default */
-    0x02FF, /* p256 - oqs_kem_default */
+    0x2FFF, /* p256 - oqs_kem_default */
 ///// OQS_TEMPLATE_FRAGMENT_ALL_OQS_CURVEIDS_START
     0x0200, /* frodo640aes */
     0x0300, /* p256 - OQS frodo640aes hybrid */

@@ -678,7 +678,7 @@
 
 /* Returns true if the curve ID is for an OQS hybrid KEM */
 // TBD, ideally, this bracket is also generated
-#define IS_OQS_KEM_HYBRID_CURVEID(id) (id >= 0x02FF && id <= 0x0350)
+#define IS_OQS_KEM_HYBRID_CURVEID(id) (id >= 0x2F00 && id <= 0x2FFF)
 
 /* Returns the OQS alg ID for OQS API */
 ///// OQS_TEMPLATE_FRAGMENT_OQS_ALG_NAME_START
