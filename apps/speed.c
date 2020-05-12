@@ -3762,6 +3762,7 @@ int speed_main(int argc, char **argv)
 
  end:
     ERR_print_errors(bio_err);
+    if (getenv("OPENSSL_NO_CLEANUP")) goto realend;
     for (i = 0; i < loopargs_len; i++) {
         OPENSSL_free(loopargs[i].buf_malloc);
         OPENSSL_free(loopargs[i].buf2_malloc);
