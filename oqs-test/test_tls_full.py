@@ -17,7 +17,7 @@ def server(ossl, ossl_config, test_artifacts_dir, request, worker_id):
 @pytest.mark.parametrize('kex_name', oqs_algorithms.key_exchanges)
 def test_sig_kem_pair(ossl, server, test_artifacts_dir, kex_name, worker_id):
     client_output = helpers.run_subprocess([ossl, 's_client',
-                                                  '-curves', kex_name,
+                                                  '-groups', kex_name,
                                                   '-CAfile', os.path.join(test_artifacts_dir, '{}_{}_CA.crt'.format(worker_id, server[0])),
                                                   '-verify_return_error',
                                                   '-connect', 'localhost:{}'.format(server[1])],

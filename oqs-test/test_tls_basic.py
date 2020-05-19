@@ -17,7 +17,7 @@ def server_port(ossl, ossl_config, test_artifacts_dir, worker_id):
 @pytest.mark.parametrize('kex_name', oqs_algorithms.key_exchanges)
 def test_kem(ossl, server_port, test_artifacts_dir, kex_name, worker_id):
     client_output = helpers.run_subprocess([ossl, 's_client',
-                                                  '-curves', kex_name,
+                                                  '-groups', kex_name,
                                                   '-CAfile', os.path.join(test_artifacts_dir, '{}_oqs_sig_default_CA.crt'.format(worker_id)),
                                                   '-verify_return_error',
                                                   '-connect', 'localhost:{}'.format(server_port)],
@@ -35,7 +35,7 @@ def test_sig(ossl, ossl_config, test_artifacts_dir, sig_name, worker_id):
     helpers.gen_keys(ossl, ossl_config, sig_name, test_artifacts_dir, worker_id)
     server, server_port = helpers.start_server(ossl, test_artifacts_dir, sig_name, worker_id)
     client_output = helpers.run_subprocess([ossl, 's_client',
-                                                  '-curves', 'oqs_kem_default',
+                                                  '-groups', 'oqs_kem_default',
                                                   '-CAfile', os.path.join(test_artifacts_dir, '{}_{}_CA.crt'.format(worker_id, sig_name)),
                                                   '-verify_return_error',
                                                   '-connect', 'localhost:{}'.format(server_port)],
