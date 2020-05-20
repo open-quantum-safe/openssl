@@ -30,11 +30,11 @@ OQS-OpenSSL\_1\_1\_1 is a fork of OpenSSL 1.1.1 that adds quantum-safe key excha
 
 ## Overview
 
-**liboqs** is an open source C library for [quantum-resistant cryptographic](#terminology) algorithms. See [here](https://github.com/open-quantum-safe/liboqs/) for more information.
+**liboqs** is an open source C library for quantum-resistant cryptographic algorithms. See [here](https://github.com/open-quantum-safe/liboqs/) for more information.
 
 **OQS-OpenSSL\_1\_1\_1-stable** is a fork that integrates liboqs into OpenSSL 1.1.1.  The goal of this integration is to provide easy prototyping of quantum-safe cryptography in the TLS 1.3 protocol. (For TLS 1.2, see the [OQS-OpenSSL\_1\_0\_2-stable](https://github.com/open-quantum-safe/openssl/tree/OQS-OpenSSL_1_0_2-stable) branch.)
 
-Both liboqs and this fork are part of the **Open Quantum Safe (OQS) project**, which aims to develop and prototype [quantum-safe cryptography (QSC)](#terminology) . More information about the project can be found [here](https://openquantumsafe.org/).
+Both liboqs and this fork are part of the **Open Quantum Safe (OQS) project**, which aims to develop and prototype quantum-safe cryptography (QSC). More information about the project can be found [here](https://openquantumsafe.org/).
 
 Note that, referencing the terminology defined by [ETSI](https://www.etsi.org/technologies/quantum-safe-cryptography) and [CSA](https://downloads.cloudsecurityalliance.org/assets/research/quantum-safe-security/applied-quantum-safe-security.pdf), the terms "post-quantum cryptography" (PQC), "quantum-safe cryptography" (QSC) and "quantum-resistant cryptography" (QRC) all refer to the same class of cryptographic algorithms that is made available for use via this fork.
 
@@ -285,13 +285,23 @@ The contents of `inputfile` and the resultant `signeddatafile` should be the sam
 
 ##### TLS end-to-end testing
 
-"Empty" TLS handshakes can be run via the standard `openssl s_time` command. In order to suitably trigger this with an OQS KEM/SIG pair of choice, first follow all steps outlined in the [TLS demo](#tls-demo) section to obtain an OQS-signed server certificate. As the `openssl s_time` command does not permit selection of groups, which are used to encode the OQS-KEM in the handshake, you have to start the server with the certificate and desired key exchange algorithm as follows (`<SERVER>` and `<KEX>` are defined in the [TLS demo](#tls-demo) section above):
+"Empty" TLS handshakes can be performance tested via the standard `openssl s_time` command. In order to suitably trigger this with an OQS KEM/SIG pair of choice, first follow all steps outlined in the [TLS demo](#tls-demo) section to obtain an OQS-algorithm-signed server certificate. You can then run the performance test in one of two ways:
 
-	apps/openssl s_server -cert <SERVER>.crt -key <SERVER>.key -www -tls1_3 -groups <KEX>
+- Start the server with the desired certificate and key exchange algorithm as follows (`<SERVER>` and `<KEX>` are defined in the [TLS demo](#tls-demo) section above):
 
-Then, this signature and key-exchange algorithm pair can be performance tested using:
+```
+apps/openssl s_server -cert <SERVER>.crt -key <SERVER>.key -www -tls1_3 -groups <KEX>
+```
 
-	apps/openssl s_time
+Then run `apps/openssl s_time`
+
+- Start the server with the desired certificate:
+
+```
+apps/openssl s_server -cert <SERVER>.crt -key <SERVER>.key -www -tls1_3
+```
+
+and specify the key-exchange algorithm through `s_time` using `apps/openssl s_time -curves <KEX>`.
 
 ##### Algorithm speed testing
 
