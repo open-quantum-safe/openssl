@@ -41,7 +41,7 @@ def start_server(ossl, test_artifacts_dir, sig_alg, worker_id):
 
     print(" > " + " ".join(command))
     s_server = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    time.sleep(0.5)
+    time.sleep(1)
 
     # Find and return the port that s_server is bound to.
     s_server_info = psutil.Process(s_server.pid).connections()[0]
