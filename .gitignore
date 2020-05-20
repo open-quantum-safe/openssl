@@ -191,7 +191,7 @@ doc-nits
 /oqs-test/tmp/
 /oqs-interop-test/tests/__pycache__
 /oqs-interop-test/tmp/
-/oqs-interop-test/bssl_mappings.py
+/oqs-interop-test/bssl_algorithms.py
 /*.crt
 /*.key
 /*.csr
