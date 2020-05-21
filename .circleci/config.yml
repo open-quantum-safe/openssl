@@ -1,5 +1,7 @@
 version: 2
 
+# TODO: Add psutil to CI images.
+
 # CircleCI doesn't handle large file sets properly for local builds
 # https://github.com/CircleCI-Public/circleci-cli/issues/281#issuecomment-472808051
 localCheckout: &localCheckout
@@ -62,6 +64,29 @@ localCheckout: &localCheckout
         - store_test_results: # Note that this command will fail when running CircleCI locally, that is expected behaviour
             path: oqs-test/tmp/test-results
 
+.boringssl_interop_job: &boringsslinteropjob
+  docker:
+    - image: ${IMAGE}
+  steps:
+    - checkout # change this from "checkout" to "*localCheckout" when running CircleCI locally
+    - run:
+        name: Clone liboqs and BoringSSL
+        command: ./oqs-scripts/clone_liboqs.sh && ./oqs-scripts/clone_boringssl.sh
+    - run:
+        name: Build liboqs
+        command: .circleci/git_no_checkin_in_last_day.sh || ./oqs-scripts/build_liboqs.sh
+    - run:
+        name: Build BoringSSL
+        command: .circleci/git_no_checkin_in_last_day.sh || ./oqs-scripts/build_boringssl.sh
+    - run:
+        name: Build OpenSSL
+        command: .circleci/git_no_checkin_in_last_day.sh || ./oqs-scripts/build_openssl.sh
+    - run:
+        name: Test interoperability with BoringSSL
+        command: .circleci/git_no_checkin_in_last_day.sh || (apt install python3-psutil && python3 -m pytest --numprocesses=auto oqs-interop-test/test_full.py --junitxml=oqs-interop-test/tmp/test-results/pytest/test-results.xml)
+    - store_test_results: # Note that this command will fail when running CircleCI locally, that is expected behaviour
+        path: oqs-interop-test/tmp/test-results
+
 jobs:
   debian_buster-shared_oqs-static_ossl:
     <<: *openssljob
@@ -78,6 +103,10 @@ jobs:
     <<: *openssljob
     environment:
       IMAGE: openquantumsafe/ci-ubuntu-bionic-x86_64:latest
+  ubuntu_bionic-static_oqs-static_ossl-boringssl-interop:
+    <<: *boringsslinteropjob
+    environment:
+      IMAGE: openquantumsafe/ci-ubuntu-bionic-x86_64:latest
   macOS-shared_oqs-shared_ossl:
     <<: *macopenssljob
     environment:
@@ -92,6 +121,7 @@ workflows:
     jobs:
       - macOS-shared_oqs-shared_ossl
       - ubuntu_bionic-shared_oqs-shared_ossl
+      - ubuntu_bionic-static_oqs-static_ossl-boringssl-interop
   nightly:
     triggers:
       - schedule:
@@ -106,4 +136,4 @@ workflows:
       - macOS-static_oqs-static_ossl
       - ubuntu_bionic-shared_oqs-shared_ossl
       - ubuntu_bionic-static_oqs-static_ossl
-
+      - ubuntu_bionic-static_oqs-static_ossl-boringssl-interop
