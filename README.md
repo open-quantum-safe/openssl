@@ -79,6 +79,7 @@ The following quantum-safe algorithms from liboqs are supported (assuming they h
 
 - `oqs_kem_default` (see [here](https://github.com/open-quantum-safe/openssl/wiki/Using-liboqs-algorithms-that-are-not-in-the-forks#oqsdefault) for what this denotes)
 - **BIKE**: `bike1l1cpa`, `bike1l3cpa`, `bike1l1fo`, `bike1l3fo`
+- **Classic McEliece**: `classicmceliece348864`, `classicmceliece348864f`, `classicmceliece460896`, `classicmceliece460896f`, `classicmceliece6688128`, `classicmceliece6688128f`, `classicmceliece6960119`, `classicmceliece6960119f`, `classicmceliece8192128`, `classicmceliece8192128f`
 - **FrodoKEM**: `frodo640aes`, `frodo640shake`, `frodo976aes`, `frodo976shake`, `frodo1344aes`, `frodo1344shake`
 - **Kyber**: `kyber512`, `kyber768`, `kyber1024`, `kyber90s512`, `kyber90s768`, `kyber90s1024`
 - **LEDA**: `ledacryptkemlt12`, `ledacryptkemlt32`, `ledacryptkemlt52`

@@ -519,8 +519,18 @@
   (nid == NID_babybearephem ? 0x022F : \
   (nid == NID_mamabearephem ? 0x0230 : \
   (nid == NID_papabearephem ? 0x0231 : \
+  (nid == NID_classicmceliece348864 ? 0x0232 : \
+  (nid == NID_classicmceliece348864f ? 0x0233 : \
+  (nid == NID_classicmceliece460896 ? 0x0234 : \
+  (nid == NID_classicmceliece460896f ? 0x0235 : \
+  (nid == NID_classicmceliece6688128 ? 0x0236 : \
+  (nid == NID_classicmceliece6688128f ? 0x0237 : \
+  (nid == NID_classicmceliece6960119 ? 0x0238 : \
+  (nid == NID_classicmceliece6960119f ? 0x0239 : \
+  (nid == NID_classicmceliece8192128 ? 0x023a : \
+  (nid == NID_classicmceliece8192128f ? 0x023b : \
   0 \
-  )))))))))))))))))))))))))))))))))))))))))))
+  )))))))))))))))))))))))))))))))))))))))))))))))))))))
 ///// OQS_TEMPLATE_FRAGMENT_OQS_KEM_CURVEID_END
 
 ///// OQS_TEMPLATE_FRAGMENT_OQS_KEM_HYBRID_CURVEID_START
@@ -568,8 +578,18 @@
   (nid == NID_p256_babybearephem ? 0x2F2F : \
   (nid == NID_p256_mamabearephem ? 0x2F30 : \
   (nid == NID_p256_papabearephem ? 0x2F31 : \
+  (nid == NID_p256_classicmceliece348864 ? 0x2F32 : \
+  (nid == NID_p256_classicmceliece348864f ? 0x2F33 : \
+  (nid == NID_p256_classicmceliece460896 ? 0x2F34 : \
+  (nid == NID_p256_classicmceliece460896f ? 0x2F35 : \
+  (nid == NID_p256_classicmceliece6688128 ? 0x2F36 : \
+  (nid == NID_p256_classicmceliece6688128f ? 0x2F37 : \
+  (nid == NID_p256_classicmceliece6960119 ? 0x2F38 : \
+  (nid == NID_p256_classicmceliece6960119f ? 0x2F39 : \
+  (nid == NID_p256_classicmceliece8192128 ? 0x2F3a : \
+  (nid == NID_p256_classicmceliece8192128f ? 0x2F3b : \
   0 \
-  )))))))))))))))))))))))))))))))))))))))))))
+  )))))))))))))))))))))))))))))))))))))))))))))))))))))
 ///// OQS_TEMPLATE_FRAGMENT_OQS_KEM_HYBRID_CURVEID_END
 
   /* Returns the non-hybrid OQS KEM NID for a PQ or hybrid curve ID */
@@ -618,8 +638,18 @@
   (curveID == 0x022F || curveID == 0x2F2F ? NID_babybearephem : \
   (curveID == 0x0230 || curveID == 0x2F30 ? NID_mamabearephem : \
   (curveID == 0x0231 || curveID == 0x2F31 ? NID_papabearephem : \
+  (curveID == 0x0232 || curveID == 0x2F32 ? NID_classicmceliece348864 : \
+  (curveID == 0x0233 || curveID == 0x2F33 ? NID_classicmceliece348864f : \
+  (curveID == 0x0234 || curveID == 0x2F34 ? NID_classicmceliece460896 : \
+  (curveID == 0x0235 || curveID == 0x2F35 ? NID_classicmceliece460896f : \
+  (curveID == 0x0236 || curveID == 0x2F36 ? NID_classicmceliece6688128 : \
+  (curveID == 0x0237 || curveID == 0x2F37 ? NID_classicmceliece6688128f : \
+  (curveID == 0x0238 || curveID == 0x2F38 ? NID_classicmceliece6960119 : \
+  (curveID == 0x0239 || curveID == 0x2F39 ? NID_classicmceliece6960119f : \
+  (curveID == 0x023a || curveID == 0x2F3a ? NID_classicmceliece8192128 : \
+  (curveID == 0x023b || curveID == 0x2F3b ? NID_classicmceliece8192128f : \
   0 \
-  )))))))))))))))))))))))))))))))))))))))))))
+  )))))))))))))))))))))))))))))))))))))))))))))))))))))
 ///// OQS_TEMPLATE_FRAGMENT_OQS_KEM_NID_END
 
   /* Returns the hybrid OQS KEM NID for a hybrid curve ID */
@@ -668,8 +698,18 @@
   (curveID == 0x2F2F ? NID_p256_babybearephem : \
   (curveID == 0x2F30 ? NID_p256_mamabearephem : \
   (curveID == 0x2F31 ? NID_p256_papabearephem : \
+  (curveID == 0x2F32 ? NID_p256_classicmceliece348864 : \
+  (curveID == 0x2F33 ? NID_p256_classicmceliece348864f : \
+  (curveID == 0x2F34 ? NID_p256_classicmceliece460896 : \
+  (curveID == 0x2F35 ? NID_p256_classicmceliece460896f : \
+  (curveID == 0x2F36 ? NID_p256_classicmceliece6688128 : \
+  (curveID == 0x2F37 ? NID_p256_classicmceliece6688128f : \
+  (curveID == 0x2F38 ? NID_p256_classicmceliece6960119 : \
+  (curveID == 0x2F39 ? NID_p256_classicmceliece6960119f : \
+  (curveID == 0x2F3a ? NID_p256_classicmceliece8192128 : \
+  (curveID == 0x2F3b ? NID_p256_classicmceliece8192128f : \
   0 \
-  )))))))))))))))))))))))))))))))))))))))))))
+  )))))))))))))))))))))))))))))))))))))))))))))))))))))
 ///// OQS_TEMPLATE_FRAGMENT_OQS_HYBRID_KEM_NID_END
 
 /* Returns true if the curve ID is for an OQS KEM */
@@ -726,8 +766,18 @@
   (nid == NID_babybearephem ? OQS_KEM_alg_threebears_babybear_ephem : \
   (nid == NID_mamabearephem ? OQS_KEM_alg_threebears_mamabear_ephem : \
   (nid == NID_papabearephem ? OQS_KEM_alg_threebears_papabear_ephem : \
+  (nid == NID_classicmceliece348864 ? OQS_KEM_alg_classic_mceliece_348864 : \
+  (nid == NID_classicmceliece348864f ? OQS_KEM_alg_classic_mceliece_348864f : \
+  (nid == NID_classicmceliece460896 ? OQS_KEM_alg_classic_mceliece_460896 : \
+  (nid == NID_classicmceliece460896f ? OQS_KEM_alg_classic_mceliece_460896f : \
+  (nid == NID_classicmceliece6688128 ? OQS_KEM_alg_classic_mceliece_6688128 : \
+  (nid == NID_classicmceliece6688128f ? OQS_KEM_alg_classic_mceliece_6688128f : \
+  (nid == NID_classicmceliece6960119 ? OQS_KEM_alg_classic_mceliece_6960119 : \
+  (nid == NID_classicmceliece6960119f ? OQS_KEM_alg_classic_mceliece_6960119f : \
+  (nid == NID_classicmceliece8192128 ? OQS_KEM_alg_classic_mceliece_8192128 : \
+  (nid == NID_classicmceliece8192128f ? OQS_KEM_alg_classic_mceliece_8192128f : \
   0 \
-  )))))))))))))))))))))))))))))))))))))))))))
+  )))))))))))))))))))))))))))))))))))))))))))))))))))))
 ///// OQS_TEMPLATE_FRAGMENT_OQS_ALG_NAME_END
 
 /* Returns the classical nid for an hybrid alg (FIXMEOQS: only secp256r1 (23) is supported for now) */

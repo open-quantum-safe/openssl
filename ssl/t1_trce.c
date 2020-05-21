@@ -574,6 +574,16 @@ static const ssl_trace_tbl ssl_groups_tbl[] = {
     {OQS_KEM_CURVEID(NID_babybearephem), "babybearephem"},
     {OQS_KEM_CURVEID(NID_mamabearephem), "mamabearephem"},
     {OQS_KEM_CURVEID(NID_papabearephem), "papabearephem"},
+    {OQS_KEM_CURVEID(NID_classicmceliece348864), "classicmceliece348864"},
+    {OQS_KEM_CURVEID(NID_classicmceliece348864f), "classicmceliece348864f"},
+    {OQS_KEM_CURVEID(NID_classicmceliece460896), "classicmceliece460896"},
+    {OQS_KEM_CURVEID(NID_classicmceliece460896f), "classicmceliece460896f"},
+    {OQS_KEM_CURVEID(NID_classicmceliece6688128), "classicmceliece6688128"},
+    {OQS_KEM_CURVEID(NID_classicmceliece6688128f), "classicmceliece6688128f"},
+    {OQS_KEM_CURVEID(NID_classicmceliece6960119), "classicmceliece6960119"},
+    {OQS_KEM_CURVEID(NID_classicmceliece6960119f), "classicmceliece6960119f"},
+    {OQS_KEM_CURVEID(NID_classicmceliece8192128), "classicmceliece8192128"},
+    {OQS_KEM_CURVEID(NID_classicmceliece8192128f), "classicmceliece8192128f"},
 ///// OQS_TEMPLATE_FRAGMENT_SSL_GROUPS_TBL_END
     {OQS_KEM_CURVEID(NID_p256_oqs_kem_default), "p256 - OQS KEM default hybrid"},
 ///// OQS_TEMPLATE_FRAGMENT_SSL_GROUPS_TBL_HYBRID_START
@@ -619,6 +629,16 @@ static const ssl_trace_tbl ssl_groups_tbl[] = {
     {OQS_KEM_CURVEID(NID_p256_babybearephem), "p256 - babybearephem hybrid"},
     {OQS_KEM_CURVEID(NID_p256_mamabearephem), "p256 - mamabearephem hybrid"},
     {OQS_KEM_CURVEID(NID_p256_papabearephem), "p256 - papabearephem hybrid"},
+    {OQS_KEM_CURVEID(NID_p256_classicmceliece348864), "p256 - classicmceliece348864 hybrid"},
+    {OQS_KEM_CURVEID(NID_p256_classicmceliece348864f), "p256 - classicmceliece348864f hybrid"},
+    {OQS_KEM_CURVEID(NID_p256_classicmceliece460896), "p256 - classicmceliece460896 hybrid"},
+    {OQS_KEM_CURVEID(NID_p256_classicmceliece460896f), "p256 - classicmceliece460896f hybrid"},
+    {OQS_KEM_CURVEID(NID_p256_classicmceliece6688128), "p256 - classicmceliece6688128 hybrid"},
+    {OQS_KEM_CURVEID(NID_p256_classicmceliece6688128f), "p256 - classicmceliece6688128f hybrid"},
+    {OQS_KEM_CURVEID(NID_p256_classicmceliece6960119), "p256 - classicmceliece6960119 hybrid"},
+    {OQS_KEM_CURVEID(NID_p256_classicmceliece6960119f), "p256 - classicmceliece6960119f hybrid"},
+    {OQS_KEM_CURVEID(NID_p256_classicmceliece8192128), "p256 - classicmceliece8192128 hybrid"},
+    {OQS_KEM_CURVEID(NID_p256_classicmceliece8192128f), "p256 - classicmceliece8192128f hybrid"},
 ///// OQS_TEMPLATE_FRAGMENT_SSL_GROUPS_TBL_HYBRID_END
     {0xFF01, "arbitrary_explicit_prime_curves"},
     {0xFF02, "arbitrary_explicit_char2_curves"}

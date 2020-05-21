@@ -482,6 +482,16 @@ static const char* OQS_CURVE_ID_NAME_STR(int id) {
   case 0x022F: return "babybearephem";
   case 0x0230: return "mamabearephem";
   case 0x0231: return "papabearephem";
+  case 0x0232: return "classicmceliece348864";
+  case 0x0233: return "classicmceliece348864f";
+  case 0x0234: return "classicmceliece460896";
+  case 0x0235: return "classicmceliece460896f";
+  case 0x0236: return "classicmceliece6688128";
+  case 0x0237: return "classicmceliece6688128f";
+  case 0x0238: return "classicmceliece6960119";
+  case 0x0239: return "classicmceliece6960119f";
+  case 0x023a: return "classicmceliece8192128";
+  case 0x023b: return "classicmceliece8192128f";
   ///// OQS_TEMPLATE_FRAGMENT_OQS_CURVE_ID_NAME_STR_END
   case 0x2FFF: return "p256_oqs_kem_default hybrid";
   ///// OQS_TEMPLATE_FRAGMENT_OQS_CURVE_ID_NAME_STR_HYBRID_START
@@ -527,6 +537,16 @@ static const char* OQS_CURVE_ID_NAME_STR(int id) {
   case 0x2F2F: return "p256_babybearephem hybrid";
   case 0x2F30: return "p256_mamabearephem hybrid";
   case 0x2F31: return "p256_papabearephem hybrid";
+  case 0x2F32: return "p256_classicmceliece348864 hybrid";
+  case 0x2F33: return "p256_classicmceliece348864f hybrid";
+  case 0x2F34: return "p256_classicmceliece460896 hybrid";
+  case 0x2F35: return "p256_classicmceliece460896f hybrid";
+  case 0x2F36: return "p256_classicmceliece6688128 hybrid";
+  case 0x2F37: return "p256_classicmceliece6688128f hybrid";
+  case 0x2F38: return "p256_classicmceliece6960119 hybrid";
+  case 0x2F39: return "p256_classicmceliece6960119f hybrid";
+  case 0x2F3a: return "p256_classicmceliece8192128 hybrid";
+  case 0x2F3b: return "p256_classicmceliece8192128f hybrid";
   ///// OQS_TEMPLATE_FRAGMENT_OQS_CURVE_ID_NAME_STR_HYBRID_END
   default: return "";
   }

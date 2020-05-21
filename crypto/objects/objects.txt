@@ -1763,6 +1763,26 @@ dstu4145le 2 9 : uacurve9 : DSTU curve 9
  : p256_mamabearephem : p256_mamabearephem
  : papabearephem : papabearephem
  : p256_papabearephem : p256_papabearephem
+ : classicmceliece348864 : classicmceliece348864
+ : p256_classicmceliece348864 : p256_classicmceliece348864
+ : classicmceliece348864f : classicmceliece348864f
+ : p256_classicmceliece348864f : p256_classicmceliece348864f
+ : classicmceliece460896 : classicmceliece460896
+ : p256_classicmceliece460896 : p256_classicmceliece460896
+ : classicmceliece460896f : classicmceliece460896f
+ : p256_classicmceliece460896f : p256_classicmceliece460896f
+ : classicmceliece6688128 : classicmceliece6688128
+ : p256_classicmceliece6688128 : p256_classicmceliece6688128
+ : classicmceliece6688128f : classicmceliece6688128f
+ : p256_classicmceliece6688128f : p256_classicmceliece6688128f
+ : classicmceliece6960119 : classicmceliece6960119
+ : p256_classicmceliece6960119 : p256_classicmceliece6960119
+ : classicmceliece6960119f : classicmceliece6960119f
+ : p256_classicmceliece6960119f : p256_classicmceliece6960119f
+ : classicmceliece8192128 : classicmceliece8192128
+ : p256_classicmceliece8192128 : p256_classicmceliece8192128
+ : classicmceliece8192128f : classicmceliece8192128f
+ : p256_classicmceliece8192128f : p256_classicmceliece8192128f
 ##### OQS_TEMPLATE_FRAGMENT_LIST_KEMS_END
 
 ##### OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_OIDS_START

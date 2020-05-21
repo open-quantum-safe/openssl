@@ -142,6 +142,16 @@ int oqssl_kem_nids_list[] = {
         NID_babybearephem,
         NID_mamabearephem,
         NID_papabearephem,
+        NID_classicmceliece348864,
+        NID_classicmceliece348864f,
+        NID_classicmceliece460896,
+        NID_classicmceliece460896f,
+        NID_classicmceliece6688128,
+        NID_classicmceliece6688128f,
+        NID_classicmceliece6960119,
+        NID_classicmceliece6960119f,
+        NID_classicmceliece8192128,
+        NID_classicmceliece8192128f,
 /////// OQS_TEMPLATE_FRAGMENT_LIST_KNOWN_KEM_NIDS_END
 };
 
@@ -328,6 +338,36 @@ char* get_oqs_alg_name(int openssl_nid)
     case NID_papabearephem:
     case NID_p256_papabearephem:
       return OQS_KEM_alg_threebears_papabear_ephem;
+    case NID_classicmceliece348864:
+    case NID_p256_classicmceliece348864:
+      return OQS_KEM_alg_classic_mceliece_348864;
+    case NID_classicmceliece348864f:
+    case NID_p256_classicmceliece348864f:
+      return OQS_KEM_alg_classic_mceliece_348864f;
+    case NID_classicmceliece460896:
+    case NID_p256_classicmceliece460896:
+      return OQS_KEM_alg_classic_mceliece_460896;
+    case NID_classicmceliece460896f:
+    case NID_p256_classicmceliece460896f:
+      return OQS_KEM_alg_classic_mceliece_460896f;
+    case NID_classicmceliece6688128:
+    case NID_p256_classicmceliece6688128:
+      return OQS_KEM_alg_classic_mceliece_6688128;
+    case NID_classicmceliece6688128f:
+    case NID_p256_classicmceliece6688128f:
+      return OQS_KEM_alg_classic_mceliece_6688128f;
+    case NID_classicmceliece6960119:
+    case NID_p256_classicmceliece6960119:
+      return OQS_KEM_alg_classic_mceliece_6960119;
+    case NID_classicmceliece6960119f:
+    case NID_p256_classicmceliece6960119f:
+      return OQS_KEM_alg_classic_mceliece_6960119f;
+    case NID_classicmceliece8192128:
+    case NID_p256_classicmceliece8192128:
+      return OQS_KEM_alg_classic_mceliece_8192128;
+    case NID_classicmceliece8192128f:
+    case NID_p256_classicmceliece8192128f:
+      return OQS_KEM_alg_classic_mceliece_8192128f;
 ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_SIG_ALG_END
     default:
       return NULL;
