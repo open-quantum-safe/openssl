@@ -80,10 +80,10 @@ localCheckout: &localCheckout
         command: .circleci/git_no_checkin_in_last_day.sh || ./oqs-scripts/build_boringssl.sh
     - run:
         name: Build OpenSSL
-        command: .circleci/git_no_checkin_in_last_day.sh || ./oqs-scripts/build_openssl.sh
+        command: .circleci/git_no_checkin_in_last_day.sh || (./Configure linux-x86_64 no-shared no-tests && make -j15)
     - run:
         name: Test interoperability with BoringSSL
-        command: .circleci/git_no_checkin_in_last_day.sh || (apt install python3-psutil && python3 -m pytest --numprocesses=auto oqs-interop-test/test_full.py --junitxml=oqs-interop-test/tmp/test-results/pytest/test-results.xml)
+        command: .circleci/git_no_checkin_in_last_day.sh || (python3 -m pytest --numprocesses=auto oqs-interop-test/test_full.py --junitxml=oqs-interop-test/tmp/test-results/pytest/test-results.xml)
     - store_test_results: # Note that this command will fail when running CircleCI locally, that is expected behaviour
         path: oqs-interop-test/tmp/test-results
 
@@ -107,6 +107,7 @@ jobs:
     <<: *boringsslinteropjob
     environment:
       IMAGE: openquantumsafe/ci-ubuntu-bionic-x86_64:latest
+      LIBOQS_LIBTYPE: noopenssl
   macOS-shared_oqs-shared_ossl:
     <<: *macopenssljob
     environment:
