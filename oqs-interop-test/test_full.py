@@ -29,7 +29,7 @@ def parametrized_sig_server(request, server_prog, server_type, test_artifacts_di
                                 '-loop']
     print(" > " + " ".join(command))
     server = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    time.sleep(1)
+    time.sleep(3)
 
     # Find and return the port that the server is bound to.
     server_conn = psutil.Process(server.pid).connections()[0]
