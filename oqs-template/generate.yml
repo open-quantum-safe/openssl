@@ -309,6 +309,35 @@ sigs:
   -
     # iso (1)
     # identified-organization (3)
+    # reserved (9999)
+    # falcon (3)
+    variants:
+      -
+        name: "falcon512"
+        pretty_name: "Falcon-512"
+        oqs_meth: "OQS_SIG_alg_falcon_512"
+        security: 128
+        oid: "1.3.9999.3.1"
+        mix_with: [{"name": "p256",
+                    "pretty_name": "ECDSA p256",
+                    "oid": "1.3.9999.3.2"},
+                   {"name": "rsa3072",
+                    "pretty_name": "RSA3072",
+                    "oid": "1.3.9999.3.3"}]
+      -
+        name: "falcon1024"
+        pretty_name: "Falcon-1024"
+        oqs_meth: "OQS_SIG_alg_falcon_1024"
+        security: 256
+        oid: "1.3.9999.3.4"
+        mix_with: [{"name": "p521",
+                    "pretty_name": "ECDSA p521",
+                    "oid": "1.3.9999.3.5"},
+                   {"name": "rsa4096",
+                    "pretty_name": "RSA4096",
+                    "oid": "1.3.9999.3.6"}]
+    # iso (1)
+    # identified-organization (3)
     # dod (6)
     # internet (1)
     # private (4)
