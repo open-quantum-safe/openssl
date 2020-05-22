@@ -264,6 +264,18 @@ static const char *get_sigtype(int nid)
         return "Dilithium-4";
     case NID_p384_dilithium4:
         return "ECDSA p384 - Dilithium-4";
+    case NID_falcon512:
+        return "Falcon-512";
+    case NID_p256_falcon512:
+        return "ECDSA p256 - Falcon-512";
+    case NID_rsa3072_falcon512:
+        return "RSA3072 - Falcon-512";
+    case NID_falcon1024:
+        return "Falcon-1024";
+    case NID_p521_falcon1024:
+        return "ECDSA p521 - Falcon-1024";
+    case NID_rsa4096_falcon1024:
+        return "RSA4096 - Falcon-1024";
     case NID_picnicl1fs:
         return "Picnic L1 FS";
     case NID_p256_picnicl1fs:
