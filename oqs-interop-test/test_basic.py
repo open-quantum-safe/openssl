@@ -84,9 +84,9 @@ def test_kex(kex_name, test_artifacts_dir, sig_default_server_port, client_prog,
             kex_full_name = "{} hybrid".format(kex_name)
         else:
             kex_full_name = kex_name
-        if not "Server Temp Key: {}".format(kex_full_name) in client_output:
+        if not (("Server Temp Key: {}".format(kex_full_name) in client_output) or (not "issuer=C = US, O = BoringSSL" in client_output)):
             print(client_output)
-            assert False, "Server temp key missing."
+            assert False
     elif client_type == "bssl":
         helpers.run_subprocess([client_prog, '-port', str(sig_default_server_port),
                                              '-expect-version', 'TLSv1.3',
@@ -106,9 +106,9 @@ def test_sig(parametrized_sig_server, client_prog, client_type, test_artifacts_d
                                                              '-groups', 'oqs_kem_default',
                                                              '-connect', 'localhost:{}'.format(server_port)],
                                          input='Q'.encode())
-        if not "Server Temp Key: oqs_kem_default" in client_output:
+        if not (("Server Temp Key: oqs_kem_default" in client_output) or ("issuer=C = US, O = BoringSSL" in client_output)) :
             print(client_output)
-            assert False, "Server temp key missing."
+            assert False
     elif client_type == "bssl":
         helpers.run_subprocess([client_prog, '-port', str(server_port),
                                              '-expect-version', 'TLSv1.3',

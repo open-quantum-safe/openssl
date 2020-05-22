@@ -49,17 +49,17 @@ def test_kex_sig_pair(kex_name, parametrized_sig_server, client_prog, client_typ
         pytest.skip("{} is unsupported by OQS-BoringSSL.".format(kex_name))
 
     if client_type == "ossl":
-        output = helpers.run_subprocess([client_prog, 's_client',
-                                                      '-groups', kex_name,
-                                                      '-connect', 'localhost:{}'.format(server_port)],
+        client_output = helpers.run_subprocess([client_prog, 's_client',
+                                                             '-groups', kex_name,
+                                                             '-connect', 'localhost:{}'.format(server_port)],
                                          input='Q'.encode())
         if kex_name.startswith('p256'):
             kex_full_name = "{} hybrid".format(kex_name)
         else:
             kex_full_name = kex_name
-        if not "Server Temp Key: {}".format(kex_full_name) in output:
-            print(output)
-            assert False, "Server temp key missing."
+        if not (("Server Temp Key: {}".format(kex_full_name) in client_output) or (not "issuer=C = US, O = BoringSSL" in client_output)):
+            print(client_output)
+            assert False
     elif client_type == "bssl":
         helpers.run_subprocess([client_prog, '-port', str(server_port),
                                              '-expect-version', 'TLSv1.3',
