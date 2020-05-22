@@ -107,7 +107,7 @@ jobs:
     <<: *boringsslinteropjob
     environment:
       IMAGE: openquantumsafe/ci-ubuntu-bionic-x86_64:latest
-      LIBOQS_LIBTYPE: noopenssl
+      LIBOQS_USE_OPENSSL: OFF
   macOS-shared_oqs-shared_ossl:
     <<: *macopenssljob
     environment:

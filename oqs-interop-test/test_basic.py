@@ -11,7 +11,7 @@ import psutil
 @pytest.fixture()
 def sig_default_server_port(server_prog, server_type, test_artifacts_dir, worker_id):
     # Setup: start server
-    sig_alg = "oqs_sig_default"
+    sig_alg = 'oqs_sig_default'
     if server_type == "ossl":
         helpers.gen_openssl_keys(server_prog, os.path.join('apps', 'openssl.cnf'), sig_alg, test_artifacts_dir, worker_id)
         command = [server_prog, 's_server',
@@ -27,7 +27,7 @@ def sig_default_server_port(server_prog, server_type, test_artifacts_dir, worker
                                 '-loop']
     print(" > " + " ".join(command))
     server = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    time.sleep(3)
+    time.sleep(1)
 
     # Find and return the port that the server is bound to.
     server_conn = psutil.Process(server.pid).connections()[0]
@@ -60,7 +60,7 @@ def parametrized_sig_server(request, server_prog, server_type, test_artifacts_di
                                 '-loop']
     print(" > " + " ".join(command))
     server = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    time.sleep(3)
+    time.sleep(1)
 
     # Find and return the port that the server is bound to.
     server_conn = psutil.Process(server.pid).connections()[0]
@@ -93,9 +93,10 @@ def test_kex(kex_name, test_artifacts_dir, sig_default_server_port, client_prog,
                                              '-curves', bssl_algorithms.kex_to_nid[kex_name],
                                              '-expect-curve-id', bssl_algorithms.kex_to_nid[kex_name],
                                              '-expect-peer-signature-algorithm', bssl_algorithms.sig_to_code_point['oqs_sig_default'],
+                                             '-expect-peer-cert-file', os.path.join(test_artifacts_dir, '{}_oqs_sig_default_srv.crt'.format(worker_id)),
                                              '-shim-shuts-down'])
 
-def test_sig(parametrized_sig_server, client_prog, client_type, worker_id):
+def test_sig(parametrized_sig_server, client_prog, client_type, test_artifacts_dir, worker_id):
     server_sig = parametrized_sig_server[0]
     server_port = parametrized_sig_server[1]
 
@@ -114,6 +115,7 @@ def test_sig(parametrized_sig_server, client_prog, client_type, worker_id):
                                              '-curves', bssl_algorithms.kex_to_nid['oqs_kem_default'],
                                              '-expect-curve-id', bssl_algorithms.kex_to_nid['oqs_kem_default'],
                                              '-expect-peer-signature-algorithm', bssl_algorithms.sig_to_code_point[server_sig],
+                                             '-expect-peer-cert-file', os.path.join(test_artifacts_dir, '{}_{}_srv.crt'.format(worker_id, server_sig)),
                                              '-shim-shuts-down'])
 
 if __name__ == "__main__":
