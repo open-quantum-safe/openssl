@@ -82,8 +82,11 @@ localCheckout: &localCheckout
         name: Build OpenSSL
         command: .circleci/git_no_checkin_in_last_day.sh || (./Configure linux-x86_64 no-shared no-tests && make -j15)
     - run:
-        name: Test interoperability with BoringSSL
-        command: .circleci/git_no_checkin_in_last_day.sh || (python3 -m pytest --numprocesses=auto oqs-interop-test/test_full.py --junitxml=oqs-interop-test/tmp/test-results/pytest/test-results.xml)
+        name: Test BoringSSL client against OpenSSL server
+        command: .circleci/git_no_checkin_in_last_day.sh || (python3 -m pytest --numprocesses=auto oqs-interop-test/test_full.py --client-prog=boringssl/build/ssl/test/bssl_shim --client-type=bssl --server-prog=apps/openssl --server-type=ossl --junitxml=oqs-interop-test/tmp/test-results/pytest/bssl_client-test-results.xml)
+    - run:
+        name: Test OpenSSL client against BoringSSL server
+        command: .circleci/git_no_checkin_in_last_day.sh || (python3 -m pytest --numprocesses=auto oqs-interop-test/test_full.py --client-prog=apps/openssl --client-type=ossl --server-prog=boringssl/build/tool/bssl --server-type=bssl --junitxml=oqs-interop-test/tmp/test-results/pytest/ossl_client-test-results.xml)
     - store_test_results: # Note that this command will fail when running CircleCI locally, that is expected behaviour
         path: oqs-interop-test/tmp/test-results
 
