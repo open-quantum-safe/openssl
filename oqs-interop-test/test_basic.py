@@ -17,6 +17,7 @@ def sig_default_server_port(server_prog, server_type, test_artifacts_dir, worker
         command = [server_prog, 's_server',
                                 '-cert', os.path.join(test_artifacts_dir, '{}_{}_srv.crt'.format(worker_id, sig_alg)),
                                 '-key', os.path.join(test_artifacts_dir, '{}_{}_srv.key'.format(worker_id, sig_alg)),
+                                '-CAfile', os.path.join(test_artifacts_dir, '{}_{}_CA.crt'.format(worker_id, sig_alg)),
                                 '-tls1_3',
                                 '-quiet',
                                 '-accept', '0']
@@ -50,6 +51,7 @@ def parametrized_sig_server(request, server_prog, server_type, test_artifacts_di
         command = [server_prog, 's_server',
                                 '-cert', os.path.join(test_artifacts_dir, '{}_{}_srv.crt'.format(worker_id, sig_alg)),
                                 '-key', os.path.join(test_artifacts_dir, '{}_{}_srv.key'.format(worker_id, sig_alg)),
+                                '-CAfile', os.path.join(test_artifacts_dir, '{}_{}_CA.crt'.format(worker_id, sig_alg)),
                                 '-tls1_3',
                                 '-quiet',
                                 '-accept', '0']
@@ -93,7 +95,8 @@ def test_kex(kex_name, test_artifacts_dir, sig_default_server_port, client_prog,
                                              '-curves', bssl_algorithms.kex_to_nid[kex_name],
                                              '-expect-curve-id', bssl_algorithms.kex_to_nid[kex_name],
                                              '-expect-peer-signature-algorithm', bssl_algorithms.sig_to_code_point['oqs_sig_default'],
-                                             '-expect-peer-cert-file', os.path.join(test_artifacts_dir, '{}_oqs_sig_default_srv.crt'.format(worker_id)),
+                                             '-expect-peer-cert-file', os.path.join(test_artifacts_dir, '{}_cert_chain'.format(worker_id)),
+                                             '-verify-fail',
                                              '-shim-shuts-down'])
 
 def test_sig(parametrized_sig_server, client_prog, client_type, test_artifacts_dir, worker_id):
@@ -115,7 +118,8 @@ def test_sig(parametrized_sig_server, client_prog, client_type, test_artifacts_d
                                              '-curves', bssl_algorithms.kex_to_nid['oqs_kem_default'],
                                              '-expect-curve-id', bssl_algorithms.kex_to_nid['oqs_kem_default'],
                                              '-expect-peer-signature-algorithm', bssl_algorithms.sig_to_code_point[server_sig],
-                                             '-expect-peer-cert-file', os.path.join(test_artifacts_dir, '{}_{}_srv.crt'.format(worker_id, server_sig)),
+                                             '-expect-peer-cert-file', os.path.join(test_artifacts_dir, '{}_cert_chain'.format(worker_id)),
+                                             '-verify-fail',
                                              '-shim-shuts-down'])
 
 if __name__ == "__main__":
