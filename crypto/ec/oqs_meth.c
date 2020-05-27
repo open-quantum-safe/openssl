@@ -452,6 +452,8 @@ static int get_classical_key_len(oqs_key_type_t keytype, int classical_id) {
       return (keytype == KEY_TYPE_PRIVATE) ? 121 : 65;
     case NID_secp384r1:
       return (keytype == KEY_TYPE_PRIVATE) ? 167 : 97;
+    case NID_secp521r1:
+      return (keytype == KEY_TYPE_PRIVATE) ? 223 : 133;
     default:
       return 0;
     }
@@ -467,6 +469,8 @@ static int get_classical_sig_len(int classical_id)
       return 72;
     case NID_secp384r1:
       return 104;
+    case NID_secp521r1:
+      return 141;
     default:
       return 0;
     }
@@ -593,7 +597,7 @@ static int get_oqs_security_bits(int openssl_nid)
 }
 
 static int is_EC_nid(int nid) {
-  return (nid == NID_X9_62_prime256v1 || nid == NID_secp384r1);
+  return (nid == NID_X9_62_prime256v1 || nid == NID_secp384r1 || nid == NID_secp521r1);
 }
 
 static int decode_EC_key(oqs_key_type_t keytype, int nid, const unsigned char* encoded_key, int key_len, OQS_KEY* oqs_key) {
