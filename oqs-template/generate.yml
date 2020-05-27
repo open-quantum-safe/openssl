@@ -331,10 +331,7 @@ sigs:
         oid: "1.3.9999.3.4"
         mix_with: [{"name": "p521",
                     "pretty_name": "ECDSA p521",
-                    "oid": "1.3.9999.3.5"},
-                   {"name": "rsa4096",
-                    "pretty_name": "RSA4096",
-                    "oid": "1.3.9999.3.6"}]
+                    "oid": "1.3.9999.3.5"}]
   -
     # iso (1)
     # identified-organization (3)

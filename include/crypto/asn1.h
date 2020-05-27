@@ -103,7 +103,6 @@ extern const EVP_PKEY_ASN1_METHOD p256_falcon512_asn1_meth;
 extern const EVP_PKEY_ASN1_METHOD rsa3072_falcon512_asn1_meth;
 extern const EVP_PKEY_ASN1_METHOD falcon1024_asn1_meth;
 extern const EVP_PKEY_ASN1_METHOD p521_falcon1024_asn1_meth;
-extern const EVP_PKEY_ASN1_METHOD rsa4096_falcon1024_asn1_meth;
 extern const EVP_PKEY_ASN1_METHOD picnicl1fs_asn1_meth;
 extern const EVP_PKEY_ASN1_METHOD p256_picnicl1fs_asn1_meth;
 extern const EVP_PKEY_ASN1_METHOD rsa3072_picnicl1fs_asn1_meth;

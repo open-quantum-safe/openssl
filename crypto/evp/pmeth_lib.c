@@ -85,7 +85,6 @@ static const EVP_PKEY_METHOD *standard_methods[] = {
     &rsa3072_falcon512_pkey_meth,
     &falcon1024_pkey_meth,
     &p521_falcon1024_pkey_meth,
-    &rsa4096_falcon1024_pkey_meth,
     &picnicl1fs_pkey_meth,
     &p256_picnicl1fs_pkey_meth,
     &rsa3072_picnicl1fs_pkey_meth,

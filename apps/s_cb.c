@@ -278,8 +278,6 @@ static const char *get_sigtype(int nid)
         return "Falcon-1024";
     case NID_p521_falcon1024:
         return "ECDSA p521 - Falcon-1024";
-    case NID_rsa4096_falcon1024:
-        return "RSA4096 - Falcon-1024";
     case NID_picnicl1fs:
         return "Picnic L1 FS";
     case NID_p256_picnicl1fs:

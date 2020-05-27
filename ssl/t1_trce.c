@@ -676,7 +676,6 @@ static const ssl_trace_tbl ssl_sigalg_tbl[] = {
     {TLSEXT_SIGALG_rsa3072_falcon512, "rsa3072_falcon512"},
     {TLSEXT_SIGALG_falcon1024, "falcon1024"},
     {TLSEXT_SIGALG_p521_falcon1024, "p521_falcon1024"},
-    {TLSEXT_SIGALG_rsa4096_falcon1024, "rsa4096_falcon1024"},
     {TLSEXT_SIGALG_picnicl1fs, "picnicl1fs"},
     {TLSEXT_SIGALG_p256_picnicl1fs, "p256_picnicl1fs"},
     {TLSEXT_SIGALG_rsa3072_picnicl1fs, "rsa3072_picnicl1fs"},

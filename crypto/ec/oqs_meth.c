@@ -91,7 +91,6 @@ int oqssl_sig_nids_list[] = {
         NID_rsa3072_falcon512,
         NID_falcon1024,
         NID_p521_falcon1024,
-        NID_rsa4096_falcon1024,
         NID_picnicl1fs,
         NID_p256_picnicl1fs,
         NID_rsa3072_picnicl1fs,
@@ -198,7 +197,6 @@ char* get_oqs_alg_name(int openssl_nid)
       return OQS_SIG_alg_falcon_512;
     case NID_falcon1024:
     case NID_p521_falcon1024:
-    case NID_rsa4096_falcon1024:
       return OQS_SIG_alg_falcon_1024;
     case NID_picnicl1fs:
     case NID_p256_picnicl1fs:
@@ -355,7 +353,6 @@ static int is_oqs_hybrid_alg(int openssl_nid)
     case NID_p256_falcon512:
     case NID_rsa3072_falcon512:
     case NID_p521_falcon1024:
-    case NID_rsa4096_falcon1024:
     case NID_p256_picnicl1fs:
     case NID_rsa3072_picnicl1fs:
     case NID_p256_picnic2l1fs:
@@ -422,7 +419,6 @@ static int get_oqs_nid(int hybrid_id)
     case NID_rsa3072_falcon512:
       return NID_falcon512;
     case NID_p521_falcon1024:
-    case NID_rsa4096_falcon1024:
       return NID_falcon1024;
     case NID_p256_picnicl1fs:
     case NID_rsa3072_picnicl1fs:
@@ -573,7 +569,6 @@ static int get_oqs_security_bits(int openssl_nid)
       return 128;
     case NID_falcon1024:
     case NID_p521_falcon1024:
-    case NID_rsa4096_falcon1024:
       return 256;
     case NID_picnicl1fs:
     case NID_p256_picnicl1fs:
@@ -1178,7 +1173,6 @@ static int oqs_item_verify(EVP_MD_CTX *ctx, const ASN1_ITEM *it, void *asn,
         nid != NID_rsa3072_falcon512 &&
         nid != NID_falcon1024 &&
         nid != NID_p521_falcon1024 &&
-        nid != NID_rsa4096_falcon1024 &&
         nid != NID_picnicl1fs &&
         nid != NID_p256_picnicl1fs &&
         nid != NID_rsa3072_picnicl1fs &&
@@ -1708,7 +1702,6 @@ DEFINE_OQS_EVP_METHODS(p256_falcon512, NID_p256_falcon512, "p256_falcon512", "Op
 DEFINE_OQS_EVP_METHODS(rsa3072_falcon512, NID_rsa3072_falcon512, "rsa3072_falcon512", "OpenSSL RSA3072 Falcon-512 algorithm")
 DEFINE_OQS_EVP_METHODS(falcon1024, NID_falcon1024, "falcon1024", "OpenSSL Falcon-1024 algorithm")
 DEFINE_OQS_EVP_METHODS(p521_falcon1024, NID_p521_falcon1024, "p521_falcon1024", "OpenSSL ECDSA p521 Falcon-1024 algorithm")
-DEFINE_OQS_EVP_METHODS(rsa4096_falcon1024, NID_rsa4096_falcon1024, "rsa4096_falcon1024", "OpenSSL RSA4096 Falcon-1024 algorithm")
 DEFINE_OQS_EVP_METHODS(picnicl1fs, NID_picnicl1fs, "picnicl1fs", "OpenSSL Picnic L1 FS algorithm")
 DEFINE_OQS_EVP_METHODS(p256_picnicl1fs, NID_p256_picnicl1fs, "p256_picnicl1fs", "OpenSSL ECDSA p256 Picnic L1 FS algorithm")
 DEFINE_OQS_EVP_METHODS(rsa3072_picnicl1fs, NID_rsa3072_picnicl1fs, "rsa3072_picnicl1fs", "OpenSSL RSA3072 Picnic L1 FS algorithm")
