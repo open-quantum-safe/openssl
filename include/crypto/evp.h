@@ -132,8 +132,6 @@ extern const EVP_PKEY_METHOD p521_falcon1024_pkey_meth;
 extern const EVP_PKEY_METHOD mqdss3148_pkey_meth;
 extern const EVP_PKEY_METHOD p256_mqdss3148_pkey_meth;
 extern const EVP_PKEY_METHOD rsa3072_mqdss3148_pkey_meth;
-extern const EVP_PKEY_METHOD mqdss3164_pkey_meth;
-extern const EVP_PKEY_METHOD p384_mqdss3164_pkey_meth;
 extern const EVP_PKEY_METHOD picnicl1fs_pkey_meth;
 extern const EVP_PKEY_METHOD p256_picnicl1fs_pkey_meth;
 extern const EVP_PKEY_METHOD rsa3072_picnicl1fs_pkey_meth;

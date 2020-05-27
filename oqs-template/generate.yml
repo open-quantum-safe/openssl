@@ -350,15 +350,6 @@ sigs:
                    {"name": "rsa3072",
                     "pretty_name": "RSA3072",
                     "oid": "1.3.9999.4.3"}]
-      -
-        name: "mqdss3164"
-        pretty_name: "MQDSS-31-64"
-        oqs_meth: "OQS_SIG_alg_mqdss_31_64"
-        security: 192
-        oid: "1.3.9999.4.4"
-        mix_with: [{"name": "p384",
-                    "pretty_name": "ECDSA p384",
-                    "oid": "1.3.9999.4.5"}]
   -
     # iso (1)
     # identified-organization (3)

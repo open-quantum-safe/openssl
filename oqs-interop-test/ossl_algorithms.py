@@ -12,7 +12,7 @@ signatures = [
     'oqs_sig_default',
     'dilithium2','dilithium3','dilithium4',
     'falcon512','falcon1024',
-    'mqdss3148','mqdss3164',
+    'mqdss3148',
     'picnicl1fs','picnic2l1fs',
     'qteslapi','qteslapiii',
 ##### OQS_TEMPLATE_FRAGMENT_PQ_SIG_ALGS_END

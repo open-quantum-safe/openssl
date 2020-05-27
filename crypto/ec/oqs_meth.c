@@ -94,8 +94,6 @@ int oqssl_sig_nids_list[] = {
         NID_mqdss3148,
         NID_p256_mqdss3148,
         NID_rsa3072_mqdss3148,
-        NID_mqdss3164,
-        NID_p384_mqdss3164,
         NID_picnicl1fs,
         NID_p256_picnicl1fs,
         NID_rsa3072_picnicl1fs,
@@ -207,9 +205,6 @@ char* get_oqs_alg_name(int openssl_nid)
     case NID_p256_mqdss3148:
     case NID_rsa3072_mqdss3148:
       return OQS_SIG_alg_mqdss_31_48;
-    case NID_mqdss3164:
-    case NID_p384_mqdss3164:
-      return OQS_SIG_alg_mqdss_31_64;
     case NID_picnicl1fs:
     case NID_p256_picnicl1fs:
     case NID_rsa3072_picnicl1fs:
@@ -367,7 +362,6 @@ static int is_oqs_hybrid_alg(int openssl_nid)
     case NID_p521_falcon1024:
     case NID_p256_mqdss3148:
     case NID_rsa3072_mqdss3148:
-    case NID_p384_mqdss3164:
     case NID_p256_picnicl1fs:
     case NID_rsa3072_picnicl1fs:
     case NID_p256_picnic2l1fs:
@@ -407,7 +401,6 @@ static int get_classical_nid(int hybrid_id)
     case NID_p256_qteslapi:
       return NID_X9_62_prime256v1;
     case NID_p384_dilithium4:
-    case NID_p384_mqdss3164:
     case NID_p384_qteslapiii:
       return NID_secp384r1;
     case NID_p521_falcon1024:
@@ -441,8 +434,6 @@ static int get_oqs_nid(int hybrid_id)
     case NID_p256_mqdss3148:
     case NID_rsa3072_mqdss3148:
       return NID_mqdss3148;
-    case NID_p384_mqdss3164:
-      return NID_mqdss3164;
     case NID_p256_picnicl1fs:
     case NID_rsa3072_picnicl1fs:
       return NID_picnicl1fs;
@@ -597,9 +588,6 @@ static int get_oqs_security_bits(int openssl_nid)
     case NID_p256_mqdss3148:
     case NID_rsa3072_mqdss3148:
       return 128;
-    case NID_mqdss3164:
-    case NID_p384_mqdss3164:
-      return 192;
     case NID_picnicl1fs:
     case NID_p256_picnicl1fs:
     case NID_rsa3072_picnicl1fs:
@@ -1206,8 +1194,6 @@ static int oqs_item_verify(EVP_MD_CTX *ctx, const ASN1_ITEM *it, void *asn,
         nid != NID_mqdss3148 &&
         nid != NID_p256_mqdss3148 &&
         nid != NID_rsa3072_mqdss3148 &&
-        nid != NID_mqdss3164 &&
-        nid != NID_p384_mqdss3164 &&
         nid != NID_picnicl1fs &&
         nid != NID_p256_picnicl1fs &&
         nid != NID_rsa3072_picnicl1fs &&
@@ -1740,8 +1726,6 @@ DEFINE_OQS_EVP_METHODS(p521_falcon1024, NID_p521_falcon1024, "p521_falcon1024", 
 DEFINE_OQS_EVP_METHODS(mqdss3148, NID_mqdss3148, "mqdss3148", "OpenSSL MQDSS-31-48 algorithm")
 DEFINE_OQS_EVP_METHODS(p256_mqdss3148, NID_p256_mqdss3148, "p256_mqdss3148", "OpenSSL ECDSA p256 MQDSS-31-48 algorithm")
 DEFINE_OQS_EVP_METHODS(rsa3072_mqdss3148, NID_rsa3072_mqdss3148, "rsa3072_mqdss3148", "OpenSSL RSA3072 MQDSS-31-48 algorithm")
-DEFINE_OQS_EVP_METHODS(mqdss3164, NID_mqdss3164, "mqdss3164", "OpenSSL MQDSS-31-64 algorithm")
-DEFINE_OQS_EVP_METHODS(p384_mqdss3164, NID_p384_mqdss3164, "p384_mqdss3164", "OpenSSL ECDSA p384 MQDSS-31-64 algorithm")
 DEFINE_OQS_EVP_METHODS(picnicl1fs, NID_picnicl1fs, "picnicl1fs", "OpenSSL Picnic L1 FS algorithm")
 DEFINE_OQS_EVP_METHODS(p256_picnicl1fs, NID_p256_picnicl1fs, "p256_picnicl1fs", "OpenSSL ECDSA p256 Picnic L1 FS algorithm")
 DEFINE_OQS_EVP_METHODS(rsa3072_picnicl1fs, NID_rsa3072_picnicl1fs, "rsa3072_picnicl1fs", "OpenSSL RSA3072 Picnic L1 FS algorithm")
