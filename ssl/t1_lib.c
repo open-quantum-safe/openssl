@@ -192,6 +192,9 @@ static const TLS_GROUP_INFO oqs_nid_list[] = {
     {NID_bike1l3cpa, 192, TLS_CURVE_CUSTOM}, /* bike1l3cpa (0x0207) */
     {NID_bike1l1fo, 128, TLS_CURVE_CUSTOM}, /* bike1l1fo (0x0223) */
     {NID_bike1l3fo, 192, TLS_CURVE_CUSTOM}, /* bike1l3fo (0x0224) */
+    {NID_ledacryptkemlt12, 128, TLS_CURVE_CUSTOM}, /* ledacryptkemlt12 (0x0226) */
+    {NID_ledacryptkemlt32, 192, TLS_CURVE_CUSTOM}, /* ledacryptkemlt32 (0x0227) */
+    {NID_ledacryptkemlt52, 256, TLS_CURVE_CUSTOM}, /* ledacryptkemlt52 (0x0228) */
     {NID_kyber512, 128, TLS_CURVE_CUSTOM}, /* kyber512 (0x020F) */
     {NID_kyber768, 192, TLS_CURVE_CUSTOM}, /* kyber768 (0x0210) */
     {NID_kyber1024, 256, TLS_CURVE_CUSTOM}, /* kyber1024 (0x0211) */
@@ -212,9 +215,6 @@ static const TLS_GROUP_INFO oqs_nid_list[] = {
     {NID_sikep503, 128, TLS_CURVE_CUSTOM}, /* sikep503 (0x0220) */
     {NID_sikep610, 192, TLS_CURVE_CUSTOM}, /* sikep610 (0x0221) */
     {NID_sikep751, 256, TLS_CURVE_CUSTOM}, /* sikep751 (0x0222) */
-    {NID_ledacryptkemlt12, 128, TLS_CURVE_CUSTOM}, /* ledacryptkemlt12 (0x0226) */
-    {NID_ledacryptkemlt32, 192, TLS_CURVE_CUSTOM}, /* ledacryptkemlt32 (0x0227) */
-    {NID_ledacryptkemlt52, 256, TLS_CURVE_CUSTOM}, /* ledacryptkemlt52 (0x0228) */
     {NID_kyber90s512, 128, TLS_CURVE_CUSTOM}, /* kyber90s512 (0x0229) */
     {NID_kyber90s768, 192, TLS_CURVE_CUSTOM}, /* kyber90s768 (0x022A) */
     {NID_kyber90s1024, 256, TLS_CURVE_CUSTOM}, /* kyber90s1024 (0x022B) */
@@ -240,6 +240,9 @@ static const TLS_GROUP_INFO oqs_hybrid_nid_list[] = {
     {NID_p256_bike1l3cpa, 192, TLS_CURVE_CUSTOM}, /* p256 + bike1l3cpa hybrid (0x0207) */
     {NID_p256_bike1l1fo, 128, TLS_CURVE_CUSTOM}, /* p256 + bike1l1fo hybrid (0x0223) */
     {NID_p256_bike1l3fo, 192, TLS_CURVE_CUSTOM}, /* p256 + bike1l3fo hybrid (0x0224) */
+    {NID_p256_ledacryptkemlt12, 128, TLS_CURVE_CUSTOM}, /* p256 + ledacryptkemlt12 hybrid (0x0226) */
+    {NID_p256_ledacryptkemlt32, 192, TLS_CURVE_CUSTOM}, /* p256 + ledacryptkemlt32 hybrid (0x0227) */
+    {NID_p256_ledacryptkemlt52, 256, TLS_CURVE_CUSTOM}, /* p256 + ledacryptkemlt52 hybrid (0x0228) */
     {NID_p256_kyber512, 128, TLS_CURVE_CUSTOM}, /* p256 + kyber512 hybrid (0x020F) */
     {NID_p256_kyber768, 192, TLS_CURVE_CUSTOM}, /* p256 + kyber768 hybrid (0x0210) */
     {NID_p256_kyber1024, 256, TLS_CURVE_CUSTOM}, /* p256 + kyber1024 hybrid (0x0211) */
@@ -260,9 +263,6 @@ static const TLS_GROUP_INFO oqs_hybrid_nid_list[] = {
     {NID_p256_sikep503, 128, TLS_CURVE_CUSTOM}, /* p256 + sikep503 hybrid (0x0220) */
     {NID_p256_sikep610, 192, TLS_CURVE_CUSTOM}, /* p256 + sikep610 hybrid (0x0221) */
     {NID_p256_sikep751, 256, TLS_CURVE_CUSTOM}, /* p256 + sikep751 hybrid (0x0222) */
-    {NID_p256_ledacryptkemlt12, 128, TLS_CURVE_CUSTOM}, /* p256 + ledacryptkemlt12 hybrid (0x0226) */
-    {NID_p256_ledacryptkemlt32, 192, TLS_CURVE_CUSTOM}, /* p256 + ledacryptkemlt32 hybrid (0x0227) */
-    {NID_p256_ledacryptkemlt52, 256, TLS_CURVE_CUSTOM}, /* p256 + ledacryptkemlt52 hybrid (0x0228) */
     {NID_p256_kyber90s512, 128, TLS_CURVE_CUSTOM}, /* p256 + kyber90s512 hybrid (0x0229) */
     {NID_p256_kyber90s768, 192, TLS_CURVE_CUSTOM}, /* p256 + kyber90s768 hybrid (0x022A) */
     {NID_p256_kyber90s1024, 256, TLS_CURVE_CUSTOM}, /* p256 + kyber90s1024 hybrid (0x022B) */
@@ -293,6 +293,7 @@ static const uint16_t eccurves_default[] = {
     0x2F01, /* p256 - OQS frodo640shake hybrid */
     0x2F06, /* p256 - OQS bike1l1cpa hybrid */
     0x2F23, /* p256 - OQS bike1l1fo hybrid */
+    0x2F26, /* p256 - OQS ledacryptkemlt12 hybrid */
     0x2F0F, /* p256 - OQS kyber512 hybrid */
     0x2F12, /* p256 - OQS newhope512cca hybrid */
     0x2F14, /* p256 - OQS ntru_hps2048509 hybrid */
@@ -301,7 +302,6 @@ static const uint16_t eccurves_default[] = {
     0x2F1C, /* p256 - OQS sidhp503 hybrid */
     0x2F1F, /* p256 - OQS sikep434 hybrid */
     0x2F20, /* p256 - OQS sikep503 hybrid */
-    0x2F26, /* p256 - OQS ledacryptkemlt12 hybrid */
     0x2F29, /* p256 - OQS kyber90s512 hybrid */
     0x2F2C, /* p256 - OQS babybear hybrid */
     0x2F2F, /* p256 - OQS babybearephem hybrid */
@@ -342,6 +342,12 @@ static const uint16_t oqs_all_tls13_server_groups[] = {
     0x2F23, /* p256 - OQS bike1l1fo hybrid */
     0x0224, /* bike1l3fo */
     0x2F24, /* p256 - OQS bike1l3fo hybrid */
+    0x0226, /* ledacryptkemlt12 */
+    0x2F26, /* p256 - OQS ledacryptkemlt12 hybrid */
+    0x0227, /* ledacryptkemlt32 */
+    0x2F27, /* p256 - OQS ledacryptkemlt32 hybrid */
+    0x0228, /* ledacryptkemlt52 */
+    0x2F28, /* p256 - OQS ledacryptkemlt52 hybrid */
     0x020F, /* kyber512 */
     0x2F0F, /* p256 - OQS kyber512 hybrid */
     0x0210, /* kyber768 */
@@ -382,12 +388,6 @@ static const uint16_t oqs_all_tls13_server_groups[] = {
     0x2F21, /* p256 - OQS sikep610 hybrid */
     0x0222, /* sikep751 */
     0x2F22, /* p256 - OQS sikep751 hybrid */
-    0x0226, /* ledacryptkemlt12 */
-    0x2F26, /* p256 - OQS ledacryptkemlt12 hybrid */
-    0x0227, /* ledacryptkemlt32 */
-    0x2F27, /* p256 - OQS ledacryptkemlt32 hybrid */
-    0x0228, /* ledacryptkemlt52 */
-    0x2F28, /* p256 - OQS ledacryptkemlt52 hybrid */
     0x0229, /* kyber90s512 */
     0x2F29, /* p256 - OQS kyber90s512 hybrid */
     0x022A, /* kyber90s768 */
@@ -933,6 +933,8 @@ static const uint16_t tls12_sigalgs[] = {
     TLSEXT_SIGALG_p256_dilithium2,
     TLSEXT_SIGALG_rsa3072_dilithium2,
     TLSEXT_SIGALG_dilithium3,
+    TLSEXT_SIGALG_p256_dilithium3,
+    TLSEXT_SIGALG_rsa3072_dilithium3,
     TLSEXT_SIGALG_dilithium4,
     TLSEXT_SIGALG_p384_dilithium4,
     TLSEXT_SIGALG_falcon512,
@@ -1102,6 +1104,12 @@ static const SIGALG_LOOKUP sigalg_lookup_tbl[] = {
      NID_undef, NID_undef},
     {"dilithium3", TLSEXT_SIGALG_dilithium3,
      NID_undef, -1, EVP_PKEY_DILITHIUM3, SSL_PKEY_DILITHIUM3,
+     NID_undef, NID_undef},
+    {"p256_dilithium3", TLSEXT_SIGALG_p256_dilithium3,
+     NID_undef, -1, EVP_PKEY_P256_DILITHIUM3, SSL_PKEY_P256_DILITHIUM3,
+     NID_undef, NID_undef},
+    {"rsa3072_dilithium3", TLSEXT_SIGALG_rsa3072_dilithium3,
+     NID_undef, -1, EVP_PKEY_RSA3072_DILITHIUM3, SSL_PKEY_RSA3072_DILITHIUM3,
      NID_undef, NID_undef},
     {"dilithium4", TLSEXT_SIGALG_dilithium4,
      NID_undef, -1, EVP_PKEY_DILITHIUM4, SSL_PKEY_DILITHIUM4,
@@ -2828,6 +2836,8 @@ void tls1_set_cert_validity(SSL *s)
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_P256_DILITHIUM2);
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_RSA3072_DILITHIUM2);
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_DILITHIUM3);
+    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_P256_DILITHIUM3);
+    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_RSA3072_DILITHIUM3);
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_DILITHIUM4);
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_P384_DILITHIUM4);
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_FALCON512);

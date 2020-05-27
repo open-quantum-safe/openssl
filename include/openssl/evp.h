@@ -71,6 +71,8 @@
 # define EVP_PKEY_P256_DILITHIUM2 NID_p256_dilithium2
 # define EVP_PKEY_RSA3072_DILITHIUM2 NID_rsa3072_dilithium2
 # define EVP_PKEY_DILITHIUM3 NID_dilithium3
+# define EVP_PKEY_P256_DILITHIUM3 NID_p256_dilithium3
+# define EVP_PKEY_RSA3072_DILITHIUM3 NID_rsa3072_dilithium3
 # define EVP_PKEY_DILITHIUM4 NID_dilithium4
 # define EVP_PKEY_P384_DILITHIUM4 NID_p384_dilithium4
 # define EVP_PKEY_FALCON512 NID_falcon512
@@ -90,7 +92,7 @@
 # define EVP_PKEY_RSA3072_QTESLAPI NID_rsa3072_qteslapi
 # define EVP_PKEY_QTESLAPIII NID_qteslapiii
 # define EVP_PKEY_P384_QTESLAPIII NID_p384_qteslapiii
-#define OQS_OPENSSL_SIG_algs_length 26
+#define OQS_OPENSSL_SIG_algs_length 28
 #define OQS_OPENSSL_KEM_algs_length 42
 /////// OQS_TEMPLATE_FRAGMENT_DEFINE_EVP_PKEYS_END
 const char *OQSKEM_options(void);

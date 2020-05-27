@@ -67,6 +67,8 @@ static const EVP_PKEY_ASN1_METHOD *standard_methods[] = {
     &p256_dilithium2_asn1_meth,
     &rsa3072_dilithium2_asn1_meth,
     &dilithium3_asn1_meth,
+    &p256_dilithium3_asn1_meth,
+    &rsa3072_dilithium3_asn1_meth,
     &dilithium4_asn1_meth,
     &p384_dilithium4_asn1_meth,
     &falcon512_asn1_meth,

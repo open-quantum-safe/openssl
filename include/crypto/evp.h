@@ -120,6 +120,8 @@ extern const EVP_PKEY_METHOD dilithium2_pkey_meth;
 extern const EVP_PKEY_METHOD p256_dilithium2_pkey_meth;
 extern const EVP_PKEY_METHOD rsa3072_dilithium2_pkey_meth;
 extern const EVP_PKEY_METHOD dilithium3_pkey_meth;
+extern const EVP_PKEY_METHOD p256_dilithium3_pkey_meth;
+extern const EVP_PKEY_METHOD rsa3072_dilithium3_pkey_meth;
 extern const EVP_PKEY_METHOD dilithium4_pkey_meth;
 extern const EVP_PKEY_METHOD p384_dilithium4_pkey_meth;
 extern const EVP_PKEY_METHOD falcon512_pkey_meth;

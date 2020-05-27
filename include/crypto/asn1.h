@@ -94,6 +94,8 @@ extern const EVP_PKEY_ASN1_METHOD dilithium2_asn1_meth;
 extern const EVP_PKEY_ASN1_METHOD p256_dilithium2_asn1_meth;
 extern const EVP_PKEY_ASN1_METHOD rsa3072_dilithium2_asn1_meth;
 extern const EVP_PKEY_ASN1_METHOD dilithium3_asn1_meth;
+extern const EVP_PKEY_ASN1_METHOD p256_dilithium3_asn1_meth;
+extern const EVP_PKEY_ASN1_METHOD rsa3072_dilithium3_asn1_meth;
 extern const EVP_PKEY_ASN1_METHOD dilithium4_asn1_meth;
 extern const EVP_PKEY_ASN1_METHOD p384_dilithium4_asn1_meth;
 extern const EVP_PKEY_ASN1_METHOD falcon512_asn1_meth;

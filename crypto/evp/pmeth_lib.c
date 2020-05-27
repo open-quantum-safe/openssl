@@ -76,6 +76,8 @@ static const EVP_PKEY_METHOD *standard_methods[] = {
     &p256_dilithium2_pkey_meth,
     &rsa3072_dilithium2_pkey_meth,
     &dilithium3_pkey_meth,
+    &p256_dilithium3_pkey_meth,
+    &rsa3072_dilithium3_pkey_meth,
     &dilithium4_pkey_meth,
     &p384_dilithium4_pkey_meth,
     &falcon512_pkey_meth,

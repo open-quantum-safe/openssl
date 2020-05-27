@@ -260,6 +260,10 @@ static const char *get_sigtype(int nid)
         return "RSA3072 - Dilithium-2";
     case NID_dilithium3:
         return "Dilithium-3";
+    case NID_p256_dilithium3:
+        return "ECDSA p256 - Dilithium-3";
+    case NID_rsa3072_dilithium3:
+        return "RSA3072 - Dilithium-3";
     case NID_dilithium4:
         return "Dilithium-4";
     case NID_p384_dilithium4:
@@ -462,6 +466,9 @@ static const char* OQS_CURVE_ID_NAME_STR(int id) {
   case 0x0207: return "bike1l3cpa";
   case 0x0223: return "bike1l1fo";
   case 0x0224: return "bike1l3fo";
+  case 0x0226: return "ledacryptkemlt12";
+  case 0x0227: return "ledacryptkemlt32";
+  case 0x0228: return "ledacryptkemlt52";
   case 0x020F: return "kyber512";
   case 0x0210: return "kyber768";
   case 0x0211: return "kyber1024";
@@ -482,9 +489,6 @@ static const char* OQS_CURVE_ID_NAME_STR(int id) {
   case 0x0220: return "sikep503";
   case 0x0221: return "sikep610";
   case 0x0222: return "sikep751";
-  case 0x0226: return "ledacryptkemlt12";
-  case 0x0227: return "ledacryptkemlt32";
-  case 0x0228: return "ledacryptkemlt52";
   case 0x0229: return "kyber90s512";
   case 0x022A: return "kyber90s768";
   case 0x022B: return "kyber90s1024";
@@ -507,6 +511,9 @@ static const char* OQS_CURVE_ID_NAME_STR(int id) {
   case 0x2F07: return "p256_bike1l3cpa hybrid";
   case 0x2F23: return "p256_bike1l1fo hybrid";
   case 0x2F24: return "p256_bike1l3fo hybrid";
+  case 0x2F26: return "p256_ledacryptkemlt12 hybrid";
+  case 0x2F27: return "p256_ledacryptkemlt32 hybrid";
+  case 0x2F28: return "p256_ledacryptkemlt52 hybrid";
   case 0x2F0F: return "p256_kyber512 hybrid";
   case 0x2F10: return "p256_kyber768 hybrid";
   case 0x2F11: return "p256_kyber1024 hybrid";
@@ -527,9 +534,6 @@ static const char* OQS_CURVE_ID_NAME_STR(int id) {
   case 0x2F20: return "p256_sikep503 hybrid";
   case 0x2F21: return "p256_sikep610 hybrid";
   case 0x2F22: return "p256_sikep751 hybrid";
-  case 0x2F26: return "p256_ledacryptkemlt12 hybrid";
-  case 0x2F27: return "p256_ledacryptkemlt32 hybrid";
-  case 0x2F28: return "p256_ledacryptkemlt52 hybrid";
   case 0x2F29: return "p256_kyber90s512 hybrid";
   case 0x2F2A: return "p256_kyber90s768 hybrid";
   case 0x2F2B: return "p256_kyber90s1024 hybrid";

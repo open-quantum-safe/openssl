@@ -31,6 +31,8 @@ dilithium2	sha512	dilithium2
 p256_dilithium2	sha512	p256_dilithium2
 rsa3072_dilithium2	sha512	rsa3072_dilithium2
 dilithium3	sha512	dilithium3
+p256_dilithium3	sha512	p256_dilithium3
+rsa3072_dilithium3	sha512	rsa3072_dilithium3
 dilithium4	sha512	dilithium4
 p384_dilithium4	sha512	p384_dilithium4
 falcon512	sha512	falcon512
