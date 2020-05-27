@@ -80,6 +80,11 @@
 # define EVP_PKEY_RSA3072_FALCON512 NID_rsa3072_falcon512
 # define EVP_PKEY_FALCON1024 NID_falcon1024
 # define EVP_PKEY_P521_FALCON1024 NID_p521_falcon1024
+# define EVP_PKEY_MQDSS3148 NID_mqdss3148
+# define EVP_PKEY_P256_MQDSS3148 NID_p256_mqdss3148
+# define EVP_PKEY_RSA3072_MQDSS3148 NID_rsa3072_mqdss3148
+# define EVP_PKEY_MQDSS3164 NID_mqdss3164
+# define EVP_PKEY_P384_MQDSS3164 NID_p384_mqdss3164
 # define EVP_PKEY_PICNICL1FS NID_picnicl1fs
 # define EVP_PKEY_P256_PICNICL1FS NID_p256_picnicl1fs
 # define EVP_PKEY_RSA3072_PICNICL1FS NID_rsa3072_picnicl1fs
@@ -91,7 +96,7 @@
 # define EVP_PKEY_RSA3072_QTESLAPI NID_rsa3072_qteslapi
 # define EVP_PKEY_QTESLAPIII NID_qteslapiii
 # define EVP_PKEY_P384_QTESLAPIII NID_p384_qteslapiii
-#define OQS_OPENSSL_SIG_algs_length 27
+#define OQS_OPENSSL_SIG_algs_length 32
 #define OQS_OPENSSL_KEM_algs_length 39
 /////// OQS_TEMPLATE_FRAGMENT_DEFINE_EVP_PKEYS_END
 const char *OQSKEM_options(void);
