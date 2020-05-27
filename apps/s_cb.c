@@ -466,9 +466,6 @@ static const char* OQS_CURVE_ID_NAME_STR(int id) {
   case 0x0207: return "bike1l3cpa";
   case 0x0223: return "bike1l1fo";
   case 0x0224: return "bike1l3fo";
-  case 0x0226: return "ledacryptkemlt12";
-  case 0x0227: return "ledacryptkemlt32";
-  case 0x0228: return "ledacryptkemlt52";
   case 0x020F: return "kyber512";
   case 0x0210: return "kyber768";
   case 0x0211: return "kyber1024";
@@ -511,9 +508,6 @@ static const char* OQS_CURVE_ID_NAME_STR(int id) {
   case 0x2F07: return "p256_bike1l3cpa hybrid";
   case 0x2F23: return "p256_bike1l1fo hybrid";
   case 0x2F24: return "p256_bike1l3fo hybrid";
-  case 0x2F26: return "p256_ledacryptkemlt12 hybrid";
-  case 0x2F27: return "p256_ledacryptkemlt32 hybrid";
-  case 0x2F28: return "p256_ledacryptkemlt52 hybrid";
   case 0x2F0F: return "p256_kyber512 hybrid";
   case 0x2F10: return "p256_kyber768 hybrid";
   case 0x2F11: return "p256_kyber1024 hybrid";

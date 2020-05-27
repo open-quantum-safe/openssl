@@ -192,9 +192,6 @@ static const TLS_GROUP_INFO oqs_nid_list[] = {
     {NID_bike1l3cpa, 192, TLS_CURVE_CUSTOM}, /* bike1l3cpa (0x0207) */
     {NID_bike1l1fo, 128, TLS_CURVE_CUSTOM}, /* bike1l1fo (0x0223) */
     {NID_bike1l3fo, 192, TLS_CURVE_CUSTOM}, /* bike1l3fo (0x0224) */
-    {NID_ledacryptkemlt12, 128, TLS_CURVE_CUSTOM}, /* ledacryptkemlt12 (0x0226) */
-    {NID_ledacryptkemlt32, 192, TLS_CURVE_CUSTOM}, /* ledacryptkemlt32 (0x0227) */
-    {NID_ledacryptkemlt52, 256, TLS_CURVE_CUSTOM}, /* ledacryptkemlt52 (0x0228) */
     {NID_kyber512, 128, TLS_CURVE_CUSTOM}, /* kyber512 (0x020F) */
     {NID_kyber768, 192, TLS_CURVE_CUSTOM}, /* kyber768 (0x0210) */
     {NID_kyber1024, 256, TLS_CURVE_CUSTOM}, /* kyber1024 (0x0211) */
@@ -240,9 +237,6 @@ static const TLS_GROUP_INFO oqs_hybrid_nid_list[] = {
     {NID_p256_bike1l3cpa, 192, TLS_CURVE_CUSTOM}, /* p256 + bike1l3cpa hybrid (0x0207) */
     {NID_p256_bike1l1fo, 128, TLS_CURVE_CUSTOM}, /* p256 + bike1l1fo hybrid (0x0223) */
     {NID_p256_bike1l3fo, 192, TLS_CURVE_CUSTOM}, /* p256 + bike1l3fo hybrid (0x0224) */
-    {NID_p256_ledacryptkemlt12, 128, TLS_CURVE_CUSTOM}, /* p256 + ledacryptkemlt12 hybrid (0x0226) */
-    {NID_p256_ledacryptkemlt32, 192, TLS_CURVE_CUSTOM}, /* p256 + ledacryptkemlt32 hybrid (0x0227) */
-    {NID_p256_ledacryptkemlt52, 256, TLS_CURVE_CUSTOM}, /* p256 + ledacryptkemlt52 hybrid (0x0228) */
     {NID_p256_kyber512, 128, TLS_CURVE_CUSTOM}, /* p256 + kyber512 hybrid (0x020F) */
     {NID_p256_kyber768, 192, TLS_CURVE_CUSTOM}, /* p256 + kyber768 hybrid (0x0210) */
     {NID_p256_kyber1024, 256, TLS_CURVE_CUSTOM}, /* p256 + kyber1024 hybrid (0x0211) */
@@ -293,7 +287,6 @@ static const uint16_t eccurves_default[] = {
     0x2F01, /* p256 - OQS frodo640shake hybrid */
     0x2F06, /* p256 - OQS bike1l1cpa hybrid */
     0x2F23, /* p256 - OQS bike1l1fo hybrid */
-    0x2F26, /* p256 - OQS ledacryptkemlt12 hybrid */
     0x2F0F, /* p256 - OQS kyber512 hybrid */
     0x2F12, /* p256 - OQS newhope512cca hybrid */
     0x2F14, /* p256 - OQS ntru_hps2048509 hybrid */
@@ -342,12 +335,6 @@ static const uint16_t oqs_all_tls13_server_groups[] = {
     0x2F23, /* p256 - OQS bike1l1fo hybrid */
     0x0224, /* bike1l3fo */
     0x2F24, /* p256 - OQS bike1l3fo hybrid */
-    0x0226, /* ledacryptkemlt12 */
-    0x2F26, /* p256 - OQS ledacryptkemlt12 hybrid */
-    0x0227, /* ledacryptkemlt32 */
-    0x2F27, /* p256 - OQS ledacryptkemlt32 hybrid */
-    0x0228, /* ledacryptkemlt52 */
-    0x2F28, /* p256 - OQS ledacryptkemlt52 hybrid */
     0x020F, /* kyber512 */
     0x2F0F, /* p256 - OQS kyber512 hybrid */
     0x0210, /* kyber768 */

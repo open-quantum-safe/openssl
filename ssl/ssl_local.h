@@ -511,9 +511,6 @@
   (nid == NID_bike1l3cpa ? 0x0207 : \
   (nid == NID_bike1l1fo ? 0x0223 : \
   (nid == NID_bike1l3fo ? 0x0224 : \
-  (nid == NID_ledacryptkemlt12 ? 0x0226 : \
-  (nid == NID_ledacryptkemlt32 ? 0x0227 : \
-  (nid == NID_ledacryptkemlt52 ? 0x0228 : \
   (nid == NID_kyber512 ? 0x020F : \
   (nid == NID_kyber768 ? 0x0210 : \
   (nid == NID_kyber1024 ? 0x0211 : \
@@ -560,9 +557,6 @@
   (nid == NID_p256_bike1l3cpa ? 0x2F07 : \
   (nid == NID_p256_bike1l1fo ? 0x2F23 : \
   (nid == NID_p256_bike1l3fo ? 0x2F24 : \
-  (nid == NID_p256_ledacryptkemlt12 ? 0x2F26 : \
-  (nid == NID_p256_ledacryptkemlt32 ? 0x2F27 : \
-  (nid == NID_p256_ledacryptkemlt52 ? 0x2F28 : \
   (nid == NID_p256_kyber512 ? 0x2F0F : \
   (nid == NID_p256_kyber768 ? 0x2F10 : \
   (nid == NID_p256_kyber1024 ? 0x2F11 : \
@@ -610,9 +604,6 @@
   (curveID == 0x0207 || curveID == 0x2F07 ? NID_bike1l3cpa : \
   (curveID == 0x0223 || curveID == 0x2F23 ? NID_bike1l1fo : \
   (curveID == 0x0224 || curveID == 0x2F24 ? NID_bike1l3fo : \
-  (curveID == 0x0226 || curveID == 0x2F26 ? NID_ledacryptkemlt12 : \
-  (curveID == 0x0227 || curveID == 0x2F27 ? NID_ledacryptkemlt32 : \
-  (curveID == 0x0228 || curveID == 0x2F28 ? NID_ledacryptkemlt52 : \
   (curveID == 0x020F || curveID == 0x2F0F ? NID_kyber512 : \
   (curveID == 0x0210 || curveID == 0x2F10 ? NID_kyber768 : \
   (curveID == 0x0211 || curveID == 0x2F11 ? NID_kyber1024 : \
@@ -660,9 +651,6 @@
   (curveID == 0x2F07 ? NID_p256_bike1l3cpa : \
   (curveID == 0x2F23 ? NID_p256_bike1l1fo : \
   (curveID == 0x2F24 ? NID_p256_bike1l3fo : \
-  (curveID == 0x2F26 ? NID_p256_ledacryptkemlt12 : \
-  (curveID == 0x2F27 ? NID_p256_ledacryptkemlt32 : \
-  (curveID == 0x2F28 ? NID_p256_ledacryptkemlt52 : \
   (curveID == 0x2F0F ? NID_p256_kyber512 : \
   (curveID == 0x2F10 ? NID_p256_kyber768 : \
   (curveID == 0x2F11 ? NID_p256_kyber1024 : \
@@ -718,9 +706,6 @@
   (nid == NID_bike1l3cpa ? OQS_KEM_alg_bike1_l3_cpa : \
   (nid == NID_bike1l1fo ? OQS_KEM_alg_bike1_l1_fo : \
   (nid == NID_bike1l3fo ? OQS_KEM_alg_bike1_l3_fo : \
-  (nid == NID_ledacryptkemlt12 ? OQS_KEM_alg_ledacrypt_ledakemlt12 : \
-  (nid == NID_ledacryptkemlt32 ? OQS_KEM_alg_ledacrypt_ledakemlt32 : \
-  (nid == NID_ledacryptkemlt52 ? OQS_KEM_alg_ledacrypt_ledakemlt52 : \
   (nid == NID_kyber512 ? OQS_KEM_alg_kyber_512 : \
   (nid == NID_kyber768 ? OQS_KEM_alg_kyber_768 : \
   (nid == NID_kyber1024 ? OQS_KEM_alg_kyber_1024 : \
