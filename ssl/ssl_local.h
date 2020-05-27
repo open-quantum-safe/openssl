@@ -544,7 +544,7 @@
   (nid == NID_mamabearephem ? 0x0230 : \
   (nid == NID_papabearephem ? 0x0231 : \
   0 \
-  )))))))))))))))))))))))))))))))))))))))))))
+  ))))))))))))))))))))))))))))))))))))))))
 ///// OQS_TEMPLATE_FRAGMENT_OQS_KEM_CURVEID_END
 
 ///// OQS_TEMPLATE_FRAGMENT_OQS_KEM_HYBRID_CURVEID_START
@@ -593,7 +593,7 @@
   (nid == NID_p256_mamabearephem ? 0x2F30 : \
   (nid == NID_p256_papabearephem ? 0x2F31 : \
   0 \
-  )))))))))))))))))))))))))))))))))))))))))))
+  ))))))))))))))))))))))))))))))))))))))))
 ///// OQS_TEMPLATE_FRAGMENT_OQS_KEM_HYBRID_CURVEID_END
 
   /* Returns the non-hybrid OQS KEM NID for a PQ or hybrid curve ID */
@@ -643,7 +643,7 @@
   (curveID == 0x0230 || curveID == 0x2F30 ? NID_mamabearephem : \
   (curveID == 0x0231 || curveID == 0x2F31 ? NID_papabearephem : \
   0 \
-  )))))))))))))))))))))))))))))))))))))))))))
+  ))))))))))))))))))))))))))))))))))))))))
 ///// OQS_TEMPLATE_FRAGMENT_OQS_KEM_NID_END
 
   /* Returns the hybrid OQS KEM NID for a hybrid curve ID */
@@ -693,7 +693,7 @@
   (curveID == 0x2F30 ? NID_p256_mamabearephem : \
   (curveID == 0x2F31 ? NID_p256_papabearephem : \
   0 \
-  )))))))))))))))))))))))))))))))))))))))))))
+  ))))))))))))))))))))))))))))))))))))))))
 ///// OQS_TEMPLATE_FRAGMENT_OQS_HYBRID_KEM_NID_END
 
 /* Returns true if the curve ID is for an OQS KEM */
@@ -751,7 +751,7 @@
   (nid == NID_mamabearephem ? OQS_KEM_alg_threebears_mamabear_ephem : \
   (nid == NID_papabearephem ? OQS_KEM_alg_threebears_papabear_ephem : \
   0 \
-  )))))))))))))))))))))))))))))))))))))))))))
+  ))))))))))))))))))))))))))))))))))))))))
 ///// OQS_TEMPLATE_FRAGMENT_OQS_ALG_NAME_END
 
 /* Returns the classical nid for an hybrid alg (FIXMEOQS: only secp256r1 (23) is supported for now) */

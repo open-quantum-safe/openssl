@@ -8,11 +8,10 @@ key_exchanges = [
 ##### OQS_TEMPLATE_FRAGMENT_KEX_ALGS_END
 ]
 signatures = [
-    'ecdsap256', 'rsa3072',
-##### OQS_TEMPLATE_FRAGMENT_SIG_ALGS_START
-    # post-quantum signatures
-    'oqs_sig_default','dilithium2','dilithium3','dilithium4','falcon512','falcon1024','picnicl1fs','picnic2l1fs','qteslapi','qteslapiii',
-    # post-quantum + classical signatures
-    'p256_oqs_sig_default','rsa3072_oqs_sig_default','p256_dilithium2','rsa3072_dilithium2','p256_dilithium3','rsa3072_dilithium3','p384_dilithium4','p256_falcon512','rsa3072_falcon512','p521_falcon1024','rsa4096_falcon1024','p256_picnicl1fs','rsa3072_picnicl1fs','p256_picnic2l1fs','rsa3072_picnic2l1fs','p256_qteslapi','rsa3072_qteslapi','p384_qteslapiii',
-##### OQS_TEMPLATE_FRAGMENT_SIG_ALGS_END
+##### OQS_TEMPLATE_FRAGMENT_PQ_SIG_ALGS_START
+    'oqs_sig_default',
+    'dilithium2','dilithium3','dilithium4',
+    'picnicl1fs','picnic2l1fs',
+    'qteslapi','qteslapiii',
+##### OQS_TEMPLATE_FRAGMENT_PQ_SIG_ALGS_END
 ]
