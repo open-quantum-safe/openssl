@@ -15,6 +15,5 @@ signatures = [
     'mqdss3148',
     'picnicl1fs','picnic2l1fs',
     'qteslapi','qteslapiii',
-    'rainbowiaclassic','rainbowiacyclic','rainbowiacycliccompressed',
 ##### OQS_TEMPLATE_FRAGMENT_PQ_SIG_ALGS_END
 ]

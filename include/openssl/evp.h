@@ -94,16 +94,7 @@
 # define EVP_PKEY_RSA3072_QTESLAPI NID_rsa3072_qteslapi
 # define EVP_PKEY_QTESLAPIII NID_qteslapiii
 # define EVP_PKEY_P384_QTESLAPIII NID_p384_qteslapiii
-# define EVP_PKEY_RAINBOWIACLASSIC NID_rainbowiaclassic
-# define EVP_PKEY_P256_RAINBOWIACLASSIC NID_p256_rainbowiaclassic
-# define EVP_PKEY_RSA3072_RAINBOWIACLASSIC NID_rsa3072_rainbowiaclassic
-# define EVP_PKEY_RAINBOWIACYCLIC NID_rainbowiacyclic
-# define EVP_PKEY_P256_RAINBOWIACYCLIC NID_p256_rainbowiacyclic
-# define EVP_PKEY_RSA3072_RAINBOWIACYCLIC NID_rsa3072_rainbowiacyclic
-# define EVP_PKEY_RAINBOWIACYCLICCOMPRESSED NID_rainbowiacycliccompressed
-# define EVP_PKEY_P256_RAINBOWIACYCLICCOMPRESSED NID_p256_rainbowiacycliccompressed
-# define EVP_PKEY_RSA3072_RAINBOWIACYCLICCOMPRESSED NID_rsa3072_rainbowiacycliccompressed
-#define OQS_OPENSSL_SIG_algs_length 39
+#define OQS_OPENSSL_SIG_algs_length 30
 #define OQS_OPENSSL_KEM_algs_length 39
 /////// OQS_TEMPLATE_FRAGMENT_DEFINE_EVP_PKEYS_END
 const char *OQSKEM_options(void);

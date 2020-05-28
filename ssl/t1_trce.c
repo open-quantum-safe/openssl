@@ -690,15 +690,6 @@ static const ssl_trace_tbl ssl_sigalg_tbl[] = {
     {TLSEXT_SIGALG_rsa3072_qteslapi, "rsa3072_qteslapi"},
     {TLSEXT_SIGALG_qteslapiii, "qteslapiii"},
     {TLSEXT_SIGALG_p384_qteslapiii, "p384_qteslapiii"},
-    {TLSEXT_SIGALG_rainbowiaclassic, "rainbowiaclassic"},
-    {TLSEXT_SIGALG_p256_rainbowiaclassic, "p256_rainbowiaclassic"},
-    {TLSEXT_SIGALG_rsa3072_rainbowiaclassic, "rsa3072_rainbowiaclassic"},
-    {TLSEXT_SIGALG_rainbowiacyclic, "rainbowiacyclic"},
-    {TLSEXT_SIGALG_p256_rainbowiacyclic, "p256_rainbowiacyclic"},
-    {TLSEXT_SIGALG_rsa3072_rainbowiacyclic, "rsa3072_rainbowiacyclic"},
-    {TLSEXT_SIGALG_rainbowiacycliccompressed, "rainbowiacycliccompressed"},
-    {TLSEXT_SIGALG_p256_rainbowiacycliccompressed, "p256_rainbowiacycliccompressed"},
-    {TLSEXT_SIGALG_rsa3072_rainbowiacycliccompressed, "rsa3072_rainbowiacycliccompressed"},
 ///// OQS_TEMPLATE_FRAGMENT_POPULATE_SIGALG_TBL_END
 };
 

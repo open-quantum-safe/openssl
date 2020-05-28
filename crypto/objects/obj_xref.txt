@@ -54,15 +54,6 @@ p256_qteslapi	sha512	p256_qteslapi
 rsa3072_qteslapi	sha512	rsa3072_qteslapi
 qteslapiii	sha512	qteslapiii
 p384_qteslapiii	sha512	p384_qteslapiii
-rainbowiaclassic	sha512	rainbowiaclassic
-p256_rainbowiaclassic	sha512	p256_rainbowiaclassic
-rsa3072_rainbowiaclassic	sha512	rsa3072_rainbowiaclassic
-rainbowiacyclic	sha512	rainbowiacyclic
-p256_rainbowiacyclic	sha512	p256_rainbowiacyclic
-rsa3072_rainbowiacyclic	sha512	rsa3072_rainbowiacyclic
-rainbowiacycliccompressed	sha512	rainbowiacycliccompressed
-p256_rainbowiacycliccompressed	sha512	p256_rainbowiacycliccompressed
-rsa3072_rainbowiacycliccompressed	sha512	rsa3072_rainbowiacycliccompressed
 ##### OQS_TEMPLATE_FRAGMENT_LIST_OQS_SIGS_END
 
 
