@@ -108,12 +108,6 @@ static const EVP_PKEY_METHOD *standard_methods[] = {
     &rainbowiacycliccompressed_pkey_meth,
     &p256_rainbowiacycliccompressed_pkey_meth,
     &rsa3072_rainbowiacycliccompressed_pkey_meth,
-    &rainbowiiicclassic_pkey_meth,
-    &p384_rainbowiiicclassic_pkey_meth,
-    &rainbowiiiccyclic_pkey_meth,
-    &p384_rainbowiiiccyclic_pkey_meth,
-    &rainbowiiiccycliccompressed_pkey_meth,
-    &p384_rainbowiiiccycliccompressed_pkey_meth,
 ///// OQS_TEMPLATE_FRAGMENT_LIST_PKEY_METHS_END
 };
 

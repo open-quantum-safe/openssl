@@ -121,14 +121,6 @@ static const nid_triple sigoid_srt[] = {
      NID_p256_rainbowiacycliccompressed},
     {NID_rsa3072_rainbowiacycliccompressed, NID_sha512,
      NID_rsa3072_rainbowiacycliccompressed},
-    {NID_rainbowiiicclassic, NID_sha512, NID_rainbowiiicclassic},
-    {NID_p384_rainbowiiicclassic, NID_sha512, NID_p384_rainbowiiicclassic},
-    {NID_rainbowiiiccyclic, NID_sha512, NID_rainbowiiiccyclic},
-    {NID_p384_rainbowiiiccyclic, NID_sha512, NID_p384_rainbowiiiccyclic},
-    {NID_rainbowiiiccycliccompressed, NID_sha512,
-     NID_rainbowiiiccycliccompressed},
-    {NID_p384_rainbowiiiccycliccompressed, NID_sha512,
-     NID_p384_rainbowiiiccycliccompressed},
 };
 
 static const nid_triple *const sigoid_srt_xref[] = {
@@ -199,12 +191,6 @@ static const nid_triple *const sigoid_srt_xref[] = {
     &sigoid_srt[84],
     &sigoid_srt[85],
     &sigoid_srt[86],
-    &sigoid_srt[87],
-    &sigoid_srt[88],
-    &sigoid_srt[89],
-    &sigoid_srt[90],
-    &sigoid_srt[91],
-    &sigoid_srt[92],
     &sigoid_srt[16],
     &sigoid_srt[23],
     &sigoid_srt[19],

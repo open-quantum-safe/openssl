@@ -113,13 +113,7 @@ int oqssl_sig_nids_list[] = {
         NID_rsa3072_rainbowiacyclic,
         NID_rainbowiacycliccompressed,
         NID_p256_rainbowiacycliccompressed,
-        NID_rsa3072_rainbowiacycliccompressed,
-        NID_rainbowiiicclassic,
-        NID_p384_rainbowiiicclassic,
-        NID_rainbowiiiccyclic,
-        NID_p384_rainbowiiiccyclic,
-        NID_rainbowiiiccycliccompressed,
-        NID_p384_rainbowiiiccycliccompressed
+        NID_rsa3072_rainbowiacycliccompressed
 /////// OQS_TEMPLATE_FRAGMENT_LIST_KNOWN_NIDS_END
 };
 
@@ -247,15 +241,6 @@ char* get_oqs_alg_name(int openssl_nid)
     case NID_p256_rainbowiacycliccompressed:
     case NID_rsa3072_rainbowiacycliccompressed:
       return OQS_SIG_alg_rainbow_Ia_cyclic_compressed;
-    case NID_rainbowiiicclassic:
-    case NID_p384_rainbowiiicclassic:
-      return OQS_SIG_alg_rainbow_IIIc_classic;
-    case NID_rainbowiiiccyclic:
-    case NID_p384_rainbowiiiccyclic:
-      return OQS_SIG_alg_rainbow_IIIc_cyclic;
-    case NID_rainbowiiiccycliccompressed:
-    case NID_p384_rainbowiiiccycliccompressed:
-      return OQS_SIG_alg_rainbow_IIIc_cyclic_compressed;
     case NID_oqs_kem_default:
       return OQS_KEM_alg_default;
     case NID_frodo640aes:
@@ -411,9 +396,6 @@ static int is_oqs_hybrid_alg(int openssl_nid)
     case NID_rsa3072_rainbowiacyclic:
     case NID_p256_rainbowiacycliccompressed:
     case NID_rsa3072_rainbowiacycliccompressed:
-    case NID_p384_rainbowiiicclassic:
-    case NID_p384_rainbowiiiccyclic:
-    case NID_p384_rainbowiiiccycliccompressed:
 ///// OQS_TEMPLATE_FRAGMENT_LIST_HYBRID_NIDS_END
       return 1;
     default:
@@ -453,9 +435,6 @@ static int get_classical_nid(int hybrid_id)
       return NID_X9_62_prime256v1;
     case NID_p384_dilithium4:
     case NID_p384_qteslapiii:
-    case NID_p384_rainbowiiicclassic:
-    case NID_p384_rainbowiiiccyclic:
-    case NID_p384_rainbowiiiccycliccompressed:
       return NID_secp384r1;
     case NID_p521_falcon1024:
       return NID_secp521r1;///// OQS_TEMPLATE_FRAGMENT_ASSIGN_CLASSICAL_NIDS_END
@@ -508,12 +487,6 @@ static int get_oqs_nid(int hybrid_id)
     case NID_p256_rainbowiacycliccompressed:
     case NID_rsa3072_rainbowiacycliccompressed:
       return NID_rainbowiacycliccompressed;
-    case NID_p384_rainbowiiicclassic:
-      return NID_rainbowiiicclassic;
-    case NID_p384_rainbowiiiccyclic:
-      return NID_rainbowiiiccyclic;
-    case NID_p384_rainbowiiiccycliccompressed:
-      return NID_rainbowiiiccycliccompressed;
 ///// OQS_TEMPLATE_FRAGMENT_ASSIGN_OQS_NID_END
     default:
       return 0;
@@ -684,15 +657,6 @@ static int get_oqs_security_bits(int openssl_nid)
     case NID_p256_rainbowiacycliccompressed:
     case NID_rsa3072_rainbowiacycliccompressed:
       return 128;
-    case NID_rainbowiiicclassic:
-    case NID_p384_rainbowiiicclassic:
-      return 192;
-    case NID_rainbowiiiccyclic:
-    case NID_p384_rainbowiiiccyclic:
-      return 192;
-    case NID_rainbowiiiccycliccompressed:
-    case NID_p384_rainbowiiiccycliccompressed:
-      return 192;
 ///// OQS_TEMPLATE_FRAGMENT_GET_SIG_SECURITY_BITS_END
     default:
       return 0;
@@ -1303,13 +1267,7 @@ static int oqs_item_verify(EVP_MD_CTX *ctx, const ASN1_ITEM *it, void *asn,
         nid != NID_rsa3072_rainbowiacyclic &&
         nid != NID_rainbowiacycliccompressed &&
         nid != NID_p256_rainbowiacycliccompressed &&
-        nid != NID_rsa3072_rainbowiacycliccompressed &&
-        nid != NID_rainbowiiicclassic &&
-        nid != NID_p384_rainbowiiicclassic &&
-        nid != NID_rainbowiiiccyclic &&
-        nid != NID_p384_rainbowiiiccyclic &&
-        nid != NID_rainbowiiiccycliccompressed &&
-        nid != NID_p384_rainbowiiiccycliccompressed
+        nid != NID_rsa3072_rainbowiacycliccompressed
 ///// OQS_TEMPLATE_FRAGMENT_CHECK_IF_KNOWN_NID_END
     ) || ptype != V_ASN1_UNDEF) {
         ECerr(EC_F_OQS_ITEM_VERIFY, EC_R_UNKNOWN_NID);
@@ -1851,10 +1809,4 @@ DEFINE_OQS_EVP_METHODS(rsa3072_rainbowiacyclic, NID_rsa3072_rainbowiacyclic, "rs
 DEFINE_OQS_EVP_METHODS(rainbowiacycliccompressed, NID_rainbowiacycliccompressed, "rainbowiacycliccompressed", "OpenSSL Rainbow-Ia-Cyclic-Compressed algorithm")
 DEFINE_OQS_EVP_METHODS(p256_rainbowiacycliccompressed, NID_p256_rainbowiacycliccompressed, "p256_rainbowiacycliccompressed", "OpenSSL ECDSA p256 Rainbow-Ia-Cyclic-Compressed algorithm")
 DEFINE_OQS_EVP_METHODS(rsa3072_rainbowiacycliccompressed, NID_rsa3072_rainbowiacycliccompressed, "rsa3072_rainbowiacycliccompressed", "OpenSSL RSA3072 Rainbow-Ia-Cyclic-Compressed algorithm")
-DEFINE_OQS_EVP_METHODS(rainbowiiicclassic, NID_rainbowiiicclassic, "rainbowiiicclassic", "OpenSSL Rainbow-IIIc-Classic algorithm")
-DEFINE_OQS_EVP_METHODS(p384_rainbowiiicclassic, NID_p384_rainbowiiicclassic, "p384_rainbowiiicclassic", "OpenSSL ECDSA p384 Rainbow-IIIc-Classic algorithm")
-DEFINE_OQS_EVP_METHODS(rainbowiiiccyclic, NID_rainbowiiiccyclic, "rainbowiiiccyclic", "OpenSSL Rainbow-IIIc-Cyclic algorithm")
-DEFINE_OQS_EVP_METHODS(p384_rainbowiiiccyclic, NID_p384_rainbowiiiccyclic, "p384_rainbowiiiccyclic", "OpenSSL ECDSA p384 Rainbow-IIIc-Cyclic algorithm")
-DEFINE_OQS_EVP_METHODS(rainbowiiiccycliccompressed, NID_rainbowiiiccycliccompressed, "rainbowiiiccycliccompressed", "OpenSSL Rainbow-IIIc-Cyclic-Compressed algorithm")
-DEFINE_OQS_EVP_METHODS(p384_rainbowiiiccycliccompressed, NID_p384_rainbowiiiccycliccompressed, "p384_rainbowiiiccycliccompressed", "OpenSSL ECDSA p384 Rainbow-IIIc-Cyclic-Compressed algorithm")
 ///// OQS_TEMPLATE_FRAGMENT_DEFINE_OQS_EVP_METHS_END

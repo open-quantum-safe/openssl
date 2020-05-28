@@ -151,13 +151,7 @@ extern const EVP_PKEY_METHOD p256_rainbowiacyclic_pkey_meth;
 extern const EVP_PKEY_METHOD rsa3072_rainbowiacyclic_pkey_meth;
 extern const EVP_PKEY_METHOD rainbowiacycliccompressed_pkey_meth;
 extern const EVP_PKEY_METHOD p256_rainbowiacycliccompressed_pkey_meth;
-extern const EVP_PKEY_METHOD rsa3072_rainbowiacycliccompressed_pkey_meth;
-extern const EVP_PKEY_METHOD rainbowiiicclassic_pkey_meth;
-extern const EVP_PKEY_METHOD p384_rainbowiiicclassic_pkey_meth;
-extern const EVP_PKEY_METHOD rainbowiiiccyclic_pkey_meth;
-extern const EVP_PKEY_METHOD p384_rainbowiiiccyclic_pkey_meth;
-extern const EVP_PKEY_METHOD rainbowiiiccycliccompressed_pkey_meth;
-extern const EVP_PKEY_METHOD p384_rainbowiiiccycliccompressed_pkey_meth;///// OQS_TEMPLATE_FRAGMENT_DEFINE_EVP_METHS_END
+extern const EVP_PKEY_METHOD rsa3072_rainbowiacycliccompressed_pkey_meth;///// OQS_TEMPLATE_FRAGMENT_DEFINE_EVP_METHS_END
 
 struct evp_md_st {
     int type;

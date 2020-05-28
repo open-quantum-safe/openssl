@@ -281,18 +281,6 @@
 #define SSL_aP256_RAINBOWIACYCLICCOMPRESSED 0x200000000000
 /* RSA3072 - Rainbow-Ia-Cyclic-Compressed auth */
 #define SSL_aRSA3072_RAINBOWIACYCLICCOMPRESSED 0x400000000000
-/* Rainbow-IIIc-Classic auth */
-#define SSL_aRAINBOWIIICCLASSIC 0x800000000000
-/* ECDSA p384 - Rainbow-IIIc-Classic auth */
-#define SSL_aP384_RAINBOWIIICCLASSIC 0x1000000000000
-/* Rainbow-IIIc-Cyclic auth */
-#define SSL_aRAINBOWIIICCYCLIC 0x2000000000000
-/* ECDSA p384 - Rainbow-IIIc-Cyclic auth */
-#define SSL_aP384_RAINBOWIIICCYCLIC 0x4000000000000
-/* Rainbow-IIIc-Cyclic-Compressed auth */
-#define SSL_aRAINBOWIIICCYCLICCOMPRESSED 0x8000000000000
-/* ECDSA p384 - Rainbow-IIIc-Cyclic-Compressed auth */
-#define SSL_aP384_RAINBOWIIICCYCLICCOMPRESSED 0x10000000000000
 ///// OQS_TEMPLATE_FRAGMENT_DEFINE_SIG_MASKS_END
 /* Any appropriate signature auth (for TLS 1.3 ciphersuites) */
 # define SSL_aANY                0x00000000U
@@ -516,14 +504,8 @@
 #define SSL_PKEY_RAINBOWIACYCLICCOMPRESSED 45
 #define SSL_PKEY_P256_RAINBOWIACYCLICCOMPRESSED 46
 #define SSL_PKEY_RSA3072_RAINBOWIACYCLICCOMPRESSED 47
-#define SSL_PKEY_RAINBOWIIICCLASSIC 48
-#define SSL_PKEY_P384_RAINBOWIIICCLASSIC 49
-#define SSL_PKEY_RAINBOWIIICCYCLIC 50
-#define SSL_PKEY_P384_RAINBOWIIICCYCLIC 51
-#define SSL_PKEY_RAINBOWIIICCYCLICCOMPRESSED 52
-#define SSL_PKEY_P384_RAINBOWIIICCYCLICCOMPRESSED 53
 
-#define SSL_PKEY_NUM 54
+#define SSL_PKEY_NUM 48
 ///// OQS_TEMPLATE_FRAGMENT_DEFINE_SSL_PKEYS_END
 
 /*-
@@ -2530,18 +2512,6 @@ typedef enum downgrade_en {
       0xfe25 /* private use code point */
 #define TLSEXT_SIGALG_rsa3072_rainbowiacycliccompressed \
       0xfe26 /* private use code point */
-#define TLSEXT_SIGALG_rainbowiiicclassic \
-      0xfe27 /* private use code point */
-#define TLSEXT_SIGALG_p384_rainbowiiicclassic \
-      0xfe28 /* private use code point */
-#define TLSEXT_SIGALG_rainbowiiiccyclic \
-      0xfe29 /* private use code point */
-#define TLSEXT_SIGALG_p384_rainbowiiiccyclic \
-      0xfe2a /* private use code point */
-#define TLSEXT_SIGALG_rainbowiiiccycliccompressed \
-      0xfe2b /* private use code point */
-#define TLSEXT_SIGALG_p384_rainbowiiiccycliccompressed \
-      0xfe2c /* private use code point */
 ///// OQS_TEMPLATE_FRAGMENT_DEFINE_SIG_CODE_POINTS_END
 
 /* Known PSK key exchange modes */
