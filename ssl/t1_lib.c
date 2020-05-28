@@ -943,6 +943,15 @@ static const uint16_t tls12_sigalgs[] = {
     TLSEXT_SIGALG_rsa3072_qteslapi,
     TLSEXT_SIGALG_qteslapiii,
     TLSEXT_SIGALG_p384_qteslapiii,
+    TLSEXT_SIGALG_rainbowiaclassic,
+    TLSEXT_SIGALG_p256_rainbowiaclassic,
+    TLSEXT_SIGALG_rsa3072_rainbowiaclassic,
+    TLSEXT_SIGALG_rainbowiacyclic,
+    TLSEXT_SIGALG_p256_rainbowiacyclic,
+    TLSEXT_SIGALG_rsa3072_rainbowiacyclic,
+    TLSEXT_SIGALG_rainbowiacycliccompressed,
+    TLSEXT_SIGALG_p256_rainbowiacycliccompressed,
+    TLSEXT_SIGALG_rsa3072_rainbowiacycliccompressed,
 ///// OQS_TEMPLATE_FRAGMENT_DEFINE_TLS12_SIGALGS_END
 
     TLSEXT_SIGALG_rsa_pss_pss_sha256,
@@ -1162,6 +1171,33 @@ static const SIGALG_LOOKUP sigalg_lookup_tbl[] = {
      NID_undef, NID_undef},
     {"p384_qteslapiii", TLSEXT_SIGALG_p384_qteslapiii,
      NID_undef, -1, EVP_PKEY_P384_QTESLAPIII, SSL_PKEY_P384_QTESLAPIII,
+     NID_undef, NID_undef},
+    {"rainbowiaclassic", TLSEXT_SIGALG_rainbowiaclassic,
+     NID_undef, -1, EVP_PKEY_RAINBOWIACLASSIC, SSL_PKEY_RAINBOWIACLASSIC,
+     NID_undef, NID_undef},
+    {"p256_rainbowiaclassic", TLSEXT_SIGALG_p256_rainbowiaclassic,
+     NID_undef, -1, EVP_PKEY_P256_RAINBOWIACLASSIC, SSL_PKEY_P256_RAINBOWIACLASSIC,
+     NID_undef, NID_undef},
+    {"rsa3072_rainbowiaclassic", TLSEXT_SIGALG_rsa3072_rainbowiaclassic,
+     NID_undef, -1, EVP_PKEY_RSA3072_RAINBOWIACLASSIC, SSL_PKEY_RSA3072_RAINBOWIACLASSIC,
+     NID_undef, NID_undef},
+    {"rainbowiacyclic", TLSEXT_SIGALG_rainbowiacyclic,
+     NID_undef, -1, EVP_PKEY_RAINBOWIACYCLIC, SSL_PKEY_RAINBOWIACYCLIC,
+     NID_undef, NID_undef},
+    {"p256_rainbowiacyclic", TLSEXT_SIGALG_p256_rainbowiacyclic,
+     NID_undef, -1, EVP_PKEY_P256_RAINBOWIACYCLIC, SSL_PKEY_P256_RAINBOWIACYCLIC,
+     NID_undef, NID_undef},
+    {"rsa3072_rainbowiacyclic", TLSEXT_SIGALG_rsa3072_rainbowiacyclic,
+     NID_undef, -1, EVP_PKEY_RSA3072_RAINBOWIACYCLIC, SSL_PKEY_RSA3072_RAINBOWIACYCLIC,
+     NID_undef, NID_undef},
+    {"rainbowiacycliccompressed", TLSEXT_SIGALG_rainbowiacycliccompressed,
+     NID_undef, -1, EVP_PKEY_RAINBOWIACYCLICCOMPRESSED, SSL_PKEY_RAINBOWIACYCLICCOMPRESSED,
+     NID_undef, NID_undef},
+    {"p256_rainbowiacycliccompressed", TLSEXT_SIGALG_p256_rainbowiacycliccompressed,
+     NID_undef, -1, EVP_PKEY_P256_RAINBOWIACYCLICCOMPRESSED, SSL_PKEY_P256_RAINBOWIACYCLICCOMPRESSED,
+     NID_undef, NID_undef},
+    {"rsa3072_rainbowiacycliccompressed", TLSEXT_SIGALG_rsa3072_rainbowiacycliccompressed,
+     NID_undef, -1, EVP_PKEY_RSA3072_RAINBOWIACYCLICCOMPRESSED, SSL_PKEY_RSA3072_RAINBOWIACYCLICCOMPRESSED,
      NID_undef, NID_undef},
 ///// OQS_TEMPLATE_FRAGMENT_POPULATE_SIGALG_TBL_END
 };
@@ -2854,6 +2890,15 @@ void tls1_set_cert_validity(SSL *s)
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_RSA3072_QTESLAPI);
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_QTESLAPIII);
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_P384_QTESLAPIII);
+    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_RAINBOWIACLASSIC);
+    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_P256_RAINBOWIACLASSIC);
+    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_RSA3072_RAINBOWIACLASSIC);
+    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_RAINBOWIACYCLIC);
+    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_P256_RAINBOWIACYCLIC);
+    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_RSA3072_RAINBOWIACYCLIC);
+    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_RAINBOWIACYCLICCOMPRESSED);
+    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_P256_RAINBOWIACYCLICCOMPRESSED);
+    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_RSA3072_RAINBOWIACYCLICCOMPRESSED);
 ///// OQS_TEMPLATE_FRAGMENT_ADD_CERT_CHAIN_CHECKS_END
 }
 

@@ -116,7 +116,16 @@ extern const EVP_PKEY_ASN1_METHOD qteslapi_asn1_meth;
 extern const EVP_PKEY_ASN1_METHOD p256_qteslapi_asn1_meth;
 extern const EVP_PKEY_ASN1_METHOD rsa3072_qteslapi_asn1_meth;
 extern const EVP_PKEY_ASN1_METHOD qteslapiii_asn1_meth;
-extern const EVP_PKEY_ASN1_METHOD p384_qteslapiii_asn1_meth;///// OQS_TEMPLATE_FRAGMENT_DEFINE_ASN1_METHS_END
+extern const EVP_PKEY_ASN1_METHOD p384_qteslapiii_asn1_meth;
+extern const EVP_PKEY_ASN1_METHOD rainbowiaclassic_asn1_meth;
+extern const EVP_PKEY_ASN1_METHOD p256_rainbowiaclassic_asn1_meth;
+extern const EVP_PKEY_ASN1_METHOD rsa3072_rainbowiaclassic_asn1_meth;
+extern const EVP_PKEY_ASN1_METHOD rainbowiacyclic_asn1_meth;
+extern const EVP_PKEY_ASN1_METHOD p256_rainbowiacyclic_asn1_meth;
+extern const EVP_PKEY_ASN1_METHOD rsa3072_rainbowiacyclic_asn1_meth;
+extern const EVP_PKEY_ASN1_METHOD rainbowiacycliccompressed_asn1_meth;
+extern const EVP_PKEY_ASN1_METHOD p256_rainbowiacycliccompressed_asn1_meth;
+extern const EVP_PKEY_ASN1_METHOD rsa3072_rainbowiacycliccompressed_asn1_meth;///// OQS_TEMPLATE_FRAGMENT_DEFINE_ASN1_METHS_END
 
 /*
  * These are used internally in the ASN1_OBJECT to keep track of whether the

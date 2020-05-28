@@ -90,5 +90,14 @@ static const EVP_PKEY_ASN1_METHOD *standard_methods[] = {
     &rsa3072_qteslapi_asn1_meth,
     &qteslapiii_asn1_meth,
     &p384_qteslapiii_asn1_meth,
+    &rainbowiaclassic_asn1_meth,
+    &p256_rainbowiaclassic_asn1_meth,
+    &rsa3072_rainbowiaclassic_asn1_meth,
+    &rainbowiacyclic_asn1_meth,
+    &p256_rainbowiacyclic_asn1_meth,
+    &rsa3072_rainbowiacyclic_asn1_meth,
+    &rainbowiacycliccompressed_asn1_meth,
+    &p256_rainbowiacycliccompressed_asn1_meth,
+    &rsa3072_rainbowiacycliccompressed_asn1_meth,
 ///// OQS_TEMPLATE_FRAGMENT_SIG_ASN1_METHS_END
 };

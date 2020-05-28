@@ -263,6 +263,24 @@
 #define SSL_aQTESLAPIII 0x1000000000
 /* ECDSA p384 - qTESLA-p-III auth */
 #define SSL_aP384_QTESLAPIII 0x2000000000
+/* Rainbow-Ia-Classic auth */
+#define SSL_aRAINBOWIACLASSIC 0x4000000000
+/* ECDSA p256 - Rainbow-Ia-Classic auth */
+#define SSL_aP256_RAINBOWIACLASSIC 0x8000000000
+/* RSA3072 - Rainbow-Ia-Classic auth */
+#define SSL_aRSA3072_RAINBOWIACLASSIC 0x10000000000
+/* Rainbow-Ia-Cyclic auth */
+#define SSL_aRAINBOWIACYCLIC 0x20000000000
+/* ECDSA p256 - Rainbow-Ia-Cyclic auth */
+#define SSL_aP256_RAINBOWIACYCLIC 0x40000000000
+/* RSA3072 - Rainbow-Ia-Cyclic auth */
+#define SSL_aRSA3072_RAINBOWIACYCLIC 0x80000000000
+/* Rainbow-Ia-Cyclic-Compressed auth */
+#define SSL_aRAINBOWIACYCLICCOMPRESSED 0x100000000000
+/* ECDSA p256 - Rainbow-Ia-Cyclic-Compressed auth */
+#define SSL_aP256_RAINBOWIACYCLICCOMPRESSED 0x200000000000
+/* RSA3072 - Rainbow-Ia-Cyclic-Compressed auth */
+#define SSL_aRSA3072_RAINBOWIACYCLICCOMPRESSED 0x400000000000
 ///// OQS_TEMPLATE_FRAGMENT_DEFINE_SIG_MASKS_END
 /* Any appropriate signature auth (for TLS 1.3 ciphersuites) */
 # define SSL_aANY                0x00000000U
@@ -477,8 +495,17 @@
 #define SSL_PKEY_RSA3072_QTESLAPI 36
 #define SSL_PKEY_QTESLAPIII 37
 #define SSL_PKEY_P384_QTESLAPIII 38
+#define SSL_PKEY_RAINBOWIACLASSIC 39
+#define SSL_PKEY_P256_RAINBOWIACLASSIC 40
+#define SSL_PKEY_RSA3072_RAINBOWIACLASSIC 41
+#define SSL_PKEY_RAINBOWIACYCLIC 42
+#define SSL_PKEY_P256_RAINBOWIACYCLIC 43
+#define SSL_PKEY_RSA3072_RAINBOWIACYCLIC 44
+#define SSL_PKEY_RAINBOWIACYCLICCOMPRESSED 45
+#define SSL_PKEY_P256_RAINBOWIACYCLICCOMPRESSED 46
+#define SSL_PKEY_RSA3072_RAINBOWIACYCLICCOMPRESSED 47
 
-#define SSL_PKEY_NUM 39
+#define SSL_PKEY_NUM 48
 ///// OQS_TEMPLATE_FRAGMENT_DEFINE_SSL_PKEYS_END
 
 /*-
@@ -2467,6 +2494,24 @@ typedef enum downgrade_en {
       0xfe1c /* private use code point */
 #define TLSEXT_SIGALG_p384_qteslapiii \
       0xfe1d /* private use code point */
+#define TLSEXT_SIGALG_rainbowiaclassic \
+      0xfe1e /* private use code point */
+#define TLSEXT_SIGALG_p256_rainbowiaclassic \
+      0xfe1f /* private use code point */
+#define TLSEXT_SIGALG_rsa3072_rainbowiaclassic \
+      0xfe20 /* private use code point */
+#define TLSEXT_SIGALG_rainbowiacyclic \
+      0xfe21 /* private use code point */
+#define TLSEXT_SIGALG_p256_rainbowiacyclic \
+      0xfe22 /* private use code point */
+#define TLSEXT_SIGALG_rsa3072_rainbowiacyclic \
+      0xfe23 /* private use code point */
+#define TLSEXT_SIGALG_rainbowiacycliccompressed \
+      0xfe24 /* private use code point */
+#define TLSEXT_SIGALG_p256_rainbowiacycliccompressed \
+      0xfe25 /* private use code point */
+#define TLSEXT_SIGALG_rsa3072_rainbowiacycliccompressed \
+      0xfe26 /* private use code point */
 ///// OQS_TEMPLATE_FRAGMENT_DEFINE_SIG_CODE_POINTS_END
 
 /* Known PSK key exchange modes */
