@@ -11,8 +11,8 @@ signatures = [
     'ecdsap256', 'rsa3072',
 ##### OQS_TEMPLATE_FRAGMENT_SIG_ALGS_START
     # post-quantum signatures
-    'oqs_sig_default','dilithium2','dilithium3','dilithium4','falcon512','falcon1024','mqdss3148','picnicl1fs','picnic2l1fs','qteslapi','qteslapiii','rainbowiaclassic','rainbowiacyclic','rainbowiacycliccompressed',
+    'oqs_sig_default','dilithium2','dilithium3','dilithium4','falcon512','falcon1024','mqdss3148','picnicl1fs','picnic2l1fs','qteslapi','qteslapiii','rainbowiaclassic','rainbowiacyclic','rainbowiacycliccompressed','rainbowiiicclassic','rainbowiiiccyclic','rainbowiiiccycliccompressed',
     # post-quantum + classical signatures
-    'p256_oqs_sig_default','rsa3072_oqs_sig_default','p256_dilithium2','rsa3072_dilithium2','p256_dilithium3','rsa3072_dilithium3','p384_dilithium4','p256_falcon512','rsa3072_falcon512','p521_falcon1024','p256_mqdss3148','rsa3072_mqdss3148','p256_picnicl1fs','rsa3072_picnicl1fs','p256_picnic2l1fs','rsa3072_picnic2l1fs','p256_qteslapi','rsa3072_qteslapi','p384_qteslapiii','p256_rainbowiaclassic','rsa3072_rainbowiaclassic','p256_rainbowiacyclic','rsa3072_rainbowiacyclic','p256_rainbowiacycliccompressed','rsa3072_rainbowiacycliccompressed',
+    'p256_oqs_sig_default','rsa3072_oqs_sig_default','p256_dilithium2','rsa3072_dilithium2','p256_dilithium3','rsa3072_dilithium3','p384_dilithium4','p256_falcon512','rsa3072_falcon512','p521_falcon1024','p256_mqdss3148','rsa3072_mqdss3148','p256_picnicl1fs','rsa3072_picnicl1fs','p256_picnic2l1fs','rsa3072_picnic2l1fs','p256_qteslapi','rsa3072_qteslapi','p384_qteslapiii','p256_rainbowiaclassic','rsa3072_rainbowiaclassic','p256_rainbowiacyclic','rsa3072_rainbowiacyclic','p256_rainbowiacycliccompressed','rsa3072_rainbowiacycliccompressed','p384_rainbowiiicclassic','p384_rainbowiiiccyclic','p384_rainbowiiiccycliccompressed',
 ##### OQS_TEMPLATE_FRAGMENT_SIG_ALGS_END
 ]

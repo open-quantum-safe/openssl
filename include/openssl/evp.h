@@ -103,7 +103,13 @@
 # define EVP_PKEY_RAINBOWIACYCLICCOMPRESSED NID_rainbowiacycliccompressed
 # define EVP_PKEY_P256_RAINBOWIACYCLICCOMPRESSED NID_p256_rainbowiacycliccompressed
 # define EVP_PKEY_RSA3072_RAINBOWIACYCLICCOMPRESSED NID_rsa3072_rainbowiacycliccompressed
-#define OQS_OPENSSL_SIG_algs_length 39
+# define EVP_PKEY_RAINBOWIIICCLASSIC NID_rainbowiiicclassic
+# define EVP_PKEY_P384_RAINBOWIIICCLASSIC NID_p384_rainbowiiicclassic
+# define EVP_PKEY_RAINBOWIIICCYCLIC NID_rainbowiiiccyclic
+# define EVP_PKEY_P384_RAINBOWIIICCYCLIC NID_p384_rainbowiiiccyclic
+# define EVP_PKEY_RAINBOWIIICCYCLICCOMPRESSED NID_rainbowiiiccycliccompressed
+# define EVP_PKEY_P384_RAINBOWIIICCYCLICCOMPRESSED NID_p384_rainbowiiiccycliccompressed
+#define OQS_OPENSSL_SIG_algs_length 45
 #define OQS_OPENSSL_KEM_algs_length 39
 /////// OQS_TEMPLATE_FRAGMENT_DEFINE_EVP_PKEYS_END
 const char *OQSKEM_options(void);

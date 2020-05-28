@@ -5711,3 +5711,33 @@
 #define LN_rsa3072_rainbowiacycliccompressed            "rsa3072_rainbowiacycliccompressed"
 #define NID_rsa3072_rainbowiacycliccompressed           1313
 #define OBJ_rsa3072_rainbowiacycliccompressed           1L,3L,9999L,5L,9L
+
+#define SN_rainbowiiicclassic           "rainbowiiicclassic"
+#define LN_rainbowiiicclassic           "rainbowiiicclassic"
+#define NID_rainbowiiicclassic          1314
+#define OBJ_rainbowiiicclassic          1L,3L,9999L,5L,10L
+
+#define SN_p384_rainbowiiicclassic              "p384_rainbowiiicclassic"
+#define LN_p384_rainbowiiicclassic              "p384_rainbowiiicclassic"
+#define NID_p384_rainbowiiicclassic             1315
+#define OBJ_p384_rainbowiiicclassic             1L,3L,9999L,5L,11L
+
+#define SN_rainbowiiiccyclic            "rainbowiiiccyclic"
+#define LN_rainbowiiiccyclic            "rainbowiiiccyclic"
+#define NID_rainbowiiiccyclic           1316
+#define OBJ_rainbowiiiccyclic           1L,3L,9999L,5L,12L
+
+#define SN_p384_rainbowiiiccyclic               "p384_rainbowiiiccyclic"
+#define LN_p384_rainbowiiiccyclic               "p384_rainbowiiiccyclic"
+#define NID_p384_rainbowiiiccyclic              1317
+#define OBJ_p384_rainbowiiiccyclic              1L,3L,9999L,5L,13L
+
+#define SN_rainbowiiiccycliccompressed          "rainbowiiiccycliccompressed"
+#define LN_rainbowiiiccycliccompressed          "rainbowiiiccycliccompressed"
+#define NID_rainbowiiiccycliccompressed         1318
+#define OBJ_rainbowiiiccycliccompressed         1L,3L,9999L,5L,14L
+
+#define SN_p384_rainbowiiiccycliccompressed             "p384_rainbowiiiccycliccompressed"
+#define LN_p384_rainbowiiiccycliccompressed             "p384_rainbowiiiccycliccompressed"
+#define NID_p384_rainbowiiiccycliccompressed            1319
+#define OBJ_p384_rainbowiiiccycliccompressed            1L,3L,9999L,5L,15L

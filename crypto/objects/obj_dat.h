@@ -10,7 +10,7 @@
  */
 
 /* Serialized OID's */
-static const unsigned char so[8041] = {
+static const unsigned char so[8071] = {
     0x2A,0x86,0x48,0x86,0xF7,0x0D,                 /* [    0] OBJ_rsadsi */
     0x2A,0x86,0x48,0x86,0xF7,0x0D,0x01,            /* [    6] OBJ_pkcs */
     0x2A,0x86,0x48,0x86,0xF7,0x0D,0x02,0x02,       /* [   13] OBJ_md2 */
@@ -1115,9 +1115,15 @@ static const unsigned char so[8041] = {
     0x2B,0xCE,0x0F,0x05,0x07,                      /* [ 8025] OBJ_rainbowiacycliccompressed */
     0x2B,0xCE,0x0F,0x05,0x08,                      /* [ 8030] OBJ_p256_rainbowiacycliccompressed */
     0x2B,0xCE,0x0F,0x05,0x09,                      /* [ 8035] OBJ_rsa3072_rainbowiacycliccompressed */
+    0x2B,0xCE,0x0F,0x05,0x0A,                      /* [ 8040] OBJ_rainbowiiicclassic */
+    0x2B,0xCE,0x0F,0x05,0x0B,                      /* [ 8045] OBJ_p384_rainbowiiicclassic */
+    0x2B,0xCE,0x0F,0x05,0x0C,                      /* [ 8050] OBJ_rainbowiiiccyclic */
+    0x2B,0xCE,0x0F,0x05,0x0D,                      /* [ 8055] OBJ_p384_rainbowiiiccyclic */
+    0x2B,0xCE,0x0F,0x05,0x0E,                      /* [ 8060] OBJ_rainbowiiiccycliccompressed */
+    0x2B,0xCE,0x0F,0x05,0x0F,                      /* [ 8065] OBJ_p384_rainbowiiiccycliccompressed */
 };
 
-#define NUM_NID 1314
+#define NUM_NID 1320
 static const ASN1_OBJECT nid_objs[NUM_NID] = {
     {"UNDEF", "undefined", NID_undef},
     {"rsadsi", "RSA Data Security, Inc.", NID_rsadsi, 6, &so[0]},
@@ -2433,9 +2439,15 @@ static const ASN1_OBJECT nid_objs[NUM_NID] = {
     {"rainbowiacycliccompressed", "rainbowiacycliccompressed", NID_rainbowiacycliccompressed, 5, &so[8025]},
     {"p256_rainbowiacycliccompressed", "p256_rainbowiacycliccompressed", NID_p256_rainbowiacycliccompressed, 5, &so[8030]},
     {"rsa3072_rainbowiacycliccompressed", "rsa3072_rainbowiacycliccompressed", NID_rsa3072_rainbowiacycliccompressed, 5, &so[8035]},
+    {"rainbowiiicclassic", "rainbowiiicclassic", NID_rainbowiiicclassic, 5, &so[8040]},
+    {"p384_rainbowiiicclassic", "p384_rainbowiiicclassic", NID_p384_rainbowiiicclassic, 5, &so[8045]},
+    {"rainbowiiiccyclic", "rainbowiiiccyclic", NID_rainbowiiiccyclic, 5, &so[8050]},
+    {"p384_rainbowiiiccyclic", "p384_rainbowiiiccyclic", NID_p384_rainbowiiiccyclic, 5, &so[8055]},
+    {"rainbowiiiccycliccompressed", "rainbowiiiccycliccompressed", NID_rainbowiiiccycliccompressed, 5, &so[8060]},
+    {"p384_rainbowiiiccycliccompressed", "p384_rainbowiiiccycliccompressed", NID_p384_rainbowiiiccycliccompressed, 5, &so[8065]},
 };
 
-#define NUM_SN 1305
+#define NUM_SN 1311
 static const unsigned int sn_objs[NUM_SN] = {
      364,    /* "AD_DVCS" */
      419,    /* "AES-128-CBC" */
@@ -3398,6 +3410,9 @@ static const unsigned int sn_objs[NUM_SN] = {
     1265,    /* "p256_sikep751" */
     1285,    /* "p384_dilithium4" */
     1304,    /* "p384_qteslapiii" */
+    1315,    /* "p384_rainbowiiicclassic" */
+    1317,    /* "p384_rainbowiiiccyclic" */
+    1319,    /* "p384_rainbowiiiccycliccompressed" */
     1290,    /* "p521_falcon1024" */
      489,    /* "pagerTelephoneNumber" */
     1231,    /* "papabear" */
@@ -3466,6 +3481,9 @@ static const unsigned int sn_objs[NUM_SN] = {
     1305,    /* "rainbowiaclassic" */
     1308,    /* "rainbowiacyclic" */
     1311,    /* "rainbowiacycliccompressed" */
+    1314,    /* "rainbowiiicclassic" */
+    1316,    /* "rainbowiiiccyclic" */
+    1318,    /* "rainbowiiiccycliccompressed" */
      870,    /* "registeredAddress" */
      400,    /* "role" */
      877,    /* "roleOccupant" */
@@ -3744,7 +3762,7 @@ static const unsigned int sn_objs[NUM_SN] = {
     1093,    /* "x509ExtAdmission" */
 };
 
-#define NUM_LN 1305
+#define NUM_LN 1311
 static const unsigned int ln_objs[NUM_LN] = {
      363,    /* "AD Time Stamping" */
      405,    /* "ANSI X9.62" */
@@ -4680,6 +4698,9 @@ static const unsigned int ln_objs[NUM_LN] = {
     1265,    /* "p256_sikep751" */
     1285,    /* "p384_dilithium4" */
     1304,    /* "p384_qteslapiii" */
+    1315,    /* "p384_rainbowiiicclassic" */
+    1317,    /* "p384_rainbowiiiccyclic" */
+    1319,    /* "p384_rainbowiiiccycliccompressed" */
     1290,    /* "p521_falcon1024" */
      935,    /* "pSpecified" */
      489,    /* "pagerTelephoneNumber" */
@@ -4755,6 +4776,9 @@ static const unsigned int ln_objs[NUM_LN] = {
     1305,    /* "rainbowiaclassic" */
     1308,    /* "rainbowiacyclic" */
     1311,    /* "rainbowiacycliccompressed" */
+    1314,    /* "rainbowiiicclassic" */
+    1316,    /* "rainbowiiiccyclic" */
+    1318,    /* "rainbowiiiccycliccompressed" */
       98,    /* "rc2-40-cbc" */
      166,    /* "rc2-64-cbc" */
       37,    /* "rc2-cbc" */
@@ -5053,7 +5077,7 @@ static const unsigned int ln_objs[NUM_LN] = {
      125,    /* "zlib compression" */
 };
 
-#define NUM_OBJ 1110
+#define NUM_OBJ 1116
 static const unsigned int obj_objs[NUM_OBJ] = {
        0,    /* OBJ_undef                        0 */
      181,    /* OBJ_iso                          1 */
@@ -5386,6 +5410,12 @@ static const unsigned int obj_objs[NUM_OBJ] = {
     1311,    /* OBJ_rainbowiacycliccompressed    1 3 9999 5 7 */
     1312,    /* OBJ_p256_rainbowiacycliccompressed 1 3 9999 5 8 */
     1313,    /* OBJ_rsa3072_rainbowiacycliccompressed 1 3 9999 5 9 */
+    1314,    /* OBJ_rainbowiiicclassic           1 3 9999 5 10 */
+    1315,    /* OBJ_p384_rainbowiiicclassic      1 3 9999 5 11 */
+    1316,    /* OBJ_rainbowiiiccyclic            1 3 9999 5 12 */
+    1317,    /* OBJ_p384_rainbowiiiccyclic       1 3 9999 5 13 */
+    1318,    /* OBJ_rainbowiiiccycliccompressed  1 3 9999 5 14 */
+    1319,    /* OBJ_p384_rainbowiiiccycliccompressed 1 3 9999 5 15 */
      624,    /* OBJ_set_rootKeyThumb             2 23 42 3 0 0 */
      625,    /* OBJ_set_addPolicy                2 23 42 3 0 1 */
      626,    /* OBJ_setAttr_Token_EMV            2 23 42 3 2 1 */
