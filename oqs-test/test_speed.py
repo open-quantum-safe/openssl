@@ -13,7 +13,7 @@ def test_sig_speed(ossl, ossl_config, test_artifacts_dir, sig_name):
 # Hybrid KEMs are not integrated to EVP layer yet (issue #59), hence are not
 # speed tested: Thus exclude them from testing. Also exclude oqs_kem_default
 # as that may be set to a hybrid too
-@pytest.mark.parametrize('kem_name', [i for i in oqs_algorithms.key_exchanges if not (i.startswith("p256_") or i == "oqs_kem_default")])
+@pytest.mark.parametrize('kem_name', [i for i in oqs_algorithms.key_exchanges if not (i.startswith("p256_") or i.startswith("p384_") or i.startswith("p521_") or i == "oqs_kem_default")])
 def test_kem_speed(ossl, ossl_config, test_artifacts_dir, kem_name):
     helpers.run_subprocess([ossl, 'speed', '-seconds', '1', kem_name])
 
