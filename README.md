@@ -88,8 +88,11 @@ The following quantum-safe algorithms from liboqs are supported (assuming they h
 - **SIDH** and **SIKE**: `sidhp434`, `sidhp503`, `sidhp610`, `sidhp751`, `sikep434`, `sikep503`, `sikep610`, `sikep751`
 - **ThreeBears**: `babybear`,`mamabear`,`papabear`,`babybearephem`,`mamabearephem`,`papabearephem`
 
-The following hybrid algorithms are supported only for L1 schemes; they combine an L1 quantum-safe algorithm listed above with ECDH that uses NIST's P256 curve:
-- `p256_<KEX>`, where ``<KEX>`` is any one of the L1 algorithms listed above.
+The following hybrid algorithms are supported; they combine a quantum-safe algorithm listed above with a traditional ECDH that uses one of the following curves: (``<KEX>`` is any of the algorithms listed above):
+
+- if `<KEX>` has L1 security, then the fork provides the method `p256_<KEX>`, which combine `<KEX>` with ECDH using the P256 curve.
+- if `<KEXSIG>` has L3 security, the fork provides the method `p384_<KEX>`, which combines `<KEX>` with ECDH using the P384 curve.
+- if `<KEXSIG>` has L5 security, the fork provides the method `p521_<KEX>`, which combines `<KEX>` with ECDH using the P521 curve.
 
 #### Authentication
 
@@ -105,6 +108,12 @@ The following hybrid algorithms are supported; they combine a quantum-safe algor
 - if `<SIG>` has L1 security, then the fork provides the methods `rsa3072_<SIG>` and `p256_<SIG>`, which combine `<SIG>` with RSA3072 and with ECDSA using NIST's P256 curve respectively.
 - if `<SIG>` has L3 security, the fork provides the method `p384_<SIG>`, which combines `<SIG>` with ECDSA using NIST's P384 curve.
 - if `<SIG>` has L5 security, the fork provides the method `p521_<SIG>`, which combines `<SIG>` with ECDSA using NIST's P521 curve.
+
+#### Example hybrid algorithms
+
+As `Kyber768` is a NIST L3 KEX algorithm, the hybrid `p384_kyber768` is available.
+
+As `Dilithium2` is a NIST L1 SIG algorithm, the hybrid `p256_dilithium2` is available.
 
 ## Quickstart
 
@@ -226,7 +235,7 @@ The fork can also be built as a set of shared libraries by specifying `shared` i
 
 By default, the fork is built to only announce 128-bit strength QSC hybrid KEM algorithms in the initial TLS handshake (using the EC groups announced extension). This algorithm set can be changed to an arbitrary collection at build time by setting the variable `OQS_DEFAULT_GROUPS` to a colon-separated list of [KEM algorithms supported](#key-exchange), e.g., by running
 ```
-./Configure no-shared linux-x86_64 -DOQS_DEFAULT_GROUPS=\"p256_kyber768:X25519:newhope1024cca\" -lm
+./Configure no-shared linux-x86_64 -DOQS_DEFAULT_GROUPS=\"p384_kyber768:X25519:newhope1024cca\" -lm
 ```
 
 The announced algorithms can also be modified at runtime by setting the `-curves` or `-groups` parameter with programs supporting this option (e.g., `openssl s_client` or `openssl s_server`) or by using the `SSL_CTX_set1_groups_list` API call.
