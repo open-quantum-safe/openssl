@@ -4,6 +4,8 @@ import pathlib
 import psutil
 import time
 
+PORT_BIND_TIMEOUT = 100
+
 def run_subprocess(command, working_dir='.', expected_returncode=0, input=None):
     """
     Helper function to run a shell command and report success/failure
@@ -41,11 +43,19 @@ def start_server(ossl, test_artifacts_dir, sig_alg, worker_id):
 
     print(" > " + " ".join(command))
     s_server = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    time.sleep(2)
 
-    # Find and return the port that s_server is bound to.
-    s_server_info = psutil.Process(s_server.pid).connections()[0]
-    return s_server, s_server_info.laddr.port
+    # Give the server PORT_BIND_TIMEOUT seconds
+    # to bind to a port and find the port number.
+    s_server_info = psutil.Process(s_server.pid)
+    timeout_start = time.time()
+    while time.time() < timeout_start + PORT_BIND_TIMEOUT:
+        if s_server_info.connections():
+            break
+    s_server_conn_info = s_server_info.connections()[0]
+
+    time.sleep(0.5) # Wait a bit longer before starting tests
+
+    return s_server, str(s_server_conn_info.laddr.port)
 
 def gen_keys(ossl, ossl_config, sig_alg, test_artifacts_dir, filename_prefix):
     pathlib.Path(test_artifacts_dir).mkdir(parents=True, exist_ok=True)

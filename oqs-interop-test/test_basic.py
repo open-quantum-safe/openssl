@@ -8,6 +8,8 @@ import time
 import os
 import psutil
 
+PORT_BIND_TIMEOUT = 100
+
 @pytest.fixture()
 def sig_default_server_port(server_prog, server_type, test_artifacts_dir, worker_id):
     # Setup: start server
@@ -26,15 +28,22 @@ def sig_default_server_port(server_prog, server_type, test_artifacts_dir, worker
                                 '-accept', '0',
                                 '-sig-alg', sig_alg,
                                 '-loop']
+
     print(" > " + " ".join(command))
     server = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    time.sleep(1)
 
-    # Find and return the port that the server is bound to.
-    server_conn = psutil.Process(server.pid).connections()[0]
+    # Give the server PORT_BIND_TIMEOUT seconds
+    # to bind to a port and find the port number.
+    server_info = psutil.Process(server.pid)
+    timeout_start = time.time()
+    while time.time() < timeout_start + PORT_BIND_TIMEOUT:
+        if server_info.connections():
+            break
+    server_conn_info = server_info.connections()[0]
+    time.sleep(0.5)
 
     # Run tests
-    yield server_conn.laddr.port
+    yield server_conn_info.laddr.port
 
     # Teardown: stop server
     server.kill()
@@ -60,15 +69,22 @@ def parametrized_sig_server(request, server_prog, server_type, test_artifacts_di
                                 '-accept', '0',
                                 '-sig-alg', sig_alg,
                                 '-loop']
+
     print(" > " + " ".join(command))
     server = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    time.sleep(1)
 
-    # Find and return the port that the server is bound to.
-    server_conn = psutil.Process(server.pid).connections()[0]
+    # Give the server PORT_BIND_TIMEOUT seconds
+    # to bind to a port and find the port number.
+    server_info = psutil.Process(server.pid)
+    timeout_start = time.time()
+    while time.time() < timeout_start + PORT_BIND_TIMEOUT:
+        if server_info.connections():
+            break
+    server_conn_info = server_info.connections()[0]
+    time.sleep(0.5)
 
     # Run tests
-    yield sig_alg, server_conn.laddr.port
+    yield sig_alg, server_conn_info.laddr.port
 
     # Teardown: stop server
     server.kill()

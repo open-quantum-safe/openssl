@@ -8,6 +8,8 @@ import time
 import os
 import psutil
 
+PORT_BIND_TIMEOUT = 100
+
 @pytest.fixture(params=ossl_algorithms.signatures)
 def parametrized_sig_server(request, server_prog, server_type, test_artifacts_dir, worker_id):
     # Setup: start server
@@ -30,13 +32,19 @@ def parametrized_sig_server(request, server_prog, server_type, test_artifacts_di
                                 '-loop']
     print(" > " + " ".join(command))
     server = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    time.sleep(2)
 
-    # Find and return the port that the server is bound to.
-    server_conn = psutil.Process(server.pid).connections()[0]
+    # Give the server PORT_BIND_TIMEOUT seconds
+    # to bind to a port and find the port number.
+    server_info = psutil.Process(server.pid)
+    timeout_start = time.time()
+    while time.time() < timeout_start + PORT_BIND_TIMEOUT:
+        if server_info.connections():
+            break
+    server_conn_info = server_info.connections()[0]
+    time.sleep(0.5)
 
     # Run tests
-    yield sig_alg, server_conn.laddr.port
+    yield sig_alg, server_conn_info.laddr.port
 
     # Teardown: stop server
     server.kill()
