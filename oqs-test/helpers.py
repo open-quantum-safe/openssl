@@ -53,7 +53,7 @@ def start_server(ossl, test_artifacts_dir, sig_alg, worker_id):
             break
     s_server_conn_info = s_server_info.connections()[0]
 
-    time.sleep(0.5) # Wait a bit longer before starting tests
+    time.sleep(1) # Wait a bit longer before starting tests
 
     return s_server, str(s_server_conn_info.laddr.port)
 

@@ -40,7 +40,7 @@ def sig_default_server_port(server_prog, server_type, test_artifacts_dir, worker
         if server_info.connections():
             break
     server_conn_info = server_info.connections()[0]
-    time.sleep(0.5)
+    time.sleep(1)
 
     # Run tests
     yield server_conn_info.laddr.port
@@ -81,7 +81,7 @@ def parametrized_sig_server(request, server_prog, server_type, test_artifacts_di
         if server_info.connections():
             break
     server_conn_info = server_info.connections()[0]
-    time.sleep(0.5)
+    time.sleep(1)
 
     # Run tests
     yield sig_alg, server_conn_info.laddr.port
