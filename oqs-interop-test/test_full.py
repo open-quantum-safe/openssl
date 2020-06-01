@@ -11,40 +11,12 @@ import psutil
 PORT_BIND_TIMEOUT = 100
 
 @pytest.fixture(params=ossl_algorithms.signatures)
-def parametrized_sig_server(request, server_prog, server_type, test_artifacts_dir, worker_id):
+def parametrized_sig_server(request, server_prog, server_type, client_prog, client_type, test_artifacts_dir, worker_id):
     # Setup: start server
-    sig_alg = request.param
-    if sig_alg not in bssl_algorithms.sig_to_code_point:
-        pytest.skip("{} is unsupported by OQS-BoringSSL.".format(sig_alg))
-    if server_type == "ossl":
-        helpers.gen_openssl_keys(server_prog, os.path.join('apps', 'openssl.cnf'), sig_alg, test_artifacts_dir, worker_id)
-        command = [server_prog, 's_server',
-                                '-cert', os.path.join(test_artifacts_dir, '{}_{}_srv.crt'.format(worker_id, sig_alg)),
-                                '-key', os.path.join(test_artifacts_dir, '{}_{}_srv.key'.format(worker_id, sig_alg)),
-                                '-CAfile', os.path.join(test_artifacts_dir, '{}_{}_CA.crt'.format(worker_id, sig_alg)),
-                                '-tls1_3',
-                                '-quiet',
-                                '-accept', '0']
-    elif server_type == "bssl":
-        command = [server_prog, 'server',
-                                '-accept', '0',
-                                '-sig-alg', sig_alg,
-                                '-loop']
-    print(" > " + " ".join(command))
-    server = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-
-    # Give the server PORT_BIND_TIMEOUT seconds
-    # to bind to a port and find the port number.
-    server_info = psutil.Process(server.pid)
-    timeout_start = time.time()
-    while time.time() < timeout_start + PORT_BIND_TIMEOUT:
-        if server_info.connections():
-            break
-    server_conn_info = server_info.connections()[0]
-    time.sleep(1)
+    server, server_port = helpers.start_server(server_prog, server_type, client_prog, client_type, test_artifacts_dir, request.param)
 
     # Run tests
-    yield sig_alg, server_conn_info.laddr.port
+    yield request.param, server_port
 
     # Teardown: stop server
     server.kill()

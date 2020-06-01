@@ -4,7 +4,7 @@ import pathlib
 import psutil
 import time
 
-PORT_BIND_TIMEOUT = 100
+SERVER_START_TIMEOUT = 100
 
 def run_subprocess(command, working_dir='.', expected_returncode=0, input=None):
     """
@@ -42,20 +42,33 @@ def start_server(ossl, test_artifacts_dir, sig_alg, worker_id):
                       '-accept', '0']
 
     print(" > " + " ".join(command))
-    s_server = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-
-    # Give the server PORT_BIND_TIMEOUT seconds
-    # to bind to a port and find the port number.
-    s_server_info = psutil.Process(s_server.pid)
+    server = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    server_info = psutil.Process(server.pid)
+    # Give the server SERVER_START_TIMEOUT seconds
+    # to bind to a port.
     timeout_start = time.time()
-    while time.time() < timeout_start + PORT_BIND_TIMEOUT:
-        if s_server_info.connections():
+    while time.time() < timeout_start + SERVER_START_TIMEOUT:
+        if server_info.connections():
             break
-    s_server_conn_info = s_server_info.connections()[0]
+    server_port = str(server_info.connections()[0].laddr.port)
 
-    time.sleep(1) # Wait a bit longer before starting tests
+    # Give the server SERVER_START_TIMEOUT seconds
+    # to be responsive
+    server_up = False
+    timeout_start = time.time()
+    while time.time() < timeout_start + SERVER_START_TIMEOUT:
+        result = subprocess.run([ossl, 's_client', '-connect', 'localhost:{}'.format(server_port)],
+                                input='Q'.encode(),
+                                stdout=subprocess.PIPE,
+                                stderr=subprocess.STDOUT)
+        if result.returncode == 0:
+            server_up = True
+            break
 
-    return s_server, str(s_server_conn_info.laddr.port)
+    if not server_up:
+        raise Exception('Cannot start OpenSSL server')
+
+    return server, server_port
 
 def gen_keys(ossl, ossl_config, sig_alg, test_artifacts_dir, filename_prefix):
     pathlib.Path(test_artifacts_dir).mkdir(parents=True, exist_ok=True)
