@@ -91,8 +91,8 @@ The following quantum-safe algorithms from liboqs are supported (assuming they h
 The following hybrid algorithms are supported; they combine a quantum-safe algorithm listed above with a traditional ECDH that uses one of the following curves: (``<KEX>`` is any of the algorithms listed above):
 
 - if `<KEX>` has L1 security, then the fork provides the method `p256_<KEX>`, which combine `<KEX>` with ECDH using the P256 curve.
-- if `<KEXSIG>` has L3 security, the fork provides the method `p384_<KEX>`, which combines `<KEX>` with ECDH using the P384 curve.
-- if `<KEXSIG>` has L5 security, the fork provides the method `p521_<KEX>`, which combines `<KEX>` with ECDH using the P521 curve.
+- if `<KEX>` has L3 security, the fork provides the method `p384_<KEX>`, which combines `<KEX>` with ECDH using the P384 curve.
+- if `<KEX>` has L5 security, the fork provides the method `p521_<KEX>`, which combines `<KEX>` with ECDH using the P521 curve.
 
 #### Authentication
 
