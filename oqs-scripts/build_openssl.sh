@@ -21,5 +21,5 @@ make clean
 if [ "x${CIRCLECI}" == "xtrue" ]; then
     make -j2
 else
-    make -j # note make -j fails on OpenSSL <= 1.0.2
+    make -j
 fi
