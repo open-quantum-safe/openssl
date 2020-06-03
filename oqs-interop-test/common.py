@@ -5,7 +5,7 @@ import psutil
 import shutil
 import time
 
-SERVER_START_TIMEOUT = 100
+SERVER_START_ATTEMPTS = 100
 
 def run_subprocess(command, working_dir='.', expected_returncode=0, input=None):
     """
@@ -64,7 +64,7 @@ def gen_openssl_keys(ossl, ossl_config, sig_alg, test_artifacts_dir, filename_pr
             with open(f, 'rb') as in_file:
                 shutil.copyfileobj(in_file, out_file)
 
-def start_server(server_prog, server_type, client_prog, client_type, test_artifacts_dir, sig_alg):
+def start_server(server_prog, server_type, client_prog, client_type, test_artifacts_dir, sig_alg, worker_id):
     if server_type == "bssl":
         server_command = [server_prog, 'server',
                                        '-accept', '0',
@@ -83,12 +83,15 @@ def start_server(server_prog, server_type, client_prog, client_type, test_artifa
     server = subprocess.Popen(server_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     server_info = psutil.Process(server.pid)
 
-    # Wait SERVER_START_TIMEOUT seconds
-    # for server to bind to port.
-    timeout_start = time.time()
-    while time.time() < timeout_start + SERVER_START_TIMEOUT:
+    # Try SERVER_START_ATTEMPTS times to see
+    # what port the server is bound to.
+    server_start_attempt = 1
+    while server_start_attempt <= SERVER_START_ATTEMPTS:
         if server_info.connections():
             break
+        else:
+            server_start_attempt += 1
+            time.sleep(3)
     server_port = str(server_info.connections()[0].laddr.port)
 
     if client_type == "bssl":
@@ -96,17 +99,18 @@ def start_server(server_prog, server_type, client_prog, client_type, test_artifa
     elif client_type == "ossl":
         client_command = [client_prog, 's_client', '-connect', 'localhost:{}'.format(server_port)]
 
-    # Wait SERVER_START_TIMEOUT seconds
-    # for server to be responsive.
-    server_up = False
-    timeout_start = time.time()
-    while time.time() < timeout_start + SERVER_START_TIMEOUT:
-        result = subprocess.run(client_command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        if result.returncode == 0: #Server should be responsive now
-            server_up = True
+    # Check SERVER_START_ATTEMPTS times to see
+    # if the server is responsive.
+    server_start_attempt = 1
+    while server_start_attempt <= SERVER_START_ATTEMPTS:
+        result = subprocess.run(client_command, input='Q'.encode(), stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        if result.returncode == 0:
             break
+        else:
+            server_start_attempt += 1
+            time.sleep(3)
 
-    if not server_up:
-        raise Exception('Cannot start bssl server')
+    if server_start_attempt > SERVER_START_ATTEMPTS:
+        raise Exception('Cannot start server')
 
     return server, server_port

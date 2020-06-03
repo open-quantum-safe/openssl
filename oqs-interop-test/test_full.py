@@ -1,4 +1,4 @@
-import helpers
+import common
 import ossl_algorithms
 import bssl_algorithms
 import pytest
@@ -13,7 +13,7 @@ PORT_BIND_TIMEOUT = 100
 @pytest.fixture(params=ossl_algorithms.signatures)
 def parametrized_sig_server(request, server_prog, server_type, client_prog, client_type, test_artifacts_dir, worker_id):
     # Setup: start server
-    server, server_port = helpers.start_server(server_prog, server_type, client_prog, client_type, test_artifacts_dir, request.param)
+    server, server_port = common.start_server(server_prog, server_type, client_prog, client_type, test_artifacts_dir, request.param, worker_id)
 
     # Run tests
     yield request.param, server_port
@@ -30,7 +30,7 @@ def test_kex_sig_pair(kex_name, parametrized_sig_server, client_prog, client_typ
         pytest.skip("{} is unsupported by OQS-BoringSSL.".format(kex_name))
 
     if client_type == "ossl":
-        client_output = helpers.run_subprocess([client_prog, 's_client',
+        client_output = common.run_subprocess([client_prog, 's_client',
                                                              '-groups', kex_name,
                                                              '-connect', 'localhost:{}'.format(server_port)],
                                          input='Q'.encode())
@@ -42,7 +42,7 @@ def test_kex_sig_pair(kex_name, parametrized_sig_server, client_prog, client_typ
             print(client_output)
             assert False
     elif client_type == "bssl":
-        helpers.run_subprocess([client_prog, '-port', str(server_port),
+        common.run_subprocess([client_prog, '-port', str(server_port),
                                              '-expect-version', 'TLSv1.3',
                                              '-curves', bssl_algorithms.kex_to_nid[kex_name],
                                              '-expect-curve-id', bssl_algorithms.kex_to_nid[kex_name],
