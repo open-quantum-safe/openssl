@@ -16,7 +16,7 @@ mkdir build && cd build
 
 cmake .. -G"Ninja" -DLIBOQS_DIR="${PROJECT_ROOT}/oqs"
 
-if [ "x${CIRCLECI}" == "xtrue" ] || [ "x${TRAVIS}" == "xtrue" ]; then
+if [ "x${CIRCLECI}" == "xtrue" ]; then
     ninja -j4
 else
     ninja
