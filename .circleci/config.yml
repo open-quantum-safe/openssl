@@ -124,8 +124,7 @@ workflows:
   build:
     jobs:
       - ubuntu_bionic-static_oqs-static_ossl
-      - ubuntu_bionic-static_oqs-static_ossl-boringssl-interop
-      - macOS-shared_oqs-shared_ossl
+      - ubuntu_bionic-shared_oqs-shared_ossl
   nightly:
     triggers:
       - schedule:
@@ -136,5 +135,8 @@ workflows:
                 - OQS-OpenSSL_1_1_1-stable
     jobs:
       - debian_buster-shared_oqs-static_ossl
+      - macOS-shared_oqs-shared_ossl
       - macOS-static_oqs-static_ossl
       - ubuntu_bionic-shared_oqs-shared_ossl
+      - ubuntu_bionic-static_oqs-static_ossl
+      - ubuntu_bionic-static_oqs-static_ossl-boringssl-interop
