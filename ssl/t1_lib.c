@@ -1405,8 +1405,68 @@ static int sigalg_security_bits(const SIGALG_LOOKUP *lu)
             secbits = 128;
         else if (lu->sigalg == TLSEXT_SIGALG_ed448)
             secbits = 224;
-	else if (lu->sigalg >= TLSEXT_SIGALG_oqs_sig_default && lu->sigalg <= TLSEXT_SIGALG_p384_qteslapiii)
-	    return 128; // FIXMEOQS. Just testing to see if that fixes the issue. If so, we'll need to properly templatize this to detect OQS algs. The values are (statically) available in crypto/ec/oqs_meth.c, we'll need to expose them.
+///// OQS_TEMPLATE_FRAGMENT_MAP_SIGALG_TO_BIT_SECURITY_START
+        else if(lu->sigalg == TLSEXT_SIGALG_oqs_sig_default)
+            secbits = 128;
+        else if(lu->sigalg == TLSEXT_SIGALG_p256_oqs_sig_default)
+            secbits = 128;
+        else if(lu->sigalg == TLSEXT_SIGALG_rsa3072_oqs_sig_default)
+            secbits = 128;
+        else if(lu->sigalg == TLSEXT_SIGALG_dilithium2)
+            secbits = 128;
+        else if(lu->sigalg == TLSEXT_SIGALG_p256_dilithium2)
+            secbits = 128;
+        else if(lu->sigalg == TLSEXT_SIGALG_rsa3072_dilithium2)
+            secbits = 128;
+        else if(lu->sigalg == TLSEXT_SIGALG_dilithium3)
+            secbits = 128;
+        else if(lu->sigalg == TLSEXT_SIGALG_p256_dilithium3)
+            secbits = 128;
+        else if(lu->sigalg == TLSEXT_SIGALG_rsa3072_dilithium3)
+            secbits = 128;
+        else if(lu->sigalg == TLSEXT_SIGALG_dilithium4)
+            secbits = 192;
+        else if(lu->sigalg == TLSEXT_SIGALG_p384_dilithium4)
+            secbits = 192;
+        else if(lu->sigalg == TLSEXT_SIGALG_falcon512)
+            secbits = 128;
+        else if(lu->sigalg == TLSEXT_SIGALG_p256_falcon512)
+            secbits = 128;
+        else if(lu->sigalg == TLSEXT_SIGALG_rsa3072_falcon512)
+            secbits = 128;
+        else if(lu->sigalg == TLSEXT_SIGALG_falcon1024)
+            secbits = 256;
+        else if(lu->sigalg == TLSEXT_SIGALG_p521_falcon1024)
+            secbits = 256;
+        else if(lu->sigalg == TLSEXT_SIGALG_mqdss3148)
+            secbits = 128;
+        else if(lu->sigalg == TLSEXT_SIGALG_p256_mqdss3148)
+            secbits = 128;
+        else if(lu->sigalg == TLSEXT_SIGALG_rsa3072_mqdss3148)
+            secbits = 128;
+        else if(lu->sigalg == TLSEXT_SIGALG_picnicl1fs)
+            secbits = 128;
+        else if(lu->sigalg == TLSEXT_SIGALG_p256_picnicl1fs)
+            secbits = 128;
+        else if(lu->sigalg == TLSEXT_SIGALG_rsa3072_picnicl1fs)
+            secbits = 128;
+        else if(lu->sigalg == TLSEXT_SIGALG_picnic2l1fs)
+            secbits = 128;
+        else if(lu->sigalg == TLSEXT_SIGALG_p256_picnic2l1fs)
+            secbits = 128;
+        else if(lu->sigalg == TLSEXT_SIGALG_rsa3072_picnic2l1fs)
+            secbits = 128;
+        else if(lu->sigalg == TLSEXT_SIGALG_qteslapi)
+            secbits = 128;
+        else if(lu->sigalg == TLSEXT_SIGALG_p256_qteslapi)
+            secbits = 128;
+        else if(lu->sigalg == TLSEXT_SIGALG_rsa3072_qteslapi)
+            secbits = 128;
+        else if(lu->sigalg == TLSEXT_SIGALG_qteslapiii)
+            secbits = 192;
+        else if(lu->sigalg == TLSEXT_SIGALG_p384_qteslapiii)
+            secbits = 192;
+///// OQS_TEMPLATE_FRAGMENT_MAP_SIGALG_TO_BIT_SECURITY_END
     }
     return secbits;
 }

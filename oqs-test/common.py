@@ -23,7 +23,7 @@ signatures = [
 ##### OQS_TEMPLATE_FRAGMENT_SIG_ALGS_END
 ]
 
-SERVER_START_ATTEMPTS = 5
+SERVER_START_ATTEMPTS = 10
 
 def run_subprocess(command, working_dir='.', expected_returncode=0, input=None):
     """
@@ -72,7 +72,7 @@ def start_server(ossl, test_artifacts_dir, sig_alg, worker_id):
             break
         else:
             server_start_attempt += 1
-            time.sleep(3)
+            time.sleep(2)
     server_port = str(server_info.connections()[0].laddr.port)
 
     # Check SERVER_START_ATTEMPTS times to see
@@ -87,7 +87,7 @@ def start_server(ossl, test_artifacts_dir, sig_alg, worker_id):
             break
         else:
             server_start_attempt += 1
-            time.sleep(3)
+            time.sleep(2)
 
     if server_start_attempt > SERVER_START_ATTEMPTS:
         raise Exception('Cannot start OpenSSL server')

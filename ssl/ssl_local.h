@@ -2474,17 +2474,17 @@ typedef enum downgrade_en {
 #define TLSEXT_SIGALG_mqdss3148 0xfe10
 #define TLSEXT_SIGALG_p256_mqdss3148 0xfe11
 #define TLSEXT_SIGALG_rsa3072_mqdss3148 0xfe12
-#define TLSEXT_SIGALG_picnicl1fs 0xfe13
-#define TLSEXT_SIGALG_p256_picnicl1fs 0xfe14
-#define TLSEXT_SIGALG_rsa3072_picnicl1fs 0xfe15
-#define TLSEXT_SIGALG_picnic2l1fs 0xfe16
-#define TLSEXT_SIGALG_p256_picnic2l1fs 0xfe17
-#define TLSEXT_SIGALG_rsa3072_picnic2l1fs 0xfe18
-#define TLSEXT_SIGALG_qteslapi 0xfe19
-#define TLSEXT_SIGALG_p256_qteslapi 0xfe1a
-#define TLSEXT_SIGALG_rsa3072_qteslapi 0xfe1b
-#define TLSEXT_SIGALG_qteslapiii 0xfe1c
-#define TLSEXT_SIGALG_p384_qteslapiii 0xfe1d
+#define TLSEXT_SIGALG_picnicl1fs 0xfe15
+#define TLSEXT_SIGALG_p256_picnicl1fs 0xfe16
+#define TLSEXT_SIGALG_rsa3072_picnicl1fs 0xfe17
+#define TLSEXT_SIGALG_picnic2l1fs 0xfe1b
+#define TLSEXT_SIGALG_p256_picnic2l1fs 0xfe1c
+#define TLSEXT_SIGALG_rsa3072_picnic2l1fs 0xfe1d
+#define TLSEXT_SIGALG_qteslapi 0xfe22
+#define TLSEXT_SIGALG_p256_qteslapi 0xfe23
+#define TLSEXT_SIGALG_rsa3072_qteslapi 0xfe24
+#define TLSEXT_SIGALG_qteslapiii 0xfe25
+#define TLSEXT_SIGALG_p384_qteslapiii 0xfe26
 ///// OQS_TEMPLATE_FRAGMENT_DEFINE_SIG_CODE_POINTS_END
 
 /* Known PSK key exchange modes */

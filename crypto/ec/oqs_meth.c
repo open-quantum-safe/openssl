@@ -104,7 +104,7 @@ int oqssl_sig_nids_list[] = {
         NID_p256_qteslapi,
         NID_rsa3072_qteslapi,
         NID_qteslapiii,
-        NID_p384_qteslapiii
+        NID_p384_qteslapiii,
 /////// OQS_TEMPLATE_FRAGMENT_LIST_KNOWN_NIDS_END
 };
 
@@ -1204,7 +1204,8 @@ static int oqs_item_verify(EVP_MD_CTX *ctx, const ASN1_ITEM *it, void *asn,
         nid != NID_p256_qteslapi &&
         nid != NID_rsa3072_qteslapi &&
         nid != NID_qteslapiii &&
-        nid != NID_p384_qteslapiii
+        nid != NID_p384_qteslapiii &&
+        1 /* This is just to faciliate templating. */
 ///// OQS_TEMPLATE_FRAGMENT_CHECK_IF_KNOWN_NID_END
     ) || ptype != V_ASN1_UNDEF) {
         ECerr(EC_F_OQS_ITEM_VERIFY, EC_R_UNKNOWN_NID);
