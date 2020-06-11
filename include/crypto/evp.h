@@ -119,30 +119,28 @@ extern const EVP_PKEY_METHOD rsa3072_oqs_sig_default_pkey_meth;
 extern const EVP_PKEY_METHOD dilithium2_pkey_meth;
 extern const EVP_PKEY_METHOD p256_dilithium2_pkey_meth;
 extern const EVP_PKEY_METHOD rsa3072_dilithium2_pkey_meth;
-extern const EVP_PKEY_METHOD dilithium3_pkey_meth;
-extern const EVP_PKEY_METHOD p256_dilithium3_pkey_meth;
-extern const EVP_PKEY_METHOD rsa3072_dilithium3_pkey_meth;
-extern const EVP_PKEY_METHOD dilithium4_pkey_meth;
-extern const EVP_PKEY_METHOD p384_dilithium4_pkey_meth;
 extern const EVP_PKEY_METHOD falcon512_pkey_meth;
 extern const EVP_PKEY_METHOD p256_falcon512_pkey_meth;
 extern const EVP_PKEY_METHOD rsa3072_falcon512_pkey_meth;
-extern const EVP_PKEY_METHOD falcon1024_pkey_meth;
-extern const EVP_PKEY_METHOD p521_falcon1024_pkey_meth;
 extern const EVP_PKEY_METHOD mqdss3148_pkey_meth;
 extern const EVP_PKEY_METHOD p256_mqdss3148_pkey_meth;
 extern const EVP_PKEY_METHOD rsa3072_mqdss3148_pkey_meth;
-extern const EVP_PKEY_METHOD picnicl1fs_pkey_meth;
-extern const EVP_PKEY_METHOD p256_picnicl1fs_pkey_meth;
-extern const EVP_PKEY_METHOD rsa3072_picnicl1fs_pkey_meth;
-extern const EVP_PKEY_METHOD picnic2l1fs_pkey_meth;
-extern const EVP_PKEY_METHOD p256_picnic2l1fs_pkey_meth;
-extern const EVP_PKEY_METHOD rsa3072_picnic2l1fs_pkey_meth;
+extern const EVP_PKEY_METHOD picnicl1ur_pkey_meth;
+extern const EVP_PKEY_METHOD p256_picnicl1ur_pkey_meth;
+extern const EVP_PKEY_METHOD rsa3072_picnicl1ur_pkey_meth;
 extern const EVP_PKEY_METHOD qteslapi_pkey_meth;
 extern const EVP_PKEY_METHOD p256_qteslapi_pkey_meth;
 extern const EVP_PKEY_METHOD rsa3072_qteslapi_pkey_meth;
 extern const EVP_PKEY_METHOD qteslapiii_pkey_meth;
-extern const EVP_PKEY_METHOD p384_qteslapiii_pkey_meth;///// OQS_TEMPLATE_FRAGMENT_DEFINE_EVP_METHS_END
+extern const EVP_PKEY_METHOD p384_qteslapiii_pkey_meth;
+extern const EVP_PKEY_METHOD rainbowIaclassic_pkey_meth;
+extern const EVP_PKEY_METHOD p256_rainbowIaclassic_pkey_meth;
+extern const EVP_PKEY_METHOD rsa3072_rainbowIaclassic_pkey_meth;
+extern const EVP_PKEY_METHOD rainbowVcclassic_pkey_meth;
+extern const EVP_PKEY_METHOD p521_rainbowVcclassic_pkey_meth;
+extern const EVP_PKEY_METHOD sphincsharaka128frobust_pkey_meth;
+extern const EVP_PKEY_METHOD p256_sphincsharaka128frobust_pkey_meth;
+extern const EVP_PKEY_METHOD rsa3072_sphincsharaka128frobust_pkey_meth;///// OQS_TEMPLATE_FRAGMENT_DEFINE_EVP_METHS_END
 
 struct evp_md_st {
     int type;
