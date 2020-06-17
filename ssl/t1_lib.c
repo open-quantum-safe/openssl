@@ -931,8 +931,6 @@ static const uint16_t tls12_sigalgs[] = {
     TLSEXT_SIGALG_qteslapi,
     TLSEXT_SIGALG_p256_qteslapi,
     TLSEXT_SIGALG_rsa3072_qteslapi,
-    TLSEXT_SIGALG_qteslapiii,
-    TLSEXT_SIGALG_p384_qteslapiii,
     TLSEXT_SIGALG_rainbowIaclassic,
     TLSEXT_SIGALG_p256_rainbowIaclassic,
     TLSEXT_SIGALG_rsa3072_rainbowIaclassic,
@@ -1124,12 +1122,6 @@ static const SIGALG_LOOKUP sigalg_lookup_tbl[] = {
      NID_undef, NID_undef},
     {"rsa3072_qteslapi", TLSEXT_SIGALG_rsa3072_qteslapi,
      NID_undef, -1, EVP_PKEY_RSA3072_QTESLAPI, SSL_PKEY_RSA3072_QTESLAPI,
-     NID_undef, NID_undef},
-    {"qteslapiii", TLSEXT_SIGALG_qteslapiii,
-     NID_undef, -1, EVP_PKEY_QTESLAPIII, SSL_PKEY_QTESLAPIII,
-     NID_undef, NID_undef},
-    {"p384_qteslapiii", TLSEXT_SIGALG_p384_qteslapiii,
-     NID_undef, -1, EVP_PKEY_P384_QTESLAPIII, SSL_PKEY_P384_QTESLAPIII,
      NID_undef, NID_undef},
     {"rainbowIaclassic", TLSEXT_SIGALG_rainbowIaclassic,
      NID_undef, -1, EVP_PKEY_RAINBOWIACLASSIC, SSL_PKEY_RAINBOWIACLASSIC,
@@ -1434,10 +1426,6 @@ static int sigalg_security_bits(const SIGALG_LOOKUP *lu)
             secbits = 128;
         else if(lu->sigalg == TLSEXT_SIGALG_rsa3072_qteslapi)
             secbits = 128;
-        else if(lu->sigalg == TLSEXT_SIGALG_qteslapiii)
-            secbits = 192;
-        else if(lu->sigalg == TLSEXT_SIGALG_p384_qteslapiii)
-            secbits = 192;
         else if(lu->sigalg == TLSEXT_SIGALG_rainbowIaclassic)
             secbits = 128;
         else if(lu->sigalg == TLSEXT_SIGALG_p256_rainbowIaclassic)
@@ -2890,8 +2878,6 @@ void tls1_set_cert_validity(SSL *s)
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_QTESLAPI);
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_P256_QTESLAPI);
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_RSA3072_QTESLAPI);
-    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_QTESLAPIII);
-    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_P384_QTESLAPIII);
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_RAINBOWIACLASSIC);
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_P256_RAINBOWIACLASSIC);
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_RSA3072_RAINBOWIACLASSIC);

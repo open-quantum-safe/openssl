@@ -509,7 +509,7 @@ sigs:
         security: 192
         oid: "1.3.6.1.4.1.311.89.2.2.20"
         code_point: "0xfe25"
-        enable: true
+        enable: false
         mix_with: [{"name": "p384",
                     "pretty_name": "ECDSA p384",
                     "oid": "1.3.6.1.4.1.311.89.2.2.21",

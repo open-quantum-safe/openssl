@@ -105,8 +105,6 @@ extern const EVP_PKEY_ASN1_METHOD rsa3072_picnicl1ur_asn1_meth;
 extern const EVP_PKEY_ASN1_METHOD qteslapi_asn1_meth;
 extern const EVP_PKEY_ASN1_METHOD p256_qteslapi_asn1_meth;
 extern const EVP_PKEY_ASN1_METHOD rsa3072_qteslapi_asn1_meth;
-extern const EVP_PKEY_ASN1_METHOD qteslapiii_asn1_meth;
-extern const EVP_PKEY_ASN1_METHOD p384_qteslapiii_asn1_meth;
 extern const EVP_PKEY_ASN1_METHOD rainbowIaclassic_asn1_meth;
 extern const EVP_PKEY_ASN1_METHOD p256_rainbowIaclassic_asn1_meth;
 extern const EVP_PKEY_ASN1_METHOD rsa3072_rainbowIaclassic_asn1_meth;

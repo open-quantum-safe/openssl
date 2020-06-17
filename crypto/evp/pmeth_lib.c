@@ -87,8 +87,6 @@ static const EVP_PKEY_METHOD *standard_methods[] = {
     &qteslapi_pkey_meth,
     &p256_qteslapi_pkey_meth,
     &rsa3072_qteslapi_pkey_meth,
-    &qteslapiii_pkey_meth,
-    &p384_qteslapiii_pkey_meth,
     &rainbowIaclassic_pkey_meth,
     &p256_rainbowIaclassic_pkey_meth,
     &rsa3072_rainbowIaclassic_pkey_meth,

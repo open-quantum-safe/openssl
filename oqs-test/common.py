@@ -17,9 +17,9 @@ signatures = [
     'ecdsap256', 'rsa3072',
 ##### OQS_TEMPLATE_FRAGMENT_SIG_ALGS_START
     # post-quantum signatures
-    'oqs_sig_default','dilithium2','falcon512','mqdss3148','picnicl1ur','qteslapi','qteslapiii','rainbowIaclassic','rainbowVcclassic','sphincsharaka128frobust',
+    'oqs_sig_default','dilithium2','falcon512','mqdss3148','picnicl1ur','qteslapi','rainbowIaclassic','rainbowVcclassic','sphincsharaka128frobust',
     # post-quantum + classical signatures
-    'p256_oqs_sig_default','rsa3072_oqs_sig_default','p256_dilithium2','rsa3072_dilithium2','p256_falcon512','rsa3072_falcon512','p256_mqdss3148','rsa3072_mqdss3148','p256_picnicl1ur','rsa3072_picnicl1ur','p256_qteslapi','rsa3072_qteslapi','p384_qteslapiii','p256_rainbowIaclassic','rsa3072_rainbowIaclassic','p521_rainbowVcclassic','p256_sphincsharaka128frobust','rsa3072_sphincsharaka128frobust',
+    'p256_oqs_sig_default','rsa3072_oqs_sig_default','p256_dilithium2','rsa3072_dilithium2','p256_falcon512','rsa3072_falcon512','p256_mqdss3148','rsa3072_mqdss3148','p256_picnicl1ur','rsa3072_picnicl1ur','p256_qteslapi','rsa3072_qteslapi','p256_rainbowIaclassic','rsa3072_rainbowIaclassic','p521_rainbowVcclassic','p256_sphincsharaka128frobust','rsa3072_sphincsharaka128frobust',
 ##### OQS_TEMPLATE_FRAGMENT_SIG_ALGS_END
 ]
 

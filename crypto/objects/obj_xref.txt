@@ -42,8 +42,6 @@ rsa3072_picnicl1ur	sha512	rsa3072_picnicl1ur
 qteslapi	sha512	qteslapi
 p256_qteslapi	sha512	p256_qteslapi
 rsa3072_qteslapi	sha512	rsa3072_qteslapi
-qteslapiii	sha512	qteslapiii
-p384_qteslapiii	sha512	p384_qteslapiii
 rainbowIaclassic	sha512	rainbowIaclassic
 p256_rainbowIaclassic	sha512	p256_rainbowIaclassic
 rsa3072_rainbowIaclassic	sha512	rsa3072_rainbowIaclassic

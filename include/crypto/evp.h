@@ -131,8 +131,6 @@ extern const EVP_PKEY_METHOD rsa3072_picnicl1ur_pkey_meth;
 extern const EVP_PKEY_METHOD qteslapi_pkey_meth;
 extern const EVP_PKEY_METHOD p256_qteslapi_pkey_meth;
 extern const EVP_PKEY_METHOD rsa3072_qteslapi_pkey_meth;
-extern const EVP_PKEY_METHOD qteslapiii_pkey_meth;
-extern const EVP_PKEY_METHOD p384_qteslapiii_pkey_meth;
 extern const EVP_PKEY_METHOD rainbowIaclassic_pkey_meth;
 extern const EVP_PKEY_METHOD p256_rainbowIaclassic_pkey_meth;
 extern const EVP_PKEY_METHOD rsa3072_rainbowIaclassic_pkey_meth;

@@ -282,10 +282,6 @@ static const char *get_sigtype(int nid)
         return "ECDSA p256 - qTesla-I-p";
     case NID_rsa3072_qteslapi:
         return "RSA3072 - qTesla-I-p";
-    case NID_qteslapiii:
-        return "qTESLA-p-III";
-    case NID_p384_qteslapiii:
-        return "ECDSA p384 - qTESLA-p-III";
     case NID_rainbowIaclassic:
         return "Rainbow-Ia-Classic";
     case NID_p256_rainbowIaclassic:

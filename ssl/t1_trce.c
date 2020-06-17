@@ -678,8 +678,6 @@ static const ssl_trace_tbl ssl_sigalg_tbl[] = {
     {TLSEXT_SIGALG_qteslapi, "qteslapi"},
     {TLSEXT_SIGALG_p256_qteslapi, "p256_qteslapi"},
     {TLSEXT_SIGALG_rsa3072_qteslapi, "rsa3072_qteslapi"},
-    {TLSEXT_SIGALG_qteslapiii, "qteslapiii"},
-    {TLSEXT_SIGALG_p384_qteslapiii, "p384_qteslapiii"},
     {TLSEXT_SIGALG_rainbowIaclassic, "rainbowIaclassic"},
     {TLSEXT_SIGALG_p256_rainbowIaclassic, "p256_rainbowIaclassic"},
     {TLSEXT_SIGALG_rsa3072_rainbowIaclassic, "rsa3072_rainbowIaclassic"},

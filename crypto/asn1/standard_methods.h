@@ -78,8 +78,6 @@ static const EVP_PKEY_ASN1_METHOD *standard_methods[] = {
     &qteslapi_asn1_meth,
     &p256_qteslapi_asn1_meth,
     &rsa3072_qteslapi_asn1_meth,
-    &qteslapiii_asn1_meth,
-    &p384_qteslapiii_asn1_meth,
     &rainbowIaclassic_asn1_meth,
     &p256_rainbowIaclassic_asn1_meth,
     &rsa3072_rainbowIaclassic_asn1_meth,

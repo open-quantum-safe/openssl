@@ -93,8 +93,6 @@ int oqssl_sig_nids_list[] = {
         NID_qteslapi,
         NID_p256_qteslapi,
         NID_rsa3072_qteslapi,
-        NID_qteslapiii,
-        NID_p384_qteslapiii,
         NID_rainbowIaclassic,
         NID_p256_rainbowIaclassic,
         NID_rsa3072_rainbowIaclassic,
@@ -201,9 +199,6 @@ char* get_oqs_alg_name(int openssl_nid)
     case NID_p256_qteslapi:
     case NID_rsa3072_qteslapi:
       return OQS_SIG_alg_qTesla_p_I;
-    case NID_qteslapiii:
-    case NID_p384_qteslapiii:
-      return OQS_SIG_alg_qTesla_p_III;
     case NID_rainbowIaclassic:
     case NID_p256_rainbowIaclassic:
     case NID_rsa3072_rainbowIaclassic:
@@ -357,7 +352,6 @@ static int is_oqs_hybrid_alg(int openssl_nid)
     case NID_rsa3072_picnicl1ur:
     case NID_p256_qteslapi:
     case NID_rsa3072_qteslapi:
-    case NID_p384_qteslapiii:
     case NID_p256_rainbowIaclassic:
     case NID_rsa3072_rainbowIaclassic:
     case NID_p521_rainbowVcclassic:
@@ -394,8 +388,7 @@ static int get_classical_nid(int hybrid_id)
     case NID_p256_rainbowIaclassic:
     case NID_p256_sphincsharaka128frobust:
       return NID_X9_62_prime256v1;
-    case NID_p384_qteslapiii:
-      return NID_secp384r1;
+
     case NID_p521_rainbowVcclassic:
       return NID_secp521r1;///// OQS_TEMPLATE_FRAGMENT_ASSIGN_CLASSICAL_NIDS_END
     default:
@@ -426,8 +419,6 @@ static int get_oqs_nid(int hybrid_id)
     case NID_p256_qteslapi:
     case NID_rsa3072_qteslapi:
       return NID_qteslapi;
-    case NID_p384_qteslapiii:
-      return NID_qteslapiii;
     case NID_p256_rainbowIaclassic:
     case NID_rsa3072_rainbowIaclassic:
       return NID_rainbowIaclassic;
@@ -577,9 +568,6 @@ static int get_oqs_security_bits(int openssl_nid)
     case NID_p256_qteslapi:
     case NID_rsa3072_qteslapi:
       return 128;
-    case NID_qteslapiii:
-    case NID_p384_qteslapiii:
-      return 192;
     case NID_rainbowIaclassic:
     case NID_p256_rainbowIaclassic:
     case NID_rsa3072_rainbowIaclassic:
@@ -1181,8 +1169,6 @@ static int oqs_item_verify(EVP_MD_CTX *ctx, const ASN1_ITEM *it, void *asn,
         nid != NID_qteslapi &&
         nid != NID_p256_qteslapi &&
         nid != NID_rsa3072_qteslapi &&
-        nid != NID_qteslapiii &&
-        nid != NID_p384_qteslapiii &&
         nid != NID_rainbowIaclassic &&
         nid != NID_p256_rainbowIaclassic &&
         nid != NID_rsa3072_rainbowIaclassic &&
@@ -1712,8 +1698,6 @@ DEFINE_OQS_EVP_METHODS(rsa3072_picnicl1ur, NID_rsa3072_picnicl1ur, "rsa3072_picn
 DEFINE_OQS_EVP_METHODS(qteslapi, NID_qteslapi, "qteslapi", "OpenSSL qTesla-I-p algorithm")
 DEFINE_OQS_EVP_METHODS(p256_qteslapi, NID_p256_qteslapi, "p256_qteslapi", "OpenSSL ECDSA p256 qTesla-I-p algorithm")
 DEFINE_OQS_EVP_METHODS(rsa3072_qteslapi, NID_rsa3072_qteslapi, "rsa3072_qteslapi", "OpenSSL RSA3072 qTesla-I-p algorithm")
-DEFINE_OQS_EVP_METHODS(qteslapiii, NID_qteslapiii, "qteslapiii", "OpenSSL qTESLA-p-III algorithm")
-DEFINE_OQS_EVP_METHODS(p384_qteslapiii, NID_p384_qteslapiii, "p384_qteslapiii", "OpenSSL ECDSA p384 qTESLA-p-III algorithm")
 DEFINE_OQS_EVP_METHODS(rainbowIaclassic, NID_rainbowIaclassic, "rainbowIaclassic", "OpenSSL Rainbow-Ia-Classic algorithm")
 DEFINE_OQS_EVP_METHODS(p256_rainbowIaclassic, NID_p256_rainbowIaclassic, "p256_rainbowIaclassic", "OpenSSL ECDSA p256 Rainbow-Ia-Classic algorithm")
 DEFINE_OQS_EVP_METHODS(rsa3072_rainbowIaclassic, NID_rsa3072_rainbowIaclassic, "rsa3072_rainbowIaclassic", "OpenSSL RSA3072 Rainbow-Ia-Classic algorithm")
