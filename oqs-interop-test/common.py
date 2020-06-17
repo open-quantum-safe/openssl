@@ -5,7 +5,7 @@ import psutil
 import shutil
 import time
 
-SERVER_START_ATTEMPTS = 10
+SERVER_START_ATTEMPTS = 60
 
 def run_subprocess(command, working_dir='.', expected_returncode=0, input=None):
     """
