@@ -919,18 +919,30 @@ static const uint16_t tls12_sigalgs[] = {
     TLSEXT_SIGALG_dilithium2,
     TLSEXT_SIGALG_p256_dilithium2,
     TLSEXT_SIGALG_rsa3072_dilithium2,
+    TLSEXT_SIGALG_dilithium3,
+    TLSEXT_SIGALG_p256_dilithium3,
+    TLSEXT_SIGALG_rsa3072_dilithium3,
+    TLSEXT_SIGALG_dilithium4,
+    TLSEXT_SIGALG_p384_dilithium4,
     TLSEXT_SIGALG_falcon512,
     TLSEXT_SIGALG_p256_falcon512,
     TLSEXT_SIGALG_rsa3072_falcon512,
+    TLSEXT_SIGALG_falcon1024,
+    TLSEXT_SIGALG_p521_falcon1024,
     TLSEXT_SIGALG_mqdss3148,
     TLSEXT_SIGALG_p256_mqdss3148,
     TLSEXT_SIGALG_rsa3072_mqdss3148,
-    TLSEXT_SIGALG_picnicl1ur,
-    TLSEXT_SIGALG_p256_picnicl1ur,
-    TLSEXT_SIGALG_rsa3072_picnicl1ur,
+    TLSEXT_SIGALG_picnicl1fs,
+    TLSEXT_SIGALG_p256_picnicl1fs,
+    TLSEXT_SIGALG_rsa3072_picnicl1fs,
+    TLSEXT_SIGALG_picnic2l1fs,
+    TLSEXT_SIGALG_p256_picnic2l1fs,
+    TLSEXT_SIGALG_rsa3072_picnic2l1fs,
     TLSEXT_SIGALG_qteslapi,
     TLSEXT_SIGALG_p256_qteslapi,
     TLSEXT_SIGALG_rsa3072_qteslapi,
+    TLSEXT_SIGALG_qteslapiii,
+    TLSEXT_SIGALG_p384_qteslapiii,
     TLSEXT_SIGALG_rainbowIaclassic,
     TLSEXT_SIGALG_p256_rainbowIaclassic,
     TLSEXT_SIGALG_rsa3072_rainbowIaclassic,
@@ -1087,6 +1099,21 @@ static const SIGALG_LOOKUP sigalg_lookup_tbl[] = {
     {"rsa3072_dilithium2", TLSEXT_SIGALG_rsa3072_dilithium2,
      NID_undef, -1, EVP_PKEY_RSA3072_DILITHIUM2, SSL_PKEY_RSA3072_DILITHIUM2,
      NID_undef, NID_undef},
+    {"dilithium3", TLSEXT_SIGALG_dilithium3,
+     NID_undef, -1, EVP_PKEY_DILITHIUM3, SSL_PKEY_DILITHIUM3,
+     NID_undef, NID_undef},
+    {"p256_dilithium3", TLSEXT_SIGALG_p256_dilithium3,
+     NID_undef, -1, EVP_PKEY_P256_DILITHIUM3, SSL_PKEY_P256_DILITHIUM3,
+     NID_undef, NID_undef},
+    {"rsa3072_dilithium3", TLSEXT_SIGALG_rsa3072_dilithium3,
+     NID_undef, -1, EVP_PKEY_RSA3072_DILITHIUM3, SSL_PKEY_RSA3072_DILITHIUM3,
+     NID_undef, NID_undef},
+    {"dilithium4", TLSEXT_SIGALG_dilithium4,
+     NID_undef, -1, EVP_PKEY_DILITHIUM4, SSL_PKEY_DILITHIUM4,
+     NID_undef, NID_undef},
+    {"p384_dilithium4", TLSEXT_SIGALG_p384_dilithium4,
+     NID_undef, -1, EVP_PKEY_P384_DILITHIUM4, SSL_PKEY_P384_DILITHIUM4,
+     NID_undef, NID_undef},
     {"falcon512", TLSEXT_SIGALG_falcon512,
      NID_undef, -1, EVP_PKEY_FALCON512, SSL_PKEY_FALCON512,
      NID_undef, NID_undef},
@@ -1095,6 +1122,12 @@ static const SIGALG_LOOKUP sigalg_lookup_tbl[] = {
      NID_undef, NID_undef},
     {"rsa3072_falcon512", TLSEXT_SIGALG_rsa3072_falcon512,
      NID_undef, -1, EVP_PKEY_RSA3072_FALCON512, SSL_PKEY_RSA3072_FALCON512,
+     NID_undef, NID_undef},
+    {"falcon1024", TLSEXT_SIGALG_falcon1024,
+     NID_undef, -1, EVP_PKEY_FALCON1024, SSL_PKEY_FALCON1024,
+     NID_undef, NID_undef},
+    {"p521_falcon1024", TLSEXT_SIGALG_p521_falcon1024,
+     NID_undef, -1, EVP_PKEY_P521_FALCON1024, SSL_PKEY_P521_FALCON1024,
      NID_undef, NID_undef},
     {"mqdss3148", TLSEXT_SIGALG_mqdss3148,
      NID_undef, -1, EVP_PKEY_MQDSS3148, SSL_PKEY_MQDSS3148,
@@ -1105,14 +1138,23 @@ static const SIGALG_LOOKUP sigalg_lookup_tbl[] = {
     {"rsa3072_mqdss3148", TLSEXT_SIGALG_rsa3072_mqdss3148,
      NID_undef, -1, EVP_PKEY_RSA3072_MQDSS3148, SSL_PKEY_RSA3072_MQDSS3148,
      NID_undef, NID_undef},
-    {"picnicl1ur", TLSEXT_SIGALG_picnicl1ur,
-     NID_undef, -1, EVP_PKEY_PICNICL1UR, SSL_PKEY_PICNICL1UR,
+    {"picnicl1fs", TLSEXT_SIGALG_picnicl1fs,
+     NID_undef, -1, EVP_PKEY_PICNICL1FS, SSL_PKEY_PICNICL1FS,
      NID_undef, NID_undef},
-    {"p256_picnicl1ur", TLSEXT_SIGALG_p256_picnicl1ur,
-     NID_undef, -1, EVP_PKEY_P256_PICNICL1UR, SSL_PKEY_P256_PICNICL1UR,
+    {"p256_picnicl1fs", TLSEXT_SIGALG_p256_picnicl1fs,
+     NID_undef, -1, EVP_PKEY_P256_PICNICL1FS, SSL_PKEY_P256_PICNICL1FS,
      NID_undef, NID_undef},
-    {"rsa3072_picnicl1ur", TLSEXT_SIGALG_rsa3072_picnicl1ur,
-     NID_undef, -1, EVP_PKEY_RSA3072_PICNICL1UR, SSL_PKEY_RSA3072_PICNICL1UR,
+    {"rsa3072_picnicl1fs", TLSEXT_SIGALG_rsa3072_picnicl1fs,
+     NID_undef, -1, EVP_PKEY_RSA3072_PICNICL1FS, SSL_PKEY_RSA3072_PICNICL1FS,
+     NID_undef, NID_undef},
+    {"picnic2l1fs", TLSEXT_SIGALG_picnic2l1fs,
+     NID_undef, -1, EVP_PKEY_PICNIC2L1FS, SSL_PKEY_PICNIC2L1FS,
+     NID_undef, NID_undef},
+    {"p256_picnic2l1fs", TLSEXT_SIGALG_p256_picnic2l1fs,
+     NID_undef, -1, EVP_PKEY_P256_PICNIC2L1FS, SSL_PKEY_P256_PICNIC2L1FS,
+     NID_undef, NID_undef},
+    {"rsa3072_picnic2l1fs", TLSEXT_SIGALG_rsa3072_picnic2l1fs,
+     NID_undef, -1, EVP_PKEY_RSA3072_PICNIC2L1FS, SSL_PKEY_RSA3072_PICNIC2L1FS,
      NID_undef, NID_undef},
     {"qteslapi", TLSEXT_SIGALG_qteslapi,
      NID_undef, -1, EVP_PKEY_QTESLAPI, SSL_PKEY_QTESLAPI,
@@ -1122,6 +1164,12 @@ static const SIGALG_LOOKUP sigalg_lookup_tbl[] = {
      NID_undef, NID_undef},
     {"rsa3072_qteslapi", TLSEXT_SIGALG_rsa3072_qteslapi,
      NID_undef, -1, EVP_PKEY_RSA3072_QTESLAPI, SSL_PKEY_RSA3072_QTESLAPI,
+     NID_undef, NID_undef},
+    {"qteslapiii", TLSEXT_SIGALG_qteslapiii,
+     NID_undef, -1, EVP_PKEY_QTESLAPIII, SSL_PKEY_QTESLAPIII,
+     NID_undef, NID_undef},
+    {"p384_qteslapiii", TLSEXT_SIGALG_p384_qteslapiii,
+     NID_undef, -1, EVP_PKEY_P384_QTESLAPIII, SSL_PKEY_P384_QTESLAPIII,
      NID_undef, NID_undef},
     {"rainbowIaclassic", TLSEXT_SIGALG_rainbowIaclassic,
      NID_undef, -1, EVP_PKEY_RAINBOWIACLASSIC, SSL_PKEY_RAINBOWIACLASSIC,
@@ -1402,23 +1450,43 @@ static int sigalg_security_bits(const SIGALG_LOOKUP *lu)
             secbits = 128;
         else if(lu->sigalg == TLSEXT_SIGALG_rsa3072_dilithium2)
             secbits = 128;
+        else if(lu->sigalg == TLSEXT_SIGALG_dilithium3)
+            secbits = 128;
+        else if(lu->sigalg == TLSEXT_SIGALG_p256_dilithium3)
+            secbits = 128;
+        else if(lu->sigalg == TLSEXT_SIGALG_rsa3072_dilithium3)
+            secbits = 128;
+        else if(lu->sigalg == TLSEXT_SIGALG_dilithium4)
+            secbits = 192;
+        else if(lu->sigalg == TLSEXT_SIGALG_p384_dilithium4)
+            secbits = 192;
         else if(lu->sigalg == TLSEXT_SIGALG_falcon512)
             secbits = 128;
         else if(lu->sigalg == TLSEXT_SIGALG_p256_falcon512)
             secbits = 128;
         else if(lu->sigalg == TLSEXT_SIGALG_rsa3072_falcon512)
             secbits = 128;
+        else if(lu->sigalg == TLSEXT_SIGALG_falcon1024)
+            secbits = 256;
+        else if(lu->sigalg == TLSEXT_SIGALG_p521_falcon1024)
+            secbits = 256;
         else if(lu->sigalg == TLSEXT_SIGALG_mqdss3148)
             secbits = 128;
         else if(lu->sigalg == TLSEXT_SIGALG_p256_mqdss3148)
             secbits = 128;
         else if(lu->sigalg == TLSEXT_SIGALG_rsa3072_mqdss3148)
             secbits = 128;
-        else if(lu->sigalg == TLSEXT_SIGALG_picnicl1ur)
+        else if(lu->sigalg == TLSEXT_SIGALG_picnicl1fs)
             secbits = 128;
-        else if(lu->sigalg == TLSEXT_SIGALG_p256_picnicl1ur)
+        else if(lu->sigalg == TLSEXT_SIGALG_p256_picnicl1fs)
             secbits = 128;
-        else if(lu->sigalg == TLSEXT_SIGALG_rsa3072_picnicl1ur)
+        else if(lu->sigalg == TLSEXT_SIGALG_rsa3072_picnicl1fs)
+            secbits = 128;
+        else if(lu->sigalg == TLSEXT_SIGALG_picnic2l1fs)
+            secbits = 128;
+        else if(lu->sigalg == TLSEXT_SIGALG_p256_picnic2l1fs)
+            secbits = 128;
+        else if(lu->sigalg == TLSEXT_SIGALG_rsa3072_picnic2l1fs)
             secbits = 128;
         else if(lu->sigalg == TLSEXT_SIGALG_qteslapi)
             secbits = 128;
@@ -1426,6 +1494,10 @@ static int sigalg_security_bits(const SIGALG_LOOKUP *lu)
             secbits = 128;
         else if(lu->sigalg == TLSEXT_SIGALG_rsa3072_qteslapi)
             secbits = 128;
+        else if(lu->sigalg == TLSEXT_SIGALG_qteslapiii)
+            secbits = 192;
+        else if(lu->sigalg == TLSEXT_SIGALG_p384_qteslapiii)
+            secbits = 192;
         else if(lu->sigalg == TLSEXT_SIGALG_rainbowIaclassic)
             secbits = 128;
         else if(lu->sigalg == TLSEXT_SIGALG_p256_rainbowIaclassic)
@@ -2866,18 +2938,30 @@ void tls1_set_cert_validity(SSL *s)
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_DILITHIUM2);
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_P256_DILITHIUM2);
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_RSA3072_DILITHIUM2);
+    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_DILITHIUM3);
+    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_P256_DILITHIUM3);
+    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_RSA3072_DILITHIUM3);
+    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_DILITHIUM4);
+    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_P384_DILITHIUM4);
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_FALCON512);
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_P256_FALCON512);
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_RSA3072_FALCON512);
+    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_FALCON1024);
+    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_P521_FALCON1024);
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_MQDSS3148);
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_P256_MQDSS3148);
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_RSA3072_MQDSS3148);
-    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_PICNICL1UR);
-    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_P256_PICNICL1UR);
-    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_RSA3072_PICNICL1UR);
+    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_PICNICL1FS);
+    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_P256_PICNICL1FS);
+    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_RSA3072_PICNICL1FS);
+    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_PICNIC2L1FS);
+    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_P256_PICNIC2L1FS);
+    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_RSA3072_PICNIC2L1FS);
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_QTESLAPI);
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_P256_QTESLAPI);
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_RSA3072_QTESLAPI);
+    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_QTESLAPIII);
+    tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_P384_QTESLAPIII);
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_RAINBOWIACLASSIC);
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_P256_RAINBOWIACLASSIC);
     tls1_check_chain(s, NULL, NULL, NULL, SSL_PKEY_RSA3072_RAINBOWIACLASSIC);

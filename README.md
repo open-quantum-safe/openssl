@@ -119,7 +119,7 @@ For example, since `dilithium2` claims L1 security, the hybrids `rsa3072_dilithi
 
 ## Quickstart
 
-The steps below have been confirmed to work on macOS 10.14 (with clang 10.0.0), Ubuntu 18.04.1 (with gcc-7) and should work on more recent versions of the operating systems/compilers.
+The steps below have been confirmed to work on macOS 10.14 (with clang 10.0.0), Ubuntu 18.04.1 (with gcc-7) and should work on more recent versions of these operating systems/compilers. They have also been confirmed to work on Windows 10 with Visual Studio 2019.
 
 ### Building
 
@@ -166,7 +166,38 @@ on **macOS**, run:
 	./Configure no-shared darwin64-x86_64-cc
 	make -j
 
-The fork can also be built as a set of shared libraries by specifying `shared` instead of `no-shared` in the above commands; We have used `no-shared` to avoid having to get the libraries in the right place for the runtime linker.
+#### Windows
+
+#### Step 0
+
+Make sure you can build the unmodified version of OpenSSL by following the instructions in [INSTALL](https://github.com/open-quantum-safe/openssl/blob/OQS-OpenSSL_1_1_1-stable/INSTALL) and [NOTES.WIN](https://github.com/open-quantum-safe/openssl/blob/OQS-OpenSSL_1_1_1-stable/NOTES.WIN).
+
+Then, get the fork source code (`<OPENSSL_DIR>` is a directory of your choosing):
+
+	git clone --branch OQS-OpenSSL_1_1_1-stable https://github.com/open-quantum-safe/openssl.git <OPENSSL_DIR>
+
+The above command uses `git`, but alternatively, an archive of the source code can be downloaded and expanded into `<OPENSSL_DIR>`
+
+#### Step 1: Build and install liboqs
+
+The following instructions will download (using git, alternatively, [download an archive of the source](https://github.com/open-quantum-safe/liboqs/archive/master.zip) and unzip the project) and build the x64 release configuration of liboqs, then copy the required files it into a subdirectory inside the OpenSSL folder.  You may need to install dependencies before building liboqs; see the [liboqs README](https://github.com/open-quantum-safe/liboqs/blob/master/README.md).
+
+	git clone --branch master https://github.com/open-quantum-safe/liboqs.git
+	cd liboqs
+	mkdir build
+	cd build
+	cmake -GNinja -DCMAKE_INSTALL_PREFIX=<OPENSSL_DIR>\oqs ..
+	ninja
+	ninja install
+
+#### Step 2: Build the fork
+
+Now we follow the standard instructions for building OpenSSL:
+
+	perl Configure VC-WIN64A
+	nmake
+
+**N.B.**: The fork can also be built as a set of shared libraries by specifying `shared` instead of `no-shared` in the above commands; We have used `no-shared` to avoid having to get the libraries in the right place for the runtime linker.
 
 #### Build options
 
@@ -299,6 +330,6 @@ Contributors to OQS-OpenSSL\_1\_1\_1 include:
 
 Financial support for the development of Open Quantum Safe has been provided by Amazon Web Services and the Tutte Institute for Mathematics and Computing.
 
-We'd like to make a special acknowledgement to the companies who have dedicated programmer time to contribute source code to OQS, including Amazon Web Services, Cisco Systems, evolutionQ, and Microsoft Research.
+We'd like to make a special acknowledgement to the companies who have dedicated programmer time to contribute source code to OQS, including Amazon Web Services, evolutionQ, Microsoft Research, Cisco Systems, and IBM Research.
 
 Research projects which developed specific components of OQS have been supported by various research grants, including funding from the Natural Sciences and Engineering Research Council of Canada (NSERC); see [here](https://openquantumsafe.org/papers/SAC-SteMos16.pdf) and [here](https://openquantumsafe.org/papers/NISTPQC-CroPaqSte19.pdf) for funding acknowledgments.

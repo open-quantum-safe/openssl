@@ -301,7 +301,7 @@ sigs:
         security: 128
         oid: "1.3.6.1.4.1.2.267.6.5.4"
         code_point: "0xfe06"
-        enable: false
+        enable: true
         mix_with: [{"name": "p256",
                     "pretty_name": "ECDSA p256",
                     "oid": "1.3.9999.2.4",
@@ -317,7 +317,7 @@ sigs:
         security: 192
         oid: "1.3.6.1.4.1.2.267.6.6.5"
         code_point: "0xfe09"
-        enable: false
+        enable: true
         mix_with: [{"name": "p384",
                     "pretty_name": "ECDSA p384",
                     "oid": "1.3.9999.2.6",
@@ -351,7 +351,7 @@ sigs:
         security: 256
         oid: "1.3.9999.3.4"
         code_point: "0xfe0e"
-        enable: false
+        enable: true
         mix_with: [{"name": "p521",
                     "pretty_name": "ECDSA p521",
                     "oid": "1.3.9999.3.5",
@@ -409,7 +409,7 @@ sigs:
         security: 128
         oid: "1.3.6.1.4.1.311.89.2.1.1"
         code_point: "0xfe15"
-        enable: false
+        enable: true
         mix_with: [{"name": "p256",
                     "pretty_name": "ECDSA p256",
                     "oid": "1.3.6.1.4.1.311.89.2.1.2",
@@ -425,7 +425,7 @@ sigs:
         security: 128
         oid: "1.3.6.1.4.1.311.89.2.1.4"
         code_point: "0xfe18"
-        enable: true
+        enable: false
         mix_with: [{"name": "p256",
                     "pretty_name": "ECDSA p256",
                     "oid": "1.3.6.1.4.1.311.89.2.1.5",
@@ -441,7 +441,7 @@ sigs:
         security: 128
         oid: "1.3.6.1.4.1.311.89.2.1.11"
         code_point: "0xfe1b"
-        enable: false
+        enable: true
         mix_with: [{"name": "p256",
                     "pretty_name": "ECDSA p256",
                     "oid": "1.3.6.1.4.1.311.89.2.1.12",
@@ -509,7 +509,7 @@ sigs:
         security: 192
         oid: "1.3.6.1.4.1.311.89.2.2.20"
         code_point: "0xfe25"
-        enable: false
+        enable: true
         mix_with: [{"name": "p384",
                     "pretty_name": "ECDSA p384",
                     "oid": "1.3.6.1.4.1.311.89.2.2.21",

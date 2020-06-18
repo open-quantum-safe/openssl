@@ -258,30 +258,54 @@ static const char *get_sigtype(int nid)
         return "ECDSA p256 - Dilithium-2";
     case NID_rsa3072_dilithium2:
         return "RSA3072 - Dilithium-2";
+    case NID_dilithium3:
+        return "Dilithium-3";
+    case NID_p256_dilithium3:
+        return "ECDSA p256 - Dilithium-3";
+    case NID_rsa3072_dilithium3:
+        return "RSA3072 - Dilithium-3";
+    case NID_dilithium4:
+        return "Dilithium-4";
+    case NID_p384_dilithium4:
+        return "ECDSA p384 - Dilithium-4";
     case NID_falcon512:
         return "Falcon-512";
     case NID_p256_falcon512:
         return "ECDSA p256 - Falcon-512";
     case NID_rsa3072_falcon512:
         return "RSA3072 - Falcon-512";
+    case NID_falcon1024:
+        return "Falcon-1024";
+    case NID_p521_falcon1024:
+        return "ECDSA p521 - Falcon-1024";
     case NID_mqdss3148:
         return "MQDSS-31-48";
     case NID_p256_mqdss3148:
         return "ECDSA p256 - MQDSS-31-48";
     case NID_rsa3072_mqdss3148:
         return "RSA3072 - MQDSS-31-48";
-    case NID_picnicl1ur:
-        return "Picnic L1 UR";
-    case NID_p256_picnicl1ur:
-        return "ECDSA p256 - Picnic L1 UR";
-    case NID_rsa3072_picnicl1ur:
-        return "RSA3072 - Picnic L1 UR";
+    case NID_picnicl1fs:
+        return "Picnic L1 FS";
+    case NID_p256_picnicl1fs:
+        return "ECDSA p256 - Picnic L1 FS";
+    case NID_rsa3072_picnicl1fs:
+        return "RSA3072 - Picnic L1 FS";
+    case NID_picnic2l1fs:
+        return "Picnic2 L1 FS";
+    case NID_p256_picnic2l1fs:
+        return "ECDSA p256 - Picnic2 L1 FS";
+    case NID_rsa3072_picnic2l1fs:
+        return "RSA3072 - Picnic2 L1 FS";
     case NID_qteslapi:
         return "qTesla-I-p";
     case NID_p256_qteslapi:
         return "ECDSA p256 - qTesla-I-p";
     case NID_rsa3072_qteslapi:
         return "RSA3072 - qTesla-I-p";
+    case NID_qteslapiii:
+        return "qTESLA-p-III";
+    case NID_p384_qteslapiii:
+        return "ECDSA p384 - qTESLA-p-III";
     case NID_rainbowIaclassic:
         return "Rainbow-Ia-Classic";
     case NID_p256_rainbowIaclassic:
