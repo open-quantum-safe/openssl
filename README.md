@@ -14,6 +14,7 @@ OQS-OpenSSL\_1\_1\_1 is a fork of OpenSSL 1.1.1 that adds quantum-safe key excha
 - [Quickstart](#quickstart)
   * [Building](#building)
     * [Linux and macOS](#linux-and-macOS)
+    * [Windows](#windows)
     * [Build Options](#build-options)
   * [Running](#running)
     * [TLS demo](#tls-demo)
@@ -94,16 +95,16 @@ For example, since `kyber768` claims L3 security, the hybrid `p384_kyber768` is 
 
 #### Authentication
 
-The following digital signature algorithms from liboqs are supported:
+The following digital signature algorithms from liboqs are supported by the fork. **Note that not all variants of all algorithms are enabled by default; algorithms that are enabled by default are marked with an asterisk, and should you wish to enable additional variants, consult [the "Code Generation" section of the documentation in the wiki](https://github.com/open-quantum-safe/openssl/wiki/Using-liboqs-algorithms-not-in-the-fork#code-generation)**.
 
-- `oqs_sig_default` (see [here](https://github.com/open-quantum-safe/openssl/wiki/Using-liboqs-algorithms-that-are-not-in-the-forks#oqsdefault) for what this denotes)
-- **CRYSTALS-DILITHIUM**: `dilithium2`, `dilithium3`, `dilithium4`
-- **Falcon**: `falcon512`, `falcon1024`
-- **MQDSS**: `mqdss3148`, `mqdss3164`
-- **Picnic**: `picnicl1fs`, `picnicl1ur`, `picnic2l1fs`, `picnic2l3fs`, `picnic2l5fs`
-- **qTESLA**: `qteslapi`, `qteslapiii`
-- **Rainbow**: `rainbowIaclassic`, `rainbowIacyclic`, `rainbowIacycliccompressed`, `rainbowIIIcclassic`, `rainbowIIIccyclic`, `rainbowIIIccycliccompressed`, `rainbowVcclassic`, `rainbowVccylic`, `rainbowVccycliccompressed`
-- **SPHINCS-Haraka**: `sphincsharaka128frobust`, `sphincsharaka128fsimple`, `sphincsharaka128srobust`, `sphincsharaka128ssimple`, `sphincsharaka192frobust`, `sphincsharaka192fsimple`, `sphincsharaka192srobust`, `sphincsharaka192ssimple`, `sphincsharaka256frobust`, `sphincsharaka256fsimple`, `sphincsharaka256srobust`, `sphincsharaka256ssimple`
+- `oqs_sig_default*` (see [here](https://github.com/open-quantum-safe/openssl/wiki/Using-liboqs-algorithms-that-are-not-in-the-forks#oqsdefault) for what this denotes)
+- **CRYSTALS-DILITHIUM**: `dilithium2*`, `dilithium3*`, `dilithium4*`
+- **Falcon**: `falcon512*`, `falcon1024*`
+- **MQDSS**: `mqdss3148*`, `mqdss3164`
+- **Picnic**: `picnicl1fs*`, `picnicl1ur`, `picnic2l1fs*`, `picnic2l3fs`, `picnic2l5fs`
+- **qTESLA**: `qteslapi*`, `qteslapiii*`
+- **Rainbow**: `rainbowIaclassic*`, `rainbowIacyclic`, `rainbowIacycliccompressed`, `rainbowIIIcclassic`, `rainbowIIIccyclic`, `rainbowIIIccycliccompressed`, `rainbowVcclassic*`, `rainbowVccylic`, `rainbowVccycliccompressed`
+- **SPHINCS-Haraka**: `sphincsharaka128frobust*`, `sphincsharaka128fsimple`, `sphincsharaka128srobust`, `sphincsharaka128ssimple`, `sphincsharaka192frobust`, `sphincsharaka192fsimple`, `sphincsharaka192srobust`, `sphincsharaka192ssimple`, `sphincsharaka256frobust`, `sphincsharaka256fsimple`, `sphincsharaka256srobust`, `sphincsharaka256ssimple`
 - **SPHINCS-SHA256**: `sphincssha256128frobust`, `sphincssha256128fsimple`, `sphincssha256128srobust`, `sphincssha256128ssimple`, `sphincssha256192frobust`, `sphincssha256192fsimple`, `sphincssha256192srobust`, `sphincssha256192ssimple`, `sphincssha256256frobust`, `sphincssha256256fsimple`, `sphincssha256256srobust`, `sphincssha256256ssimple`
 - **SPHINCS-SHAKE256**: `sphincsshake256128frobust`, `sphincsshake256128fsimple`, `sphincsshake256128srobust`, `sphincsshake256128ssimple`, `sphincsshake256192frobust`, `sphincsshake256192fsimple`, `sphincsshake256192srobust`, `sphincsshake256192ssimple`, `sphincsshake256256frobust`, `sphincsshake256256fsimple`, `sphincsshake256256srobust`, `sphincsshake256256ssimple`
 
@@ -114,8 +115,6 @@ The following hybrid algorithms are supported; they combine a quantum-safe algor
 - if `<SIG>` has L5 security, the fork provides the method `p521_<SIG>`, which combines `<SIG>` with ECDSA using NIST's P521 curve.
 
 For example, since `dilithium2` claims L1 security, the hybrids `rsa3072_dilithium2` and `p256_dilithium2` are available.
-
-**N.B.**: Only the L1 signature variants and `rainbowVcclassic` are enabled by default. Should you wish to enable additional variants, consult [the "Code Generation" section of the documentation in the wiki](https://github.com/open-quantum-safe/openssl/wiki/Using-liboqs-algorithms-not-in-the-fork#code-generation).
 
 ## Quickstart
 
