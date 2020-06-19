@@ -238,6 +238,9 @@ kems:
 kem_nid_end: "0x0250"
 kem_nid_hybrid_end: "0x2FFF"
 # need to edit ssl_local.h macros IS_OQS_KEM_CURVEID and IS_OQS_KEM_HYBRID_CURVEID with the above _end values
+
+# N.B: For interoperability, code-points and OIDs must match those used in
+# https://docs.google.com/spreadsheets/d/12YarzaNv3XQNLnvDsWLlRKwtZFhRrDdWf36YlzwrPeg/edit#gid=0
 sigs:
   -
     # iso (1)

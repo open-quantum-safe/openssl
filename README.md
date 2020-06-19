@@ -68,7 +68,7 @@ Some of the KEMs provided in liboqs do provide IND-CCA security; others do not (
 
 ### Supported Algorithms
 
-If an algorithm is provided by liboqs but is not listed below, it can still be "supported" by this fork through [either one of two ways](https://github.com/open-quantum-safe/openssl/wiki/Using-liboqs-algorithms-that-are-not-in-the-forks).
+If an algorithm is provided by liboqs but is not listed below, it might still be possible to use it in the fork through [either one of two ways](https://github.com/open-quantum-safe/openssl/wiki/Using-liboqs-algorithms-that-are-not-in-the-forks).
 
 #### Key Exchange
 
