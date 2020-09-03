@@ -1,6 +1,6 @@
 # add OQS build
 image:
-  - Visual Studio 2017
+  - Visual Studio 2019
 
 platform:
     - x64
@@ -13,8 +13,11 @@ environment:
 
 configuration:
     - shared
+      BUILD_SHARED: ON
     - plain
+      BUILD_SHARED: OFF
     - minimal
+      BUILD_SHARED: OFF
 
 before_build:
     - ps: >-
@@ -39,7 +42,7 @@ before_build:
         } Else {
             $env:SHARED="no-shared no-makedepend"
         }
-    - call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" %VCVARS_PLATFORM%
+    - call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" %VCVARS_PLATFORM%
     - mkdir _build
     - cd _build
     - perl ..\Configure %TARGET% %SHARED%
@@ -52,6 +55,7 @@ before_build:
         }
 
 build_script:
+    - cmd: '%APPVEYOR_BUILD_FOLDER%\appveyor_build.bat'
     - cd _build
     - ps: >-
         If ($env:Configuration -Match "shared" -or $env:EXTENDED_TESTS) {
