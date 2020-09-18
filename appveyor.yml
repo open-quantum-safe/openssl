@@ -13,11 +13,8 @@ environment:
 
 configuration:
     - shared
-      BUILD_SHARED: ON
     - plain
-      BUILD_SHARED: OFF
     - minimal
-      BUILD_SHARED: OFF
 
 before_build:
     - ps: >-
@@ -37,12 +34,22 @@ before_build:
     - ps: >-
         If ($env:Configuration -Match "shared") {
             $env:SHARED="no-makedepend"
+            $env:OQSSHARED="ON"
         } ElseIf ($env:Configuration -Match "minimal") {
             $env:SHARED="no-shared no-dso no-makedepend no-aria no-async no-autoload-config no-blake2 no-bf no-camellia no-cast no-chacha no-cmac no-cms no-comp no-ct no-des no-dgram no-dh no-dsa no-dtls no-ec2m no-engine no-filenames no-gost no-idea no-mdc2 no-md4 no-multiblock no-nextprotoneg no-ocsp no-ocb no-poly1305 no-psk no-rc2 no-rc4 no-rmd160 no-seed no-siphash no-sm2 no-sm3 no-sm4 no-srp no-srtp no-ssl3 no-ssl3-method no-ts no-ui-console no-whirlpool no-asm -DOPENSSL_SMALL_FOOTPRINT"
+            $env:OQSSHARED="OFF"
         } Else {
             $env:SHARED="no-shared no-makedepend"
+            $env:OQSSHARED="OFF"
         }
     - call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" %VCVARS_PLATFORM%
+    # build oqs
+    - mkdir oqsbuild
+    - cd oqsbuild
+    - git clone --branch master https://github.com/open-quantum-safe/liboqs.git
+    - cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release -DOQS_ENABLE_SIG_SPHINCS=OFF -DOQS_ENABLE_SIG_RAINBOW=OFF -DBUILD_SHARED_LIBS=%OQSSHARED%
+    - ninja
+    - ninja install
     - mkdir _build
     - cd _build
     - perl ..\Configure %TARGET% %SHARED%
