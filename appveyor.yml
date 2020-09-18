@@ -44,12 +44,14 @@ before_build:
         }
     - call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" %VCVARS_PLATFORM%
     # build oqs
+    - git clone --branch master https://github.com/open-quantum-safe/liboqs.git
+    - cd liboqs
     - mkdir oqsbuild
     - cd oqsbuild
-    - git clone --branch master https://github.com/open-quantum-safe/liboqs.git
-    - cmake .. -GNinja -DCMAKE_BUILD_TYPE=Release -DOQS_ENABLE_SIG_SPHINCS=OFF -DOQS_ENABLE_SIG_RAINBOW=OFF -DBUILD_SHARED_LIBS=%OQSSHARED%
+    - cmake .. -GNinja -DCMAKE_INSTALL_PREFIX=%APPVEYOR_BUILD_FOLDER%\oqs -DCMAKE_BUILD_TYPE=Release -DOQS_ENABLE_SIG_SPHINCS=OFF -DOQS_ENABLE_SIG_RAINBOW=OFF -DBUILD_SHARED_LIBS=%OQSSHARED%
     - ninja
     - ninja install
+    - cd ..\..
     - mkdir _build
     - cd _build
     - perl ..\Configure %TARGET% %SHARED%
