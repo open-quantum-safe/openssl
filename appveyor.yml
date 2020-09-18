@@ -1,4 +1,3 @@
-# add OQS build
 image:
   - Visual Studio 2019
 
@@ -51,7 +50,7 @@ before_build:
     - cmake .. -GNinja -DCMAKE_INSTALL_PREFIX=%APPVEYOR_BUILD_FOLDER%\oqs -DCMAKE_BUILD_TYPE=Release -DOQS_ENABLE_SIG_SPHINCS=OFF -DOQS_ENABLE_SIG_RAINBOW=OFF -DBUILD_SHARED_LIBS=%OQSSHARED%
     - ninja
     - ninja install
-    - cd ..\..
+    - cd %APPVEYOR_BUILD_FOLDER%
     - mkdir _build
     - cd _build
     - perl ..\Configure %TARGET% %SHARED%
