@@ -63,7 +63,6 @@ before_build:
         }
 
 build_script:
-    - cmd: '%APPVEYOR_BUILD_FOLDER%\appveyor_build.bat'
     - cd _build
     - ps: >-
         If ($env:Configuration -Match "shared" -or $env:EXTENDED_TESTS) {
