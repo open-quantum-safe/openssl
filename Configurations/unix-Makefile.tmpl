@@ -344,9 +344,15 @@ CNF_CFLAGS={- join(' ', $target{cflags} || (),
                         @{$config{cflags}}) -}
 CNF_CXXFLAGS={- join(' ', $target{cxxflags} || (),
                           @{$config{cxxflags}}) -}
+ifneq (,$(wildcard oqs/lib64))
+CNF_LDFLAGS={- join(' ', $target{lflags} || (),
+                         "-Loqs/lib64",
+                         @{$config{lflags}}) -}
+else
 CNF_LDFLAGS={- join(' ', $target{lflags} || (),
                          "-Loqs/lib",
                          @{$config{lflags}}) -}
+endif
 CNF_EX_LIBS={- join(' ', $target{ex_libs} || (),
                          "-loqs",
                          @{$config{ex_libs}}) -}
