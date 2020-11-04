@@ -788,12 +788,24 @@ install_runtime_libs: build_libs
 ifneq (,$(wildcard oqs/lib/liboqs.a))
 	@install oqs/lib/liboqs.a $(DESTDIR)$(libdir)
 endif
+ifneq (,$(wildcard oqs/lib64/liboqs.a))
+	@install oqs/lib64/liboqs.a $(DESTDIR)$(libdir)
+endif
 ifneq (,$(wildcard oqs/lib/liboqs.so.0*))
 	@set -e; for i in oqs/lib/liboqs.so.0.*; do \
 		fn=`basename $$i`; \
 		$(ECHO) "install oqs/lib/$$fn $(DESTDIR)$(libdir)"; \
 		$(ECHO) "cd $(DESTDIR)$(libdir) && ln -sf $$fn liboqs.so && ln -sf $$fn liboqs.so.0 && cd -"; \
 		install oqs/lib/$$fn $(DESTDIR)$(libdir); \
+		cd $(DESTDIR)$(libdir) && ln -sf $$fn liboqs.so && ln -sf $$fn liboqs.so.0 && cd -; \
+	done
+endif
+ifneq (,$(wildcard oqs/lib64/liboqs.so.0*))
+	@set -e; for i in oqs/lib64/liboqs.so.0.*; do \
+		fn=`basename $$i`; \
+		$(ECHO) "install oqs/lib64/$$fn $(DESTDIR)$(libdir)"; \
+		$(ECHO) "cd $(DESTDIR)$(libdir) && ln -sf $$fn liboqs.so && ln -sf $$fn liboqs.so.0 && cd -"; \
+		install oqs/lib64/$$fn $(DESTDIR)$(libdir); \
 		cd $(DESTDIR)$(libdir) && ln -sf $$fn liboqs.so && ln -sf $$fn liboqs.so.0 && cd -; \
 	done
 endif
