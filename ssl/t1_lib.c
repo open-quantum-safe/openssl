@@ -630,11 +630,11 @@ int tls1_set_groups(uint16_t **pext, size_t *pextlen,
         uint16_t id;
         /* TODO(TLS1.3): Convert for DH groups */
         id = tls1_nid2group_id(groups[i]);
-        if (!id || dup_list[id]) {
+        if (!id || dup_list[(id-1)]) {
             OPENSSL_free(glist);
             return 0;
         }
-        dup_list[id] = i;
+        dup_list[(id-1)] = i;
         glist[i] = id;
         int oqs_group_id = OQS_KEM_CURVEID(groups[i]);
         if (oqs_group_id != 0)
