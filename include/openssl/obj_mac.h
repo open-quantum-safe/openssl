@@ -5635,30 +5635,30 @@
 #define NID_rsa3072_picnic3l1           1216
 #define OBJ_rsa3072_picnic3l1           1L,3L,6L,1L,4L,1L,311L,89L,2L,1L,23L
 
-#define SN_rainbowIaclassic             "rainbowIaclassic"
-#define LN_rainbowIaclassic             "rainbowIaclassic"
-#define NID_rainbowIaclassic            1217
-#define OBJ_rainbowIaclassic            1L,3L,9999L,5L,1L,1L
+#define SN_rainbowIclassic              "rainbowIclassic"
+#define LN_rainbowIclassic              "rainbowIclassic"
+#define NID_rainbowIclassic             1217
+#define OBJ_rainbowIclassic             1L,3L,9999L,5L,1L,1L
 
-#define SN_p256_rainbowIaclassic                "p256_rainbowIaclassic"
-#define LN_p256_rainbowIaclassic                "p256_rainbowIaclassic"
-#define NID_p256_rainbowIaclassic               1218
-#define OBJ_p256_rainbowIaclassic               1L,3L,9999L,5L,1L,2L
+#define SN_p256_rainbowIclassic         "p256_rainbowIclassic"
+#define LN_p256_rainbowIclassic         "p256_rainbowIclassic"
+#define NID_p256_rainbowIclassic                1218
+#define OBJ_p256_rainbowIclassic                1L,3L,9999L,5L,1L,2L
 
-#define SN_rsa3072_rainbowIaclassic             "rsa3072_rainbowIaclassic"
-#define LN_rsa3072_rainbowIaclassic             "rsa3072_rainbowIaclassic"
-#define NID_rsa3072_rainbowIaclassic            1219
-#define OBJ_rsa3072_rainbowIaclassic            1L,3L,9999L,5L,1L,3L
+#define SN_rsa3072_rainbowIclassic              "rsa3072_rainbowIclassic"
+#define LN_rsa3072_rainbowIclassic              "rsa3072_rainbowIclassic"
+#define NID_rsa3072_rainbowIclassic             1219
+#define OBJ_rsa3072_rainbowIclassic             1L,3L,9999L,5L,1L,3L
 
-#define SN_rainbowVcclassic             "rainbowVcclassic"
-#define LN_rainbowVcclassic             "rainbowVcclassic"
-#define NID_rainbowVcclassic            1220
-#define OBJ_rainbowVcclassic            1L,3L,9999L,5L,3L,1L
+#define SN_rainbowVclassic              "rainbowVclassic"
+#define LN_rainbowVclassic              "rainbowVclassic"
+#define NID_rainbowVclassic             1220
+#define OBJ_rainbowVclassic             1L,3L,9999L,5L,3L,1L
 
-#define SN_p521_rainbowVcclassic                "p521_rainbowVcclassic"
-#define LN_p521_rainbowVcclassic                "p521_rainbowVcclassic"
-#define NID_p521_rainbowVcclassic               1221
-#define OBJ_p521_rainbowVcclassic               1L,3L,9999L,5L,3L,2L
+#define SN_p521_rainbowVclassic         "p521_rainbowVclassic"
+#define LN_p521_rainbowVclassic         "p521_rainbowVclassic"
+#define NID_p521_rainbowVclassic                1221
+#define OBJ_p521_rainbowVclassic                1L,3L,9999L,5L,3L,2L
 
 #define SN_sphincsharaka128frobust              "sphincsharaka128frobust"
 #define LN_sphincsharaka128frobust              "sphincsharaka128frobust"

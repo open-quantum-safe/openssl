@@ -135,11 +135,11 @@ extern const EVP_PKEY_METHOD rsa3072_picnicl1full_pkey_meth;
 extern const EVP_PKEY_METHOD picnic3l1_pkey_meth;
 extern const EVP_PKEY_METHOD p256_picnic3l1_pkey_meth;
 extern const EVP_PKEY_METHOD rsa3072_picnic3l1_pkey_meth;
-extern const EVP_PKEY_METHOD rainbowIaclassic_pkey_meth;
-extern const EVP_PKEY_METHOD p256_rainbowIaclassic_pkey_meth;
-extern const EVP_PKEY_METHOD rsa3072_rainbowIaclassic_pkey_meth;
-extern const EVP_PKEY_METHOD rainbowVcclassic_pkey_meth;
-extern const EVP_PKEY_METHOD p521_rainbowVcclassic_pkey_meth;
+extern const EVP_PKEY_METHOD rainbowIclassic_pkey_meth;
+extern const EVP_PKEY_METHOD p256_rainbowIclassic_pkey_meth;
+extern const EVP_PKEY_METHOD rsa3072_rainbowIclassic_pkey_meth;
+extern const EVP_PKEY_METHOD rainbowVclassic_pkey_meth;
+extern const EVP_PKEY_METHOD p521_rainbowVclassic_pkey_meth;
 extern const EVP_PKEY_METHOD sphincsharaka128frobust_pkey_meth;
 extern const EVP_PKEY_METHOD p256_sphincsharaka128frobust_pkey_meth;
 extern const EVP_PKEY_METHOD rsa3072_sphincsharaka128frobust_pkey_meth;///// OQS_TEMPLATE_FRAGMENT_DEFINE_EVP_METHS_END

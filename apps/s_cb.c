@@ -290,16 +290,16 @@ static const char *get_sigtype(int nid)
         return "ECDSA p256 - Picnic3 L1";
     case NID_rsa3072_picnic3l1:
         return "RSA3072 - Picnic3 L1";
-    case NID_rainbowIaclassic:
-        return "Rainbow-Ia-Classic";
-    case NID_p256_rainbowIaclassic:
-        return "ECDSA p256 - Rainbow-Ia-Classic";
-    case NID_rsa3072_rainbowIaclassic:
-        return "RSA3072 - Rainbow-Ia-Classic";
-    case NID_rainbowVcclassic:
-        return "Rainbow-Vc-Classic";
-    case NID_p521_rainbowVcclassic:
-        return "ECDSA p521 - Rainbow-Vc-Classic";
+    case NID_rainbowIclassic:
+        return "Rainbow-I-Classic";
+    case NID_p256_rainbowIclassic:
+        return "ECDSA p256 - Rainbow-I-Classic";
+    case NID_rsa3072_rainbowIclassic:
+        return "RSA3072 - Rainbow-I-Classic";
+    case NID_rainbowVclassic:
+        return "Rainbow-V-Classic";
+    case NID_p521_rainbowVclassic:
+        return "ECDSA p521 - Rainbow-V-Classic";
     case NID_sphincsharaka128frobust:
         return "SPHINCS+-Haraka-128f-robust";
     case NID_p256_sphincsharaka128frobust:

@@ -247,16 +247,16 @@
 #define SSL_aP256_PICNIC3L1 0x10000000U
 /* RSA3072 - Picnic3 L1 auth */
 #define SSL_aRSA3072_PICNIC3L1 0x20000000U
-/* Rainbow-Ia-Classic auth */
-#define SSL_aRAINBOWIACLASSIC 0x40000000U
-/* ECDSA p256 - Rainbow-Ia-Classic auth */
-#define SSL_aP256_RAINBOWIACLASSIC 0x80000000U
-/* RSA3072 - Rainbow-Ia-Classic auth */
-#define SSL_aRSA3072_RAINBOWIACLASSIC 0x100000000U
-/* Rainbow-Vc-Classic auth */
-#define SSL_aRAINBOWVCCLASSIC 0x200000000U
-/* ECDSA p521 - Rainbow-Vc-Classic auth */
-#define SSL_aP521_RAINBOWVCCLASSIC 0x400000000U
+/* Rainbow-I-Classic auth */
+#define SSL_aRAINBOWICLASSIC 0x40000000U
+/* ECDSA p256 - Rainbow-I-Classic auth */
+#define SSL_aP256_RAINBOWICLASSIC 0x80000000U
+/* RSA3072 - Rainbow-I-Classic auth */
+#define SSL_aRSA3072_RAINBOWICLASSIC 0x100000000U
+/* Rainbow-V-Classic auth */
+#define SSL_aRAINBOWVCLASSIC 0x200000000U
+/* ECDSA p521 - Rainbow-V-Classic auth */
+#define SSL_aP521_RAINBOWVCLASSIC 0x400000000U
 /* SPHINCS+-Haraka-128f-robust auth */
 #define SSL_aSPHINCSHARAKA128FROBUST 0x800000000U
 /* ECDSA p256 - SPHINCS+-Haraka-128f-robust auth */
@@ -469,11 +469,11 @@
 #define SSL_PKEY_PICNIC3L1 28
 #define SSL_PKEY_P256_PICNIC3L1 29
 #define SSL_PKEY_RSA3072_PICNIC3L1 30
-#define SSL_PKEY_RAINBOWIACLASSIC 31
-#define SSL_PKEY_P256_RAINBOWIACLASSIC 32
-#define SSL_PKEY_RSA3072_RAINBOWIACLASSIC 33
-#define SSL_PKEY_RAINBOWVCCLASSIC 34
-#define SSL_PKEY_P521_RAINBOWVCCLASSIC 35
+#define SSL_PKEY_RAINBOWICLASSIC 31
+#define SSL_PKEY_P256_RAINBOWICLASSIC 32
+#define SSL_PKEY_RSA3072_RAINBOWICLASSIC 33
+#define SSL_PKEY_RAINBOWVCLASSIC 34
+#define SSL_PKEY_P521_RAINBOWVCLASSIC 35
 #define SSL_PKEY_SPHINCSHARAKA128FROBUST 36
 #define SSL_PKEY_P256_SPHINCSHARAKA128FROBUST 37
 #define SSL_PKEY_RSA3072_SPHINCSHARAKA128FROBUST 38
@@ -2475,11 +2475,11 @@ typedef enum downgrade_en {
 #define TLSEXT_SIGALG_picnic3l1 0xfe1b
 #define TLSEXT_SIGALG_p256_picnic3l1 0xfe1c
 #define TLSEXT_SIGALG_rsa3072_picnic3l1 0xfe1d
-#define TLSEXT_SIGALG_rainbowIaclassic 0xfe27
-#define TLSEXT_SIGALG_p256_rainbowIaclassic 0xfe28
-#define TLSEXT_SIGALG_rsa3072_rainbowIaclassic 0xfe29
-#define TLSEXT_SIGALG_rainbowVcclassic 0xfe3c
-#define TLSEXT_SIGALG_p521_rainbowVcclassic 0xfe3d
+#define TLSEXT_SIGALG_rainbowIclassic 0xfe27
+#define TLSEXT_SIGALG_p256_rainbowIclassic 0xfe28
+#define TLSEXT_SIGALG_rsa3072_rainbowIclassic 0xfe29
+#define TLSEXT_SIGALG_rainbowVclassic 0xfe3c
+#define TLSEXT_SIGALG_p521_rainbowVclassic 0xfe3d
 #define TLSEXT_SIGALG_sphincsharaka128frobust 0xfe42
 #define TLSEXT_SIGALG_p256_sphincsharaka128frobust 0xfe43
 #define TLSEXT_SIGALG_rsa3072_sphincsharaka128frobust 0xfe44

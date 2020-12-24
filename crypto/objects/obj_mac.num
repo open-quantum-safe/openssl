@@ -1214,11 +1214,11 @@ rsa3072_picnicl1full		1213
 picnic3l1		1214
 p256_picnic3l1		1215
 rsa3072_picnic3l1		1216
-rainbowIaclassic		1217
-p256_rainbowIaclassic		1218
-rsa3072_rainbowIaclassic		1219
-rainbowVcclassic		1220
-p521_rainbowVcclassic		1221
+rainbowIclassic		1217
+p256_rainbowIclassic		1218
+rsa3072_rainbowIclassic		1219
+rainbowVclassic		1220
+p521_rainbowVclassic		1221
 sphincsharaka128frobust		1222
 p256_sphincsharaka128frobust		1223
 rsa3072_sphincsharaka128frobust		1224

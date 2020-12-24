@@ -31,8 +31,8 @@ signatures = [
     'falcon1024',
     'picnicl1full',
     'picnic3l1',
-    'rainbowIaclassic',
-    'rainbowVcclassic',
+    'rainbowIclassic',
+    'rainbowVclassic',
     'sphincsharaka128frobust',
 ##### OQS_TEMPLATE_FRAGMENT_PQ_SIG_ALGS_END
 ]
