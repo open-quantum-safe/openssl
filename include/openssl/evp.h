@@ -94,10 +94,16 @@
 # define EVP_PKEY_SPHINCSHARAKA128FROBUST NID_sphincsharaka128frobust
 # define EVP_PKEY_P256_SPHINCSHARAKA128FROBUST NID_p256_sphincsharaka128frobust
 # define EVP_PKEY_RSA3072_SPHINCSHARAKA128FROBUST NID_rsa3072_sphincsharaka128frobust
-#define OQS_OPENSSL_SIG_algs_length 30
+# define EVP_PKEY_SPHINCSSHA256128FROBUST NID_sphincssha256128frobust
+# define EVP_PKEY_P256_SPHINCSSHA256128FROBUST NID_p256_sphincssha256128frobust
+# define EVP_PKEY_RSA3072_SPHINCSSHA256128FROBUST NID_rsa3072_sphincssha256128frobust
+# define EVP_PKEY_SPHINCSSHAKE256128FROBUST NID_sphincsshake256128frobust
+# define EVP_PKEY_P256_SPHINCSSHAKE256128FROBUST NID_p256_sphincsshake256128frobust
+# define EVP_PKEY_RSA3072_SPHINCSSHAKE256128FROBUST NID_rsa3072_sphincsshake256128frobust
+#define OQS_OPENSSL_SIG_algs_length 36
 #define OQS_OPENSSL_KEM_algs_length 40
 #define IS_OQS_OPENSSL_KEM_NID(a) ((a >= NID_oqs_kem_default) && (a <= NID_p384_sntrup857))
-#define IS_OQS_OPENSSL_SIG_NID(a) ((a >= NID_oqs_sig_default) && (a <= NID_rsa3072_sphincsharaka128frobust))
+#define IS_OQS_OPENSSL_SIG_NID(a) ((a >= NID_oqs_sig_default) && (a <= NID_rsa3072_sphincsshake256128frobust))
 /////// OQS_TEMPLATE_FRAGMENT_DEFINE_EVP_PKEYS_END
 const char *OQSKEM_options(void);
 const char *OQSSIG_options(void);

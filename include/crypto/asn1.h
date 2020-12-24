@@ -116,7 +116,13 @@ extern const EVP_PKEY_ASN1_METHOD rainbowVclassic_asn1_meth;
 extern const EVP_PKEY_ASN1_METHOD p521_rainbowVclassic_asn1_meth;
 extern const EVP_PKEY_ASN1_METHOD sphincsharaka128frobust_asn1_meth;
 extern const EVP_PKEY_ASN1_METHOD p256_sphincsharaka128frobust_asn1_meth;
-extern const EVP_PKEY_ASN1_METHOD rsa3072_sphincsharaka128frobust_asn1_meth;///// OQS_TEMPLATE_FRAGMENT_DEFINE_ASN1_METHS_END
+extern const EVP_PKEY_ASN1_METHOD rsa3072_sphincsharaka128frobust_asn1_meth;
+extern const EVP_PKEY_ASN1_METHOD sphincssha256128frobust_asn1_meth;
+extern const EVP_PKEY_ASN1_METHOD p256_sphincssha256128frobust_asn1_meth;
+extern const EVP_PKEY_ASN1_METHOD rsa3072_sphincssha256128frobust_asn1_meth;
+extern const EVP_PKEY_ASN1_METHOD sphincsshake256128frobust_asn1_meth;
+extern const EVP_PKEY_ASN1_METHOD p256_sphincsshake256128frobust_asn1_meth;
+extern const EVP_PKEY_ASN1_METHOD rsa3072_sphincsshake256128frobust_asn1_meth;///// OQS_TEMPLATE_FRAGMENT_DEFINE_ASN1_METHS_END
 
 /*
  * These are used internally in the ASN1_OBJECT to keep track of whether the

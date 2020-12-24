@@ -34,6 +34,8 @@ signatures = [
     'rainbowIclassic',
     'rainbowVclassic',
     'sphincsharaka128frobust',
+    'sphincssha256128frobust',
+    'sphincsshake256128frobust',
 ##### OQS_TEMPLATE_FRAGMENT_PQ_SIG_ALGS_END
 ]
 
