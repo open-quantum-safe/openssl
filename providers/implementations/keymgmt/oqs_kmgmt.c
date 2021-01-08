@@ -498,27 +498,27 @@ static void *picnic3l1_gen_init(void *provctx, int selection)
     return oqsx_gen_init(provctx, selection, OQS_SIG_alg_picnic3_L1, 1); 
 }
 
-static void *rainbowIaclassic_new_key(void *provctx) 
+static void *rainbowIclassic_new_key(void *provctx) 
 { 
     if (!ossl_prov_is_running()) 
         return 0; 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_SIG_alg_rainbow_Ia_classic, 1, NULL); 
+    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_SIG_alg_rainbow_I_classic, 1, NULL); 
 }
 
-static void *rainbowIaclassic_gen_init(void *provctx, int selection)
+static void *rainbowIclassic_gen_init(void *provctx, int selection)
 { 
-    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_rainbow_Ia_classic, 1); 
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_rainbow_I_classic, 1); 
 }
-static void *rainbowVcclassic_new_key(void *provctx) 
+static void *rainbowVclassic_new_key(void *provctx) 
 { 
     if (!ossl_prov_is_running()) 
         return 0; 
-    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_SIG_alg_rainbow_Vc_classic, 1, NULL); 
+    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_SIG_alg_rainbow_V_classic, 1, NULL); 
 }
 
-static void *rainbowVcclassic_gen_init(void *provctx, int selection)
+static void *rainbowVclassic_gen_init(void *provctx, int selection)
 { 
-    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_rainbow_Vc_classic, 1); 
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_rainbow_V_classic, 1); 
 }
 
 static void *sphincsharaka128frobust_new_key(void *provctx) 
@@ -531,6 +531,30 @@ static void *sphincsharaka128frobust_new_key(void *provctx)
 static void *sphincsharaka128frobust_gen_init(void *provctx, int selection)
 { 
     return oqsx_gen_init(provctx, selection, OQS_SIG_alg_sphincs_haraka_128f_robust, 1); 
+}
+
+static void *sphincssha256128frobust_new_key(void *provctx) 
+{ 
+    if (!ossl_prov_is_running()) 
+        return 0; 
+    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_SIG_alg_sphincs_sha256_128f_robust, 1, NULL); 
+}
+
+static void *sphincssha256128frobust_gen_init(void *provctx, int selection)
+{ 
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_sphincs_sha256_128f_robust, 1); 
+}
+
+static void *sphincsshake256128frobust_new_key(void *provctx) 
+{ 
+    if (!ossl_prov_is_running()) 
+        return 0; 
+    return oqsx_key_new(PROV_LIBCTX_OF(provctx), OQS_SIG_alg_sphincs_shake256_128f_robust, 1, NULL); 
+}
+
+static void *sphincsshake256128frobust_gen_init(void *provctx, int selection)
+{ 
+    return oqsx_gen_init(provctx, selection, OQS_SIG_alg_sphincs_shake256_128f_robust, 1); 
 }
 
 
@@ -1051,9 +1075,11 @@ MAKE_KEYMGMT_FUNCTIONS(falcon512)
 MAKE_KEYMGMT_FUNCTIONS(falcon1024)
 MAKE_KEYMGMT_FUNCTIONS(picnicl1full)
 MAKE_KEYMGMT_FUNCTIONS(picnic3l1)
-MAKE_KEYMGMT_FUNCTIONS(rainbowIaclassic)
-MAKE_KEYMGMT_FUNCTIONS(rainbowVcclassic)
+MAKE_KEYMGMT_FUNCTIONS(rainbowIclassic)
+MAKE_KEYMGMT_FUNCTIONS(rainbowVclassic)
 MAKE_KEYMGMT_FUNCTIONS(sphincsharaka128frobust)
+MAKE_KEYMGMT_FUNCTIONS(sphincssha256128frobust)
+MAKE_KEYMGMT_FUNCTIONS(sphincsshake256128frobust)
 
 MAKE_KEYMGMT_FUNCTIONS(frodo640aes)
 MAKE_KEYMGMT_FUNCTIONS(frodo640shake)

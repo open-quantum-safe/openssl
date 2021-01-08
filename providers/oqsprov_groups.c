@@ -13,9 +13,9 @@
 /* For TLS1_VERSION etc */
 #include <openssl/ssl.h>
 #include <openssl/params.h>
-#include "internal/nelem.h"
-#include "internal/tlsgroups.h"
-#include "prov/providercommon.h"
+
+// internal, but useful OSSL define:
+# define OSSL_NELEM(x)    (sizeof(x)/sizeof((x)[0]))
 
 typedef struct oqs_group_constants_st {
     unsigned int group_id;   /* Group ID */

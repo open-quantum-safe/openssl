@@ -289,61 +289,6 @@ extern const OSSL_DISPATCH ossl_cossl_mac_legacy_keymgmt_functions[];
 extern const OSSL_DISPATCH sm2_keymgmt_functions[];
 #endif
 
-///// OQS_TEMPLATE_FRAGMENT_ALG_FUNCTIONS_START
-extern const OSSL_DISPATCH oqs_oqs_sig_default_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_dilithium2_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_dilithium3_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_dilithium4_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_falcon512_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_falcon1024_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_picnicl1full_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_picnic3l1_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_rainbowIaclassic_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_rainbowVcclassic_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_sphincsharaka128frobust_keymgmt_functions[];
-
-extern const OSSL_DISPATCH oqs_frodo640aes_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_frodo640shake_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_frodo976aes_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_frodo976shake_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_frodo1344aes_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_frodo1344shake_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_bike1l1cpa_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_bike1l3cpa_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_kyber512_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_kyber768_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_kyber1024_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ntru_hps2048509_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ntru_hps2048677_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ntru_hps4096821_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ntru_hrss701_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_lightsaber_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_saber_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_firesaber_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_sidhp434_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_sidhp503_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_sidhp610_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_sidhp751_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_sikep434_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_sikep503_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_sikep610_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_sikep751_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_bike1l1fo_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_bike1l3fo_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_kyber90s512_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_kyber90s768_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_kyber90s1024_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_hqc128_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_hqc192_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_hqc256_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ntrulpr653_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ntrulpr761_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_ntrulpr857_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_sntrup653_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_sntrup761_keymgmt_functions[];
-extern const OSSL_DISPATCH oqs_sntrup857_keymgmt_functions[];
-///// OQS_TEMPLATE_FRAGMENT_ALG_FUNCTIONS_END
- 
 /* Key Exchange */
 extern const OSSL_DISPATCH ossl_dh_keyexch_functions[];
 extern const OSSL_DISPATCH ossl_x25519_keyexch_functions[];
@@ -364,7 +309,6 @@ extern const OSSL_DISPATCH ossl_mac_legacy_siphash_signature_functions[];
 extern const OSSL_DISPATCH ossl_mac_legacy_poly1305_signature_functions[];
 extern const OSSL_DISPATCH ossl_mac_legacy_cmac_signature_functions[];
 extern const OSSL_DISPATCH sm2_signature_functions[];
-extern const OSSL_DISPATCH oqs_signature_functions[];
 
 /* Asym Cipher */
 extern const OSSL_DISPATCH ossl_rsa_asym_cipher_functions[];
@@ -374,7 +318,6 @@ extern const OSSL_DISPATCH sm2_asym_cipher_functions[];
 
 /* Asym Key encapsulation  */
 extern const OSSL_DISPATCH ossl_rsa_asym_kem_functions[];
-extern const OSSL_DISPATCH oqs_generic_kem_functions[];
 
 /* Encoders */
 extern const OSSL_DISPATCH ossl_rsa_to_PKCS1_der_encoder_functions[];

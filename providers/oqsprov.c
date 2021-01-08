@@ -12,9 +12,6 @@
 #include <openssl/core_dispatch.h>
 #include <openssl/core_names.h>
 #include <openssl/params.h>
-#include "prov/provider_ctx.h"
-#include "prov/implementations.h"
-#include "prov/providercommon.h"
 
 /*
  * Forward declarations to ensure that interface functions are correctly
@@ -40,6 +37,66 @@ static const OSSL_PARAM oqsprovider_param_types[] = {
     OSSL_PARAM_END
 };
 
+extern const OSSL_DISPATCH oqs_generic_kem_functions[];
+extern const OSSL_DISPATCH oqs_signature_functions[];
+
+///// OQS_TEMPLATE_FRAGMENT_ALG_FUNCTIONS_START
+extern const OSSL_DISPATCH oqs_oqs_sig_default_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_dilithium2_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_dilithium3_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_dilithium4_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_falcon512_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_falcon1024_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_picnicl1full_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_picnic3l1_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_rainbowIclassic_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_rainbowVclassic_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_sphincsharaka128frobust_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_sphincssha256128frobust_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_sphincsshake256128frobust_keymgmt_functions[];
+
+extern const OSSL_DISPATCH oqs_frodo640aes_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_frodo640shake_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_frodo976aes_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_frodo976shake_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_frodo1344aes_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_frodo1344shake_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_bike1l1cpa_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_bike1l3cpa_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_kyber512_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_kyber768_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_kyber1024_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ntru_hps2048509_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ntru_hps2048677_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ntru_hps4096821_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ntru_hrss701_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_lightsaber_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_saber_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_firesaber_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_sidhp434_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_sidhp503_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_sidhp610_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_sidhp751_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_sikep434_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_sikep503_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_sikep610_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_sikep751_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_bike1l1fo_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_bike1l3fo_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_kyber90s512_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_kyber90s768_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_kyber90s1024_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_hqc128_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_hqc192_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_hqc256_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ntrulpr653_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ntrulpr761_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ntrulpr857_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_sntrup653_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_sntrup761_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_sntrup857_keymgmt_functions[];
+///// OQS_TEMPLATE_FRAGMENT_ALG_FUNCTIONS_END
+
 static const OSSL_ALGORITHM oqsprovider_signatures[] = {
 ///// OQS_TEMPLATE_FRAGMENT_SIG_FUNCTIONS_START
     ALG("oqs_sig_default", oqs_signature_functions),
@@ -50,9 +107,11 @@ static const OSSL_ALGORITHM oqsprovider_signatures[] = {
     ALG("falcon1024", oqs_signature_functions),
     ALG("picnicl1full", oqs_signature_functions),
     ALG("picnic3l1", oqs_signature_functions),
-    ALG("rainbowIaclassic", oqs_signature_functions),
-    ALG("rainbowVcclassic", oqs_signature_functions),
+    ALG("rainbowIclassic", oqs_signature_functions),
+    ALG("rainbowVclassic", oqs_signature_functions),
     ALG("sphincsharaka128frobust", oqs_signature_functions),
+    ALG("sphincssha256128frobust", oqs_signature_functions),
+    ALG("sphincsshake256128frobust", oqs_signature_functions),
 ///// OQS_TEMPLATE_FRAGMENT_SIG_FUNCTIONS_END
     { NULL, NULL, NULL }
 };
@@ -113,9 +172,11 @@ static const OSSL_ALGORITHM oqsprovider_keymgmt[] = {
     ALG("falcon1024", oqs_falcon1024_keymgmt_functions),
     ALG("picnicl1full", oqs_picnicl1full_keymgmt_functions),
     ALG("picnic3l1", oqs_picnic3l1_keymgmt_functions),
-    ALG("rainbowIaclassic", oqs_rainbowIaclassic_keymgmt_functions),
-    ALG("rainbowVcclassic", oqs_rainbowVcclassic_keymgmt_functions),
+    ALG("rainbowIclassic", oqs_rainbowIclassic_keymgmt_functions),
+    ALG("rainbowVclassic", oqs_rainbowVclassic_keymgmt_functions),
     ALG("sphincsharaka128frobust", oqs_sphincsharaka128frobust_keymgmt_functions),
+    ALG("sphincssha256128frobust", oqs_sphincssha256128frobust_keymgmt_functions),
+    ALG("sphincsshake256128frobust", oqs_sphincsshake256128frobust_keymgmt_functions),
 
     ALG("frodo640aes", oqs_frodo640aes_keymgmt_functions),
     ALG("frodo640shake", oqs_frodo640shake_keymgmt_functions),
@@ -180,7 +241,7 @@ static int oqsprovider_get_params(void *provctx, OSSL_PARAM params[])
     if (p != NULL && !OSSL_PARAM_set_utf8_ptr(p, OPENSSL_FULL_VERSION_STR))
         return 0;
     p = OSSL_PARAM_locate(params, OSSL_PROV_PARAM_STATUS);
-    if (p != NULL && !OSSL_PARAM_set_int(p, ossl_prov_is_running()))
+    if (p != NULL && !OSSL_PARAM_set_int(p, 1)) // provider is always running
         return 0;
     return 1;
 }
@@ -204,8 +265,6 @@ static const OSSL_ALGORITHM *oqsprovider_query(void *provctx, int operation_id,
 
 static void oqsprovider_teardown(void *provctx)
 {
-    OSSL_LIB_CTX_free(PROV_LIBCTX_OF(provctx));
-    ossl_prov_ctx_free(provctx);
 }
 
 /* Functions we provide to the core */
@@ -224,7 +283,6 @@ int OSSL_provider_init(const OSSL_CORE_HANDLE *handle,
                        void **provctx)
 {
     OSSL_FUNC_core_get_libctx_fn *c_get_libctx = NULL;
-    OSSL_LIB_CTX *libctx = NULL;
 
     for (; in->function_id != 0; in++) {
         switch (in->function_id) {
@@ -246,18 +304,63 @@ int OSSL_provider_init(const OSSL_CORE_HANDLE *handle,
     if (c_get_libctx == NULL)
         return 0;
 
-    if ((*provctx = ossl_prov_ctx_new()) == NULL
-        || (libctx = OSSL_LIB_CTX_new()) == NULL) {
-        OSSL_LIB_CTX_free(libctx);
-        oqsprovider_teardown(*provctx);
-        *provctx = NULL;
-        return 0;
-    }
-    ossl_prov_ctx_set0_libctx(*provctx, libctx);
-    ossl_prov_ctx_set0_handle(*provctx, handle);
-
     *out = oqsprovider_dispatch_table;
 
     return 1;
 }
+///// OQS_TEMPLATE_FRAGMENT_ALG_FUNCTIONS_START
+extern const OSSL_DISPATCH oqs_oqs_sig_default_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_dilithium2_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_dilithium3_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_dilithium4_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_falcon512_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_falcon1024_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_picnicl1full_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_picnic3l1_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_rainbowIclassic_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_rainbowVclassic_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_sphincsharaka128frobust_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_sphincssha256128frobust_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_sphincsshake256128frobust_keymgmt_functions[];
+
+extern const OSSL_DISPATCH oqs_frodo640aes_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_frodo640shake_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_frodo976aes_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_frodo976shake_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_frodo1344aes_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_frodo1344shake_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_bike1l1cpa_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_bike1l3cpa_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_kyber512_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_kyber768_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_kyber1024_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ntru_hps2048509_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ntru_hps2048677_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ntru_hps4096821_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ntru_hrss701_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_lightsaber_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_saber_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_firesaber_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_sidhp434_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_sidhp503_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_sidhp610_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_sidhp751_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_sikep434_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_sikep503_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_sikep610_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_sikep751_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_bike1l1fo_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_bike1l3fo_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_kyber90s512_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_kyber90s768_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_kyber90s1024_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_hqc128_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_hqc192_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_hqc256_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ntrulpr653_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ntrulpr761_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_ntrulpr857_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_sntrup653_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_sntrup761_keymgmt_functions[];
+extern const OSSL_DISPATCH oqs_sntrup857_keymgmt_functions[];
 
