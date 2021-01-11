@@ -1,12 +1,30 @@
 /* 
  * OQS OpenSSL 3 key handler.
  * 
- * Code strongly inspired by OpenSSL crypto/ec key handler but relocated here to have code within provider.
+ * Code strongly inspired by OpenSSL crypto/ec key handler but relocated here 
+ * to have code within provider.
  *
  */
 
 #include <openssl/err.h>
 #include "prov/oqsx.h"
+
+/// Provider code
+
+PROV_OQS_CTX *oqsx_newprovctx(OSSL_LIB_CTX *libctx, const OSSL_CORE_HANDLE *handle) {
+    PROV_OQS_CTX * ret = OPENSSL_zalloc(sizeof(PROV_OQS_CTX));
+    if (ret) {
+       ret->libctx = libctx;
+       ret->handle = handle;
+    }
+    return ret;
+}
+
+void oqsx_freeprovctx(PROV_OQS_CTX *ctx) {
+    OPENSSL_free(ctx);
+}
+
+/// Key code
 
 OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char* oqs_name, int is_kem, const char *propq)
 {
@@ -16,7 +34,6 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char* oqs_name, int is_kem, const c
         return NULL;
 
     printf("Creating new %s key (type %d)\n", oqs_name, is_kem);
-    ret->libctx = libctx;
     if (is_kem) {
         ret->key.k = OQS_KEM_new(oqs_name);
         ret->privkeylen = ret->key.k->length_secret_key;
@@ -29,6 +46,7 @@ OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char* oqs_name, int is_kem, const c
         ret->pubkeylen = ret->key.s->length_public_key;
         ret->iskem = 0;
     }
+    ret->libctx = libctx;
     ret->references = 1;
 
     if (propq != NULL) {

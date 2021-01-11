@@ -3,9 +3,11 @@
  *
  * Code strongly inspired by OpenSSL DSA signature provider.
  *
- * ToDo: Everything: This is just a template that needs to be completed with OQS calls.
- * Significant hurdle: Signature providers of new algorithms are not utilized properly 
- * in OpenSSL3 yet -> Integration won't be seamless and probably requires quite some OpenSSL3 dev investment.
+ * ToDo: Everything: This is just a template that needs to be completed with 
+ * OQS calls.
+ * Significant hurdle: Signature providers of new algorithms are not utilized 
+ * properly in OpenSSL3 yet -> Integration won't be seamless and probably 
+ * requires quite some (upstream) OpenSSL3 dev investment.
  */
 
 #include "oqs/sig.h"
@@ -19,16 +21,19 @@
 #include <openssl/params.h>
 #include <openssl/evp.h>
 #include <openssl/err.h>
-#include "internal/nelem.h"
-#include "internal/packet.h"
-#include "internal/sizes.h"
-#include "internal/cryptlib.h"
-#include "prov/providercommon.h"
-#include "prov/implementations.h"
-#include "prov/providercommonerr.h"
-#include "prov/provider_ctx.h"
-#include "prov/securitycheck.h"
 #include "prov/oqsx.h"
+
+// Required OSSL internal defines: I don't think I like this...
+// TBD: Need to understand properly separated EVP use...
+#define OSSL_MAX_NAME_SIZE 50
+#define OSSL_MAX_PROPQUERY_SIZE     256 /* Property query strings */
+#define OSSL_MAX_ALGORITHM_ID_SIZE  256 /* AlgorithmIdentifier DER */
+#define PROV_R_DIGEST_NOT_ALLOWED                        174
+#define PROV_R_INVALID_DIGEST                            122
+// internal, but useful OSSL define:
+# define OSSL_NELEM(x)    (sizeof(x)/sizeof((x)[0]))
+
+
 
 static OSSL_FUNC_signature_newctx_fn oqs_sig_newctx;
 static OSSL_FUNC_signature_sign_init_fn oqs_sig_sign_init;
@@ -97,14 +102,12 @@ static void *oqs_sig_newctx(void *provctx, const char *propq)
     PROV_OQSSIG_CTX *poqs_sigctx;
 
     printf("OQS SIG provider: newctx called\n");
-    if (!ossl_prov_is_running())
-        return NULL;
 
     poqs_sigctx = OPENSSL_zalloc(sizeof(PROV_OQSSIG_CTX));
     if (poqs_sigctx == NULL)
         return NULL;
 
-    poqs_sigctx->libctx = PROV_LIBCTX_OF(provctx);
+    poqs_sigctx->libctx = ((PROV_OQS_CTX*)provctx)->libctx;
     poqs_sigctx->flag_allow_md = 0; // TBC
     if (propq != NULL && (poqs_sigctx->propq = OPENSSL_strdup(propq)) == NULL) {
         OPENSSL_free(poqs_sigctx);
@@ -114,6 +117,47 @@ static void *oqs_sig_newctx(void *provctx, const char *propq)
     return poqs_sigctx;
 }
 
+/*
+ * Internal library code deals with NIDs, so we need to translate from a name.
+ * We do so using EVP_MD_is_a(), and therefore need a name to NID map.
+ */
+static int digest_md_to_nid(const EVP_MD *md, const OSSL_ITEM *it, size_t it_len)
+{
+    size_t i;
+
+    if (md == NULL)
+        return NID_undef;
+
+    for (i = 0; i < it_len; i++)
+        if (EVP_MD_is_a(md, it[i].ptr))
+            return (int)it[i].id;
+    return NID_undef;
+}
+
+/*
+ * Retrieve one of the FIPs approved hash algorithms by nid.
+ * See FIPS 180-4 "Secure Hash Standard" and FIPS 202 - SHA-3.
+ */
+static int digest_get_approved_nid(const EVP_MD *md)
+{
+    static const OSSL_ITEM name_to_nid[] = {
+        { NID_sha1,      OSSL_DIGEST_NAME_SHA1      },
+        { NID_sha224,    OSSL_DIGEST_NAME_SHA2_224  },
+        { NID_sha256,    OSSL_DIGEST_NAME_SHA2_256  },
+        { NID_sha384,    OSSL_DIGEST_NAME_SHA2_384  },
+        { NID_sha512,    OSSL_DIGEST_NAME_SHA2_512  },
+        { NID_sha512_224, OSSL_DIGEST_NAME_SHA2_512_224 },
+        { NID_sha512_256, OSSL_DIGEST_NAME_SHA2_512_256 },
+        { NID_sha3_224,  OSSL_DIGEST_NAME_SHA3_224  },
+        { NID_sha3_256,  OSSL_DIGEST_NAME_SHA3_256  },
+        { NID_sha3_384,  OSSL_DIGEST_NAME_SHA3_384  },
+        { NID_sha3_512,  OSSL_DIGEST_NAME_SHA3_512  },
+    };
+
+    return digest_md_to_nid(md, name_to_nid, OSSL_NELEM(name_to_nid));
+}
+
+
 static int oqs_sig_setup_md(PROV_OQSSIG_CTX *ctx,
                         const char *mdname, const char *mdprops)
 {
@@ -122,10 +166,10 @@ static int oqs_sig_setup_md(PROV_OQSSIG_CTX *ctx,
         mdprops = ctx->propq;
 
     if (mdname != NULL) {
-        int sha1_allowed = (ctx->operation != EVP_PKEY_OP_SIGN);
-        WPACKET pkt;
+        //int sha1_allowed = (ctx->operation != EVP_PKEY_OP_SIGN);
+        //WPACKET pkt;
         EVP_MD *md = EVP_MD_fetch(ctx->libctx, mdname, mdprops);
-        int md_nid = digest_get_approved_nid_with_sha1(md, sha1_allowed);
+        int md_nid = digest_get_approved_nid(md);
         size_t mdname_len = strlen(mdname);
 
         if (md == NULL || md_nid == NID_undef) {
@@ -161,8 +205,8 @@ static int oqs_sig_setup_md(PROV_OQSSIG_CTX *ctx,
             WPACKET_get_total_written(&pkt, &ctx->aid_len);
             ctx->aid = WPACKET_get_curr(&pkt);
         }
-*/
         WPACKET_cleanup(&pkt);
+*/
 
         ctx->mdctx = NULL;
         ctx->md = md;
@@ -176,8 +220,7 @@ static int oqs_sig_signverify_init(void *vpoqs_sigctx, void *voqssig, int operat
     PROV_OQSSIG_CTX *poqs_sigctx = (PROV_OQSSIG_CTX *)vpoqs_sigctx;
 
     printf("OQS SIG provider: signverify_init called\n");
-    if (!ossl_prov_is_running()
-            || poqs_sigctx == NULL
+    if ( poqs_sigctx == NULL
             || voqssig == NULL
             || !oqsx_key_up_ref(voqssig))
         return 0;
@@ -215,8 +258,6 @@ static int oqs_sig_sign(void *vpoqs_sigctx, unsigned char *sig, size_t *siglen,
     size_t mdsize = oqs_sig_get_md_size(poqs_sigctx);
 
     printf("OQS SIG provider: sign called\n");
-    if (!ossl_prov_is_running())
-        return 0;
 
     if (sig == NULL) {
         *siglen = oqs_sigsize;
@@ -244,7 +285,7 @@ static int oqs_sig_verify(void *vpoqs_sigctx, const unsigned char *sig, size_t s
     size_t mdsize = oqs_sig_get_md_size(poqs_sigctx);
 
     printf("OQS SIG provider: verify called\n");
-    if (!ossl_prov_is_running() || (mdsize != 0 && tbslen != mdsize))
+    if (mdsize != 0 && tbslen != mdsize)
         return 0;
 
     // TBD: Actually call into OQS
@@ -258,8 +299,6 @@ static int oqs_sig_digest_signverify_init(void *vpoqs_sigctx, const char *mdname
     PROV_OQSSIG_CTX *poqs_sigctx = (PROV_OQSSIG_CTX *)vpoqs_sigctx;
 
     printf("OQS SIG provider: digest_signverify called\n");
-    if (!ossl_prov_is_running())
-        return 0;
 
     poqs_sigctx->flag_allow_md = 0;
     if (!oqs_sig_signverify_init(vpoqs_sigctx, voqssig, operation))
@@ -318,7 +357,7 @@ int oqs_sig_digest_sign_final(void *vpoqs_sigctx, unsigned char *sig, size_t *si
     unsigned int dlen = 0;
 
     printf("OQS SIG provider: digest_sign_final called\n");
-    if (!ossl_prov_is_running() || poqs_sigctx == NULL || poqs_sigctx->mdctx == NULL)
+    if (poqs_sigctx == NULL || poqs_sigctx->mdctx == NULL)
         return 0;
 
     /*
@@ -349,7 +388,7 @@ int oqs_sig_digest_verify_final(void *vpoqs_sigctx, const unsigned char *sig,
     unsigned int dlen = 0;
 
     printf("OQS SIG provider: digest_verify_final called\n");
-    if (!ossl_prov_is_running() || poqs_sigctx == NULL || poqs_sigctx->mdctx == NULL)
+    if (poqs_sigctx == NULL || poqs_sigctx->mdctx == NULL)
         return 0;
 
     /*
@@ -387,8 +426,6 @@ static void *oqs_sig_dupctx(void *vpoqs_sigctx)
     PROV_OQSSIG_CTX *dstctx;
 
     printf("OQS SIG provider: dupctx called\n");
-    if (!ossl_prov_is_running())
-        return NULL;
 
     dstctx = OPENSSL_zalloc(sizeof(*srcctx));
     if (dstctx == NULL)

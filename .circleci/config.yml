@@ -1,0 +1,51 @@
+version: 2.1
+
+# CircleCI doesn't handle large file sets properly for local builds
+# https://github.com/CircleCI-Public/circleci-cli/issues/281#issuecomment-472808051
+localCheckout: &localCheckout
+  run: |-
+    PROJECT_PATH=$(cd ${CIRCLE_WORKING_DIRECTORY}; pwd)
+    mkdir -p ${PROJECT_PATH}
+    cd /tmp/_circleci_local_build_repo
+    git ls-files -z | xargs -0 -s 2090860 tar -c | tar -x -C ${PROJECT_PATH}
+    cp -a /tmp/_circleci_local_build_repo/.git ${PROJECT_PATH}
+jobs:
+  ubuntu_bionic:
+    description: A template for running OQS-OpenSSL tests on x64 Ubuntu Bionic Docker VMs
+    parameters:
+      LIBOQS_SHARED:
+        description: "Build liboqs as a shared library."
+        type: boolean
+        default: false
+      OPENSSL_SHARED:
+        description: "Build OpenSSL as a shared library."
+        type: boolean
+        default: false
+    docker:
+      - image: openquantumsafe/ci-ubuntu-bionic-x86_64:latest
+        auth:
+          username: $DOCKER_LOGIN
+          password: $DOCKER_PASSWORD
+    steps:
+      - checkout # change this from "checkout" to "*localCheckout" when running CircleCI locally
+      - run:
+          name: Clone liboqs
+          command: ./oqs-scripts/clone_liboqs.sh
+      - run:
+          name: Build liboqs
+          command: <<# parameters.LIBOQS_SHARED >> env LIBOQS_LIBTYPE=shared <</ parameters.LIBOQS_SHARED >> ./oqs-scripts/build_liboqs.sh
+      - run:
+          name: Build OpenSSL
+          command: ./Configure && make -j 4
+      - run:
+          name: Run select OpenSSL tests
+          command: make TESTS='test_ssl_new test_oqsprovider' test
+          # ToDo: Make _all_ tests pass with oqsprovider present in openssl.cnf
+
+workflows:
+  version: 2.1
+  build:
+    jobs:
+      - ubuntu_bionic:
+          name: ubuntu-static_oqs-static_ossl
+          context: openquantumsafe

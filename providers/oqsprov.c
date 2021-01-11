@@ -12,6 +12,7 @@
 #include <openssl/core_dispatch.h>
 #include <openssl/core_names.h>
 #include <openssl/params.h>
+#include "prov/oqsx.h"
 
 /*
  * Forward declarations to ensure that interface functions are correctly
@@ -265,6 +266,7 @@ static const OSSL_ALGORITHM *oqsprovider_query(void *provctx, int operation_id,
 
 static void oqsprovider_teardown(void *provctx)
 {
+   oqsx_freeprovctx((PROV_OQS_CTX*)provctx);
 }
 
 /* Functions we provide to the core */
@@ -283,6 +285,7 @@ int OSSL_provider_init(const OSSL_CORE_HANDLE *handle,
                        void **provctx)
 {
     OSSL_FUNC_core_get_libctx_fn *c_get_libctx = NULL;
+    OSSL_LIB_CTX *libctx = NULL;
 
     for (; in->function_id != 0; in++) {
         switch (in->function_id) {
@@ -303,6 +306,14 @@ int OSSL_provider_init(const OSSL_CORE_HANDLE *handle,
 
     if (c_get_libctx == NULL)
         return 0;
+
+    if ( ((libctx = OSSL_LIB_CTX_new()) == NULL) ||
+         (*provctx = oqsx_newprovctx(libctx, handle)) == NULL ) {
+        OSSL_LIB_CTX_free(libctx);
+        oqsprovider_teardown(*provctx);
+        *provctx = NULL;
+        return 0;
+    }
 
     *out = oqsprovider_dispatch_table;
 
