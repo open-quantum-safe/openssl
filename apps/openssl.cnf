@@ -57,7 +57,11 @@ providers = provider_sect
 # List of providers to load
 [provider_sect]
 default = default_sect
-oqsprovider = oqsprovider_sect 
+
+# Activate the OQS provider by default only if you know what you're doing
+# Read: Don't activate it while testing
+# oqsprovider = oqsprovider_sect 
+
 # The fips section name should match the section name inside the
 # included fipsmodule.cnf.
 # fips = fips_sect

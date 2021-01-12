@@ -2,6 +2,8 @@
  * OQS OpenSSL 3 provider
  *
  * Code strongly inspired by OpenSSL DSA signature provider.
+ * 
+ * TBC: OQS license
  *
  * ToDo: Everything: This is just a template that needs to be completed with 
  * OQS calls.
@@ -9,6 +11,16 @@
  * properly in OpenSSL3 yet -> Integration won't be seamless and probably 
  * requires quite some (upstream) OpenSSL3 dev investment.
  */
+
+/*
+ * Copyright 2019-2020 The OpenSSL Project Authors. All Rights Reserved.
+ *
+ * Licensed under the Apache License 2.0 (the "License").  You may not use
+ * this file except in compliance with the License.  You can obtain a copy
+ * in the file LICENSE in the source distribution or at
+ * https://www.openssl.org/source/license.html
+ */
+
 
 #include "oqs/sig.h"
 
@@ -23,13 +35,15 @@
 #include <openssl/err.h>
 #include "prov/oqsx.h"
 
-// Required OSSL internal defines: I don't think I like this...
-// TBD: Need to understand properly separated EVP use...
+// our own error codes:
+#define OQSPROV_R_DIGEST_NOT_ALLOWED                        1
+#define OQSPROV_R_INVALID_DIGEST                            2
+
+// TBD: Review what we really need/want: For now go with OSSL settings:
 #define OSSL_MAX_NAME_SIZE 50
 #define OSSL_MAX_PROPQUERY_SIZE     256 /* Property query strings */
 #define OSSL_MAX_ALGORITHM_ID_SIZE  256 /* AlgorithmIdentifier DER */
-#define PROV_R_DIGEST_NOT_ALLOWED                        174
-#define PROV_R_INVALID_DIGEST                            122
+
 // internal, but useful OSSL define:
 # define OSSL_NELEM(x)    (sizeof(x)/sizeof((x)[0]))
 
@@ -112,7 +126,7 @@ static void *oqs_sig_newctx(void *provctx, const char *propq)
     if (propq != NULL && (poqs_sigctx->propq = OPENSSL_strdup(propq)) == NULL) {
         OPENSSL_free(poqs_sigctx);
         poqs_sigctx = NULL;
-        ERR_raise(ERR_LIB_PROV, ERR_R_MALLOC_FAILURE);
+        ERR_raise(ERR_LIB_USER, ERR_R_MALLOC_FAILURE);
     }
     return poqs_sigctx;
 }
@@ -174,13 +188,13 @@ static int oqs_sig_setup_md(PROV_OQSSIG_CTX *ctx,
 
         if (md == NULL || md_nid == NID_undef) {
             if (md == NULL)
-                ERR_raise_data(ERR_LIB_PROV, PROV_R_INVALID_DIGEST,
+                ERR_raise_data(ERR_LIB_USER, OQSPROV_R_INVALID_DIGEST,
                                "%s could not be fetched", mdname);
             if (md_nid == NID_undef)
-                ERR_raise_data(ERR_LIB_PROV, PROV_R_DIGEST_NOT_ALLOWED,
+                ERR_raise_data(ERR_LIB_USER, OQSPROV_R_DIGEST_NOT_ALLOWED,
                                "digest=%s", mdname);
             if (mdname_len >= sizeof(ctx->mdname))
-                ERR_raise_data(ERR_LIB_PROV, PROV_R_INVALID_DIGEST,
+                ERR_raise_data(ERR_LIB_USER, OQSPROV_R_INVALID_DIGEST,
                                "%s exceeds name buffer length", mdname);
             EVP_MD_free(md);
             return 0;
@@ -229,7 +243,7 @@ static int oqs_sig_signverify_init(void *vpoqs_sigctx, void *voqssig, int operat
     poqs_sigctx->operation = operation;
 /* TBD: key check
     if (!oqs_sig_check_key(voqssig, operation == EVP_PKEY_OP_SIGN)) {
-        ERR_raise(ERR_LIB_PROV, PROV_R_INVALID_KEY_LENGTH);
+        ERR_raise(ERR_LIB_USER, PROV_R_INVALID_KEY_LENGTH);
         return 0;
     }
 */

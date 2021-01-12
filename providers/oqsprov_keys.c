@@ -4,6 +4,7 @@
  * Code strongly inspired by OpenSSL crypto/ec key handler but relocated here 
  * to have code within provider.
  *
+ * TBC: OQS license
  */
 
 #include <openssl/err.h>

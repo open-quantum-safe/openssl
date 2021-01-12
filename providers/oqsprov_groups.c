@@ -3,6 +3,8 @@
  *
  * Code strongly inspired by OpenSSL common provider capabilities.
  *
+ * TBC: OQS license
+ *
  * ToDo: Interop testing.
  */
 
