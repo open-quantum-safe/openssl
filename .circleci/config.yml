@@ -38,9 +38,8 @@ jobs:
           name: Build OpenSSL
           command: ./Configure && make -j 4
       - run:
-          name: Run select OpenSSL tests
-          command: make TESTS='test_ssl_new test_oqsprovider' test
-          # ToDo: Make _all_ tests pass with oqsprovider present in openssl.cnf
+          name: Run OpenSSL tests
+          command: make test
 
 workflows:
   version: 2.1

@@ -49,6 +49,7 @@ def load_config():
 config = load_config()
 
 # For now, only activate providers:
+populate('test/oqs_test.c', config, '/////')
 populate('providers/oqsprov.c', config, '/////')
 populate('providers/oqsprov_groups.c', config, '/////')
 populate('providers/implementations/keymgmt/oqs_kmgmt.c', config, '/////')

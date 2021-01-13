@@ -1,0 +1,9 @@
+{% set cnt = namespace(val=0) %}
+{% for kem in config['kems'] %}
+    {%- if ((kem['name_group'] != "frodo1344aes") and (kem['name_group'] != "frodo1344shake")) %}
+        case {{ cnt.val }}: group_name = "{{kem['name_group']}}"; break;
+    
+        {%- set cnt.val = cnt.val + 1 %}
+    {%- endif -%}
+{%- endfor %}
+

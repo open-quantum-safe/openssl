@@ -67,10 +67,10 @@ default = default_sect
 # fips = fips_sect
 
 [default_sect]
-activate = 1
+# activate = 1
 
 [oqsprovider_sect]
-activate = 1
+# activate = 1
 
 
 ####################################################################

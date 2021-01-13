@@ -47,9 +47,51 @@ static int test_oqs_groups(int idx)
     SSL_CTX *cctx = NULL, *sctx = NULL;
     SSL *clientssl = NULL, *serverssl = NULL;
     int testresult = 0;
-    // TBD: Iterate through all OQS KEMs:
-    const char *group_name = idx == 0 ? "kyber512" : "kyber1024";
+    char *group_name = NULL;
 
+    switch(idx) {
+///// OQS_TEMPLATE_FRAGMENT_GROUP_CASES_START
+
+        case 0: group_name = "frodo640aes"; break;
+        case 1: group_name = "frodo640shake"; break;
+        case 2: group_name = "frodo976aes"; break;
+        case 3: group_name = "frodo976shake"; break;
+        case 4: group_name = "bike1l1cpa"; break;
+        case 5: group_name = "bike1l3cpa"; break;
+        case 6: group_name = "kyber512"; break;
+        case 7: group_name = "kyber768"; break;
+        case 8: group_name = "kyber1024"; break;
+        case 9: group_name = "ntru_hps2048509"; break;
+        case 10: group_name = "ntru_hps2048677"; break;
+        case 11: group_name = "ntru_hps4096821"; break;
+        case 12: group_name = "ntru_hrss701"; break;
+        case 13: group_name = "lightsaber"; break;
+        case 14: group_name = "saber"; break;
+        case 15: group_name = "firesaber"; break;
+        case 16: group_name = "sidhp434"; break;
+        case 17: group_name = "sidhp503"; break;
+        case 18: group_name = "sidhp610"; break;
+        case 19: group_name = "sidhp751"; break;
+        case 20: group_name = "sikep434"; break;
+        case 21: group_name = "sikep503"; break;
+        case 22: group_name = "sikep610"; break;
+        case 23: group_name = "sikep751"; break;
+        case 24: group_name = "bike1l1fo"; break;
+        case 25: group_name = "bike1l3fo"; break;
+        case 26: group_name = "kyber90s512"; break;
+        case 27: group_name = "kyber90s768"; break;
+        case 28: group_name = "kyber90s1024"; break;
+        case 29: group_name = "hqc128"; break;
+        case 30: group_name = "hqc192"; break;
+        case 31: group_name = "hqc256"; break;
+        case 32: group_name = "ntrulpr653"; break;
+        case 33: group_name = "ntrulpr761"; break;
+        case 34: group_name = "ntrulpr857"; break;
+        case 35: group_name = "sntrup653"; break;
+        case 36: group_name = "sntrup761"; break;
+        case 37: group_name = "sntrup857"; break;
+///// OQS_TEMPLATE_FRAGMENT_GROUP_CASES_END
+    }
     if (!TEST_true(create_ssl_ctx_pair(libctx, TLS_server_method(),
                                        TLS_client_method(),
                                        TLS1_3_VERSION,
@@ -81,6 +123,9 @@ int setup_tests(void)
 {
     char *modulename;
     char *configfile;
+///// OQS_TEMPLATE_FRAGMENT_GROUP_CASECOUNT_START
+const int OQS_KEMCOUNT = 38;
+///// OQS_TEMPLATE_FRAGMENT_GROUP_CASECOUNT_END
 
     libctx = OSSL_LIB_CTX_new();
     if (!TEST_ptr(libctx))
@@ -113,7 +158,7 @@ int setup_tests(void)
     if (privkey == NULL)
         goto err;
 
-    ADD_ALL_TESTS(test_oqs_groups, 2);
+    ADD_ALL_TESTS(test_oqs_groups, OQS_KEMCOUNT);
     return 1;
 
  err:
