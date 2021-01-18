@@ -51,7 +51,6 @@ static int test_oqs_groups(int idx)
 
     switch(idx) {
 ///// OQS_TEMPLATE_FRAGMENT_GROUP_CASES_START
-
         case 0: group_name = "frodo640aes"; break;
         case 1: group_name = "frodo640shake"; break;
         case 2: group_name = "frodo976aes"; break;
@@ -119,6 +118,78 @@ static int test_oqs_groups(int idx)
     return testresult;
 }
 
+static int test_oqs_signatures(int idx)
+{
+    EVP_PKEY_CTX *ctx = NULL;
+    EVP_PKEY *key = NULL;
+    char msg[100];
+    unsigned char *sig;
+    size_t siglen;
+    EVP_MD_CTX *mdctx = EVP_MD_CTX_new();
+    char *sigalg_name = NULL;
+    int testresult = 0;
+
+    switch(idx) {
+///// OQS_TEMPLATE_FRAGMENT_SIGNATURE_CASES_START
+        case 0: sigalg_name = "oqs_sig_default"; break;
+        case 1: sigalg_name = "dilithium2"; break;
+        case 2: sigalg_name = "dilithium3"; break;
+        case 3: sigalg_name = "dilithium4"; break;
+        case 4: sigalg_name = "falcon512"; break;
+        case 5: sigalg_name = "falcon1024"; break;
+        case 6: sigalg_name = "picnicl1full"; break;
+        case 7: sigalg_name = "picnic3l1"; break;
+        case 8: sigalg_name = "rainbowIclassic"; break;
+        case 9: sigalg_name = "rainbowVclassic"; break;
+        case 10: sigalg_name = "sphincsharaka128frobust"; break;
+        case 11: sigalg_name = "sphincssha256128frobust"; break;
+        case 12: sigalg_name = "sphincsshake256128frobust"; break;
+///// OQS_TEMPLATE_FRAGMENT_SIGNATURE_CASES_END
+        default:
+           goto end;
+    }
+
+    ctx = EVP_PKEY_CTX_new_from_name(libctx, sigalg_name, NULL);
+    if (ctx == NULL || mdctx == NULL)
+        goto end;
+
+    if (!TEST_true(EVP_PKEY_keygen_init(ctx)))
+        goto end;
+
+    /* Call EVP_PKEY_CTX_set_params() here if necessary for your alg */
+    if (!TEST_true(EVP_PKEY_gen(ctx, &key)))
+        goto end;
+
+    if (!TEST_true(EVP_DigestSignInit_ex(mdctx, NULL, "SHA512", libctx, NULL, key)))
+        goto end;
+
+    if (!TEST_true(EVP_DigestSignUpdate(mdctx, msg, sizeof(msg))))
+        goto end;
+
+    if (!TEST_true(EVP_DigestSignFinal(mdctx, NULL, &siglen)))
+        goto end;
+
+    if ((!(sig = OPENSSL_malloc(siglen))))
+        goto end;
+
+    if (!TEST_true(EVP_DigestSignFinal(mdctx, sig, &siglen)))
+        goto end;
+
+    if (!TEST_true(EVP_DigestVerifyInit_ex(mdctx, NULL, "SHA512", libctx, NULL, key)))
+        goto end;
+
+    if (!TEST_true(EVP_DigestVerifyUpdate(mdctx, msg, sizeof(msg))))
+        goto end;
+
+    testresult = EVP_DigestVerifyFinal(mdctx, sig, siglen);
+
+ end:
+    EVP_MD_CTX_free(mdctx);
+    OPENSSL_free(ctx);
+
+    return testresult;
+}
+
 int setup_tests(void)
 {
     char *modulename;
@@ -126,6 +197,9 @@ int setup_tests(void)
 ///// OQS_TEMPLATE_FRAGMENT_GROUP_CASECOUNT_START
 const int OQS_KEMCOUNT = 38;
 ///// OQS_TEMPLATE_FRAGMENT_GROUP_CASECOUNT_END
+///// OQS_TEMPLATE_FRAGMENT_SIGNATURE_CASECOUNT_START
+   const int OQS_SIGCOUNT = 13;
+///// OQS_TEMPLATE_FRAGMENT_SIGNATURE_CASECOUNT_END
 
     libctx = OSSL_LIB_CTX_new();
     if (!TEST_ptr(libctx))
@@ -146,8 +220,13 @@ const int OQS_KEMCOUNT = 38;
     if (!TEST_true(OSSL_LIB_CTX_load_config(libctx, configfile)))
         return 0;
 
-    /* Check we have the expected provider available */
-    if (!TEST_true(OSSL_PROVIDER_available(libctx, modulename)))
+    /* Check we have the expected providers available:
+     * Note: default only needed if liboqs built using openssl,
+     * so may be left away (in test/oqs.cnf if suitably build, see
+     * https://github.com/open-quantum-safe/liboqs/wiki/Customizing-liboqs#OQS_USE_OPENSSL
+     */
+    if ((!TEST_true(OSSL_PROVIDER_available(libctx, modulename))) ||
+        (!TEST_true(OSSL_PROVIDER_available(libctx, "default"))))
         return 0;
 
     cert = test_mk_file_path(certsdir, "servercert.pem");
@@ -159,6 +238,7 @@ const int OQS_KEMCOUNT = 38;
         goto err;
 
     ADD_ALL_TESTS(test_oqs_groups, OQS_KEMCOUNT);
+    ADD_ALL_TESTS(test_oqs_signatures, OQS_SIGCOUNT);
     return 1;
 
  err:

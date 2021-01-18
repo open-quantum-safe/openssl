@@ -41,6 +41,7 @@ struct oqsx_key_st {
     size_t privkeylen;
     size_t pubkeylen;
     char *oqs_name;
+    char *tls_name;
     CRYPTO_REF_COUNT references;
     CRYPTO_RWLOCK *lock;
     void *privkey;
@@ -50,7 +51,7 @@ struct oqsx_key_st {
 typedef struct oqsx_key_st OQSX_KEY;
 
 
-OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char* oqs_name, int is_kem, const char *propq);
+OQSX_KEY *oqsx_key_new(OSSL_LIB_CTX *libctx, char* oqs_name, char* tls_name, int is_kem, const char *propq);
 int oqsx_key_allocate_keymaterial(OQSX_KEY *key);
 void oqsx_key_free(OQSX_KEY *key);
 int oqsx_key_up_ref(OQSX_KEY *key);
@@ -58,6 +59,8 @@ int oqsx_key_gen(OQSX_KEY *key);
 
 /* Backend support */
 int oqsx_public_from_private(OQSX_KEY *key);
-int oqsx_key_fromdata(OQSX_KEY *ecx, const OSSL_PARAM params[],
+int oqsx_key_fromdata(OQSX_KEY *oqsxk, const OSSL_PARAM params[],
                      int include_private);
+int oqsx_key_parambits(OQSX_KEY *k);
+int oqsx_key_maxsize(OQSX_KEY *k);
 #endif

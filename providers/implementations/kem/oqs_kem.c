@@ -33,6 +33,12 @@
 #include "prov/securitycheck.h"
 #include "prov/oqsx.h"
 
+// debugging
+#define OQS_KEM_PRINTF(a) if (getenv("OQSKEM")) printf(a)
+#define OQS_KEM_PRINTF2(a, b) if (getenv("OQSKEM")) printf(a, b)
+#define OQS_KEM_PRINTF3(a, b, c) if (getenv("OQSKEM")) printf(a, b, c)
+
+
 static OSSL_FUNC_kem_newctx_fn oqs_kem_newctx;
 static OSSL_FUNC_kem_encapsulate_init_fn oqs_kem_encaps_init;
 static OSSL_FUNC_kem_encapsulate_fn oqs_kem_encaps;
@@ -52,7 +58,7 @@ static void *oqs_kem_newctx(void *provctx)
 {
     PROV_OQSKEM_CTX *pkemctx =  OPENSSL_zalloc(sizeof(PROV_OQSKEM_CTX));
 
-    printf("OQS KEM provider called: newctx\n");
+    OQS_KEM_PRINTF("OQS KEM provider called: newctx\n");
     if (pkemctx == NULL)
         return NULL;
     pkemctx->libctx = PROV_LIBCTX_OF(provctx);
@@ -65,7 +71,7 @@ static void oqs_kem_freectx(void *vpkemctx)
 {
     PROV_OQSKEM_CTX *pkemctx = (PROV_OQSKEM_CTX *)vpkemctx;
 
-    printf("OQS KEM provider called: freectx\n");
+    OQS_KEM_PRINTF("OQS KEM provider called: freectx\n");
     oqsx_key_free(pkemctx->kem);
     OPENSSL_free(pkemctx);
 }
@@ -74,7 +80,7 @@ static int oqs_kem_decapsencaps_init(void *vpkemctx, void *vkem, int operation)
 {
     PROV_OQSKEM_CTX *pkemctx = (PROV_OQSKEM_CTX *)vpkemctx;
 
-    printf("OQS KEM provider called: _init : New: %p; old: %p \n", vkem, pkemctx->kem);
+    OQS_KEM_PRINTF3("OQS KEM provider called: _init : New: %p; old: %p \n", vkem, pkemctx->kem);
     if (pkemctx == NULL || vkem == NULL || !oqsx_key_up_ref(vkem)) 
         return 0;
     oqsx_key_free(pkemctx->kem);
@@ -85,13 +91,13 @@ static int oqs_kem_decapsencaps_init(void *vpkemctx, void *vkem, int operation)
 
 static int oqs_kem_encaps_init(void *vpkemctx, void *vkem)
 {
-    printf("OQS KEM provider called: encaps_init\n");
+    OQS_KEM_PRINTF("OQS KEM provider called: encaps_init\n");
     return oqs_kem_decapsencaps_init(vpkemctx, vkem, EVP_PKEY_OP_ENCAPSULATE);
 }
 
 static int oqs_kem_decaps_init(void *vpkemctx, void *vkem)
 {
-    printf("OQS KEM provider called: decaps_init\n");
+    OQS_KEM_PRINTF("OQS KEM provider called: decaps_init\n");
     return oqs_kem_decapsencaps_init(vpkemctx, vkem, EVP_PKEY_OP_DECAPSULATE);
 }
 
@@ -100,7 +106,7 @@ static int oqs_kem_encaps(void *vpkemctx, unsigned char *out, size_t *outlen,
 {
     PROV_OQSKEM_CTX *pkemctx = (PROV_OQSKEM_CTX *)vpkemctx;
 
-    printf("OQS KEM provider called: encaps\n");
+    OQS_KEM_PRINTF("OQS KEM provider called: encaps\n");
     if (pkemctx->kem == NULL) {
         printf("OQS Warning: OQS_KEM not initialized\n");
         return -1;
@@ -108,7 +114,7 @@ static int oqs_kem_encaps(void *vpkemctx, unsigned char *out, size_t *outlen,
     *outlen = pkemctx->kem->key.k->length_ciphertext;
     *secretlen = pkemctx->kem->key.k->length_shared_secret;
     if (out == NULL || secret == NULL) {
-       printf("KEM returning lengths %ld and %ld\n", *outlen, *secretlen);
+       OQS_KEM_PRINTF3("KEM returning lengths %ld and %ld\n", *outlen, *secretlen);
        return 1;
     }
     return OQS_SUCCESS == OQS_KEM_encaps(pkemctx->kem->key.k, out, secret, pkemctx->kem->pubkey);
@@ -119,7 +125,7 @@ static int oqs_kem_decaps(void *vpkemctx, unsigned char *out, size_t *outlen,
 {
     PROV_OQSKEM_CTX *pkemctx = (PROV_OQSKEM_CTX *)vpkemctx;
 
-    printf("OQS KEM provider called: decaps\n");
+    OQS_KEM_PRINTF("OQS KEM provider called: decaps\n");
     if (pkemctx->kem == NULL) {
         printf("OQS Warning: OQS_KEM not initialized\n");
         return -1;

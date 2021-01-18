@@ -1,0 +1,8 @@
+{% for sig in config['sigs'] %}
+   {%- for variant in sig['variants'] %}
+   if (!strcmp({{variant['oqs_meth']}}, oqs_name))
+       return a2d_ASN1_OBJECT(oidbuf, OQS_MAX_OIDBUF_LEN, "{{variant['oid']}}", -1);
+   else
+   {%- endfor %}
+{%- endfor %}
+

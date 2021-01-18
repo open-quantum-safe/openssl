@@ -270,7 +270,7 @@ static const OSSL_ALGORITHM *oqsprovider_query(void *provctx, int operation_id,
     case OSSL_OP_KEYMGMT:
         return oqsprovider_keymgmt;
     default:
-        printf("Unknown operation %d requested from OQS provider\n", operation_id);
+        if (getenv("OQSPROV")) printf("Unknown operation %d requested from OQS provider\n", operation_id);
     }
     return NULL;
 }

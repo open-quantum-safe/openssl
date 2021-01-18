@@ -1,0 +1,8 @@
+{%- set cnt = namespace(val=0) -%}
+{% for sig in config['sigs'] %}
+   {%- for variant in sig['variants'] %}
+        case {{ cnt.val }}: sigalg_name = "{{variant['name']}}"; break;
+        {%- set cnt.val = cnt.val + 1 -%}
+   {%- endfor -%}
+{%- endfor %}
+

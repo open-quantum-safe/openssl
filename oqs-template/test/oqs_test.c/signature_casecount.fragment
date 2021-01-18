@@ -1,0 +1,8 @@
+{% set cnt = namespace(val=0) %}
+{%- for sig in config['sigs'] %}
+   {%- for variant in sig['variants'] %}
+        {%- set cnt.val = cnt.val + 1 %}
+   {%- endfor %}
+{%- endfor %}
+   const int OQS_SIGCOUNT = {{ cnt.val }};
+
