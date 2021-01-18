@@ -122,7 +122,7 @@ static int test_oqs_signatures(int idx)
 {
     EVP_PKEY_CTX *ctx = NULL;
     EVP_PKEY *key = NULL;
-    char msg[100];
+    char msg[100] = "The quick brown fox jumps over... you know what";
     unsigned char *sig;
     size_t siglen;
     EVP_MD_CTX *mdctx = EVP_MD_CTX_new();
@@ -169,7 +169,7 @@ static int test_oqs_signatures(int idx)
     if (!TEST_true(EVP_DigestSignFinal(mdctx, NULL, &siglen)))
         goto end;
 
-    if ((!(sig = OPENSSL_malloc(siglen))))
+    if ((!TEST_ptr(sig = OPENSSL_malloc(siglen))))
         goto end;
 
     if (!TEST_true(EVP_DigestSignFinal(mdctx, sig, &siglen)))

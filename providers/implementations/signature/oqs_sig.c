@@ -39,11 +39,11 @@
 // our own error codes:
 #define OQSPROV_R_INVALID_DIGEST                            1
 #define OQSPROV_R_INVALID_SIZE                              2
+#define OQSPROV_R_INVALID_KEY                               3
 
 // TBD: Review what we really need/want: For now go with OSSL settings:
 #define OSSL_MAX_NAME_SIZE 50
 #define OSSL_MAX_PROPQUERY_SIZE     256 /* Property query strings */
-#define OQS_MAX_OIDBUF_LEN  256 /* AlgorithmIdentifier DER */
 
 // internal, but useful OSSL define:
 # define OSSL_NELEM(x)    (sizeof(x)/sizeof((x)[0]))
@@ -79,43 +79,43 @@ static OSSL_FUNC_signature_settable_ctx_md_params_fn oqs_sig_settable_ctx_md_par
 static int get_oqs_oid(unsigned char* oidbuf, const char *oqs_name) {
 ///// OQS_TEMPLATE_FRAGMENT_SIG_OIDS_START
    if (!strcmp(OQS_SIG_alg_default, oqs_name))
-       return a2d_ASN1_OBJECT(oidbuf, OQS_MAX_OIDBUF_LEN, "1.3.9999.1.1", -1);
+       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.9999.1.1", 1), &oidbuf);
    else
    if (!strcmp(OQS_SIG_alg_dilithium_2, oqs_name))
-       return a2d_ASN1_OBJECT(oidbuf, OQS_MAX_OIDBUF_LEN, "1.3.6.1.4.1.2.267.6.4.3", -1);
+       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.6.1.4.1.2.267.6.4.3", 1), &oidbuf);
    else
    if (!strcmp(OQS_SIG_alg_dilithium_3, oqs_name))
-       return a2d_ASN1_OBJECT(oidbuf, OQS_MAX_OIDBUF_LEN, "1.3.6.1.4.1.2.267.6.5.4", -1);
+       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.6.1.4.1.2.267.6.5.4", 1), &oidbuf);
    else
    if (!strcmp(OQS_SIG_alg_dilithium_4, oqs_name))
-       return a2d_ASN1_OBJECT(oidbuf, OQS_MAX_OIDBUF_LEN, "1.3.6.1.4.1.2.267.6.6.5", -1);
+       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.6.1.4.1.2.267.6.6.5", 1), &oidbuf);
    else
    if (!strcmp(OQS_SIG_alg_falcon_512, oqs_name))
-       return a2d_ASN1_OBJECT(oidbuf, OQS_MAX_OIDBUF_LEN, "1.3.9999.3.1", -1);
+       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.9999.3.1", 1), &oidbuf);
    else
    if (!strcmp(OQS_SIG_alg_falcon_1024, oqs_name))
-       return a2d_ASN1_OBJECT(oidbuf, OQS_MAX_OIDBUF_LEN, "1.3.9999.3.4", -1);
+       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.9999.3.4", 1), &oidbuf);
    else
    if (!strcmp(OQS_SIG_alg_picnic_L1_full, oqs_name))
-       return a2d_ASN1_OBJECT(oidbuf, OQS_MAX_OIDBUF_LEN, "1.3.6.1.4.1.311.89.2.1.7", -1);
+       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.6.1.4.1.311.89.2.1.7", 1), &oidbuf);
    else
    if (!strcmp(OQS_SIG_alg_picnic3_L1, oqs_name))
-       return a2d_ASN1_OBJECT(oidbuf, OQS_MAX_OIDBUF_LEN, "1.3.6.1.4.1.311.89.2.1.21", -1);
+       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.6.1.4.1.311.89.2.1.21", 1), &oidbuf);
    else
    if (!strcmp(OQS_SIG_alg_rainbow_I_classic, oqs_name))
-       return a2d_ASN1_OBJECT(oidbuf, OQS_MAX_OIDBUF_LEN, "1.3.9999.5.1.1", -1);
+       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.9999.5.1.1", 1), &oidbuf);
    else
    if (!strcmp(OQS_SIG_alg_rainbow_V_classic, oqs_name))
-       return a2d_ASN1_OBJECT(oidbuf, OQS_MAX_OIDBUF_LEN, "1.3.9999.5.3.1", -1);
+       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.9999.5.3.1", 1), &oidbuf);
    else
    if (!strcmp(OQS_SIG_alg_sphincs_haraka_128f_robust, oqs_name))
-       return a2d_ASN1_OBJECT(oidbuf, OQS_MAX_OIDBUF_LEN, "1.3.9999.6.1.1", -1);
+       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.9999.6.1.1", 1), &oidbuf);
    else
    if (!strcmp(OQS_SIG_alg_sphincs_sha256_128f_robust, oqs_name))
-       return a2d_ASN1_OBJECT(oidbuf, OQS_MAX_OIDBUF_LEN, "1.3.9999.6.4.1", -1);
+       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.9999.6.4.1", 1), &oidbuf);
    else
    if (!strcmp(OQS_SIG_alg_sphincs_shake256_128f_robust, oqs_name))
-       return a2d_ASN1_OBJECT(oidbuf, OQS_MAX_OIDBUF_LEN, "1.3.9999.6.7.1", -1);
+       return i2d_ASN1_OBJECT(OBJ_txt2obj("1.3.9999.6.7.1", 1), &oidbuf);
    else
 ///// OQS_TEMPLATE_FRAGMENT_SIG_OIDS_END
    return(0);
@@ -141,7 +141,6 @@ typedef struct {
     char mdname[OSSL_MAX_NAME_SIZE];
 
     /* The Algorithm Identifier of the combined signature algorithm */
-    unsigned char aid_buf[OQS_MAX_OIDBUF_LEN];
     unsigned char *aid;
     size_t  aid_len;
 
@@ -155,7 +154,7 @@ typedef struct {
 
 static size_t oqs_sig_get_md_size(const PROV_OQSSIG_CTX *poqs_sigctx)
 {
-    OQS_SIG_PRINTF("OQS SIG provider: get_med_size called\n");
+    OQS_SIG_PRINTF("OQS SIG provider: get_md_size called\n");
     if (poqs_sigctx->md != NULL)
         return EVP_MD_size(poqs_sigctx->md);
     return 0;
@@ -202,9 +201,9 @@ static int oqs_sig_setup_md(PROV_OQSSIG_CTX *ctx,
         EVP_MD_CTX_free(ctx->mdctx);
         EVP_MD_free(ctx->md);
 
-        ctx->aid_len = get_oqs_oid(ctx->aid_buf, ctx->sig->key.s->method_name);
-        if (ctx->aid_len > 0)
-            ctx->aid=ctx->aid_buf;
+        OPENSSL_free(ctx->aid);
+        ctx->aid = NULL; // ensure next function allocates memory
+        ctx->aid_len = get_oqs_oid(ctx->aid, ctx->sig->key.s->method_name);
 
         ctx->mdctx = NULL;
         ctx->md = md;
@@ -225,12 +224,11 @@ static int oqs_sig_signverify_init(void *vpoqs_sigctx, void *voqssig, int operat
     oqsx_key_free(poqs_sigctx->sig);
     poqs_sigctx->sig = voqssig;
     poqs_sigctx->operation = operation;
-/* TBD: key check
-    if (!oqs_sig_check_key(voqssig, operation == EVP_PKEY_OP_SIGN)) {
-        ERR_raise(ERR_LIB_USER, PROV_R_INVALID_KEY_LENGTH);
+    if ( (operation==EVP_PKEY_OP_SIGN && !poqs_sigctx->sig->privkey) ||
+         (operation==EVP_PKEY_OP_SIGN && !poqs_sigctx->sig->pubkey)) {
+        ERR_raise(ERR_LIB_USER, OQSPROV_R_INVALID_KEY);
         return 0;
     }
-*/
     return 1;
 }
 
@@ -340,7 +338,7 @@ static int oqs_sig_digest_sign_init(void *vpoqs_sigctx, const char *mdname,
 
 static int oqs_sig_digest_verify_init(void *vpoqs_sigctx, const char *mdname, void *voqssig)
 {
-    OQS_SIG_PRINTF("OQS SIG provider: get_med_size called\n");
+    OQS_SIG_PRINTF("OQS SIG provider: sig_digest_verify called\n");
     return oqs_sig_digest_signverify_init(vpoqs_sigctx, mdname, voqssig, EVP_PKEY_OP_VERIFY);
 }
 
@@ -375,7 +373,7 @@ int oqs_sig_digest_sign_final(void *vpoqs_sigctx, unsigned char *sig, size_t *si
         /*
          * TODO(3.0): There is the possibility that some externally provided
          * digests exceed EVP_MAX_MD_SIZE. We should probably handle that somehow -
-         * but that problem is much larger than just in DSA.
+         * but that problem is much larger than just here.
          */
         if (!EVP_DigestFinal_ex(poqs_sigctx->mdctx, digest, &dlen))
             return 0;
@@ -401,7 +399,7 @@ int oqs_sig_digest_verify_final(void *vpoqs_sigctx, const unsigned char *sig,
     /*
      * TODO(3.0): There is the possibility that some externally provided
      * digests exceed EVP_MAX_MD_SIZE. We should probably handle that somehow -
-     * but that problem is much larger than just in DSA.
+     * but that problem is much larger than just here. 
      */
     if (!EVP_DigestFinal_ex(poqs_sigctx->mdctx, digest, &dlen))
         return 0;
