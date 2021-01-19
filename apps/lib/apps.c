@@ -54,6 +54,9 @@ static int WIN32_rename(const char *from, const char *to);
 # define _kbhit kbhit
 #endif
 
+static BIO *bio_open_default_(const char *filename, char mode, int format,
+                              int quiet);
+
 #define PASS_SOURCE_SIZE_MAX 4
 
 DEFINE_STACK_OF(CONF)
@@ -379,29 +382,25 @@ CONF *app_load_config_bio(BIO *in, const char *filename)
     return NULL;
 }
 
-CONF *app_load_config(const char *filename)
+CONF *app_load_config_verbose(const char *filename, int verbose)
 {
-    BIO *in;
-    CONF *conf;
-
-    in = bio_open_default(filename, 'r', FORMAT_TEXT);
-    if (in == NULL)
-        return NULL;
-
-    conf = app_load_config_bio(in, filename);
-    BIO_free(in);
-    return conf;
+    if (verbose) {
+        if (*filename == '\0')
+            BIO_printf(bio_err, "No configuration used\n");
+        else
+            BIO_printf(bio_err, "Using configuration from %s\n", filename);
+    }
+    return app_load_config_internal(filename, 0);
 }
 
-CONF *app_load_config_quiet(const char *filename)
+CONF *app_load_config_internal(const char *filename, int quiet)
 {
-    BIO *in;
+    BIO *in = NULL; /* leads to empty config in case filename == "" */
     CONF *conf;
 
-    in = bio_open_default_quiet(filename, 'r', FORMAT_TEXT);
-    if (in == NULL)
+    if (*filename != '\0'
+        && (in = bio_open_default_(filename, 'r', FORMAT_TEXT, quiet)) == NULL)
         return NULL;
-
     conf = app_load_config_bio(in, filename);
     BIO_free(in);
     return conf;
@@ -457,9 +456,7 @@ CONF *app_load_config_modules(const char *configfile)
     CONF *conf = NULL;
 
     if (configfile != NULL) {
-        BIO_printf(bio_err, "Using configuration from %s\n", configfile);
-
-        if ((conf = app_load_config(configfile)) == NULL)
+        if ((conf = app_load_config_verbose(configfile, 1)) == NULL)
             return NULL;
         if (configfile != default_config_file && !app_load_modules(conf)) {
             NCONF_free(conf);
@@ -469,10 +466,10 @@ CONF *app_load_config_modules(const char *configfile)
     return conf;
 }
 
-#define IS_HTTP(uri) \
-    (strncmp(uri, OSSL_HTTP_PREFIX, strlen(OSSL_HTTP_PREFIX)) == 0)
-#define IS_HTTPS(uri) \
-    (strncmp(uri, OSSL_HTTPS_PREFIX, strlen(OSSL_HTTPS_PREFIX)) == 0)
+#define IS_HTTP(uri) ((uri) != NULL \
+        && strncmp(uri, OSSL_HTTP_PREFIX, strlen(OSSL_HTTP_PREFIX)) == 0)
+#define IS_HTTPS(uri) ((uri) != NULL \
+        && strncmp(uri, OSSL_HTTPS_PREFIX, strlen(OSSL_HTTPS_PREFIX)) == 0)
 
 X509 *load_cert_pass(const char *uri, int maybe_stdin,
                      const char *pass, const char *desc)
@@ -1982,17 +1979,61 @@ static int do_sign_init(EVP_MD_CTX *ctx, EVP_PKEY *pkey,
         && do_pkey_ctx_init(pkctx, sigopts);
 }
 
-/* Ensure RFC 5280 compliance and then sign the certificate info */
+static int adapt_keyid_ext(X509 *cert, X509V3_CTX *ext_ctx,
+                           const char *name, const char *value, int add_default)
+{
+    const STACK_OF(X509_EXTENSION) *exts = X509_get0_extensions(cert);
+    X509_EXTENSION *new_ext = X509V3_EXT_nconf(NULL, ext_ctx, name, value);
+    int idx, rv = 0;
+
+    if (new_ext == NULL)
+        return rv;
+
+    idx = X509v3_get_ext_by_OBJ(exts, X509_EXTENSION_get_object(new_ext), -1);
+    if (idx >= 0) {
+        X509_EXTENSION *found_ext = X509v3_get_ext(exts, idx);
+        ASN1_OCTET_STRING *data = X509_EXTENSION_get_data(found_ext);
+        int disabled = ASN1_STRING_length(data) <= 2; /* config said "none" */
+
+        if (disabled) {
+            X509_delete_ext(cert, idx);
+            X509_EXTENSION_free(found_ext);
+        } /* else keep existing key identifier, which might be outdated */
+        rv = 1;
+    } else  {
+        rv = !add_default || X509_add_ext(cert, new_ext, -1);
+    }
+    X509_EXTENSION_free(new_ext);
+    return rv;
+}
+
+/* Ensure RFC 5280 compliance, adapt keyIDs as needed, and sign the cert info */
 int do_X509_sign(X509 *cert, EVP_PKEY *pkey, const EVP_MD *md,
-                 STACK_OF(OPENSSL_STRING) *sigopts)
+                 STACK_OF(OPENSSL_STRING) *sigopts, X509V3_CTX *ext_ctx)
 {
     const STACK_OF(X509_EXTENSION) *exts = X509_get0_extensions(cert);
     EVP_MD_CTX *mctx = EVP_MD_CTX_new();
+    int self_sign;
     int rv = 0;
 
     if (sk_X509_EXTENSION_num(exts /* may be NULL */) > 0) {
         /* Prevent X509_V_ERR_EXTENSIONS_REQUIRE_VERSION_3 */
         if (!X509_set_version(cert, 2)) /* Make sure cert is X509 v3 */
+            goto end;
+
+        /*
+         * Add default SKID before such that default AKID can make use of it
+         * in case the certificate is self-signed
+         */
+        /* Prevent X509_V_ERR_MISSING_SUBJECT_KEY_IDENTIFIER */
+        if (!adapt_keyid_ext(cert, ext_ctx, "subjectKeyIdentifier", "hash", 1))
+            goto end;
+        /* Prevent X509_V_ERR_MISSING_AUTHORITY_KEY_IDENTIFIER */
+        ERR_set_mark();
+        self_sign = X509_check_private_key(cert, pkey);
+        ERR_pop_to_mark();
+        if (!adapt_keyid_ext(cert, ext_ctx, "authorityKeyIdentifier",
+                             "keyid, issuer", !self_sign))
             goto end;
 
         /* TODO any further measures for ensuring default RFC 5280 compliance */
@@ -2745,7 +2786,7 @@ static BIO *bio_open_default_(const char *filename, char mode, int format,
         if (ret != NULL)
             return ret;
         BIO_printf(bio_err,
-                   "Can't open %s for %s, %s\n",
+                   "Can't open \"%s\" for %s, %s\n",
                    filename, modeverb(mode), strerror(errno));
     }
     ERR_print_errors(bio_err);

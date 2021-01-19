@@ -228,10 +228,14 @@ static void ossl_lib_ctx_generic_new(void *parent_ign, void *ptr_ign,
                                      long argl_ign, void *argp)
 {
     const OSSL_LIB_CTX_METHOD *meth = argp;
-    void *ptr = meth->new_func(crypto_ex_data_get_ossl_lib_ctx(ad));
+    OSSL_LIB_CTX *ctx = crypto_ex_data_get_ossl_lib_ctx(ad);
+    void *ptr = meth->new_func(ctx);
 
-    if (ptr != NULL)
+    if (ptr != NULL) {
+        CRYPTO_THREAD_write_lock(ctx->lock);
         CRYPTO_set_ex_data(ad, index, ptr);
+        CRYPTO_THREAD_unlock(ctx->lock);
+    }
 }
 static void ossl_lib_ctx_generic_free(void *parent_ign, void *ptr,
                                       CRYPTO_EX_DATA *ad, int index,
@@ -367,4 +371,17 @@ int ossl_lib_ctx_onfree(OSSL_LIB_CTX *ctx, ossl_lib_ctx_onfree_fn onfreefn)
     ctx->onfreelist = newonfree;
 
     return 1;
+}
+
+const char *ossl_lib_ctx_get_descriptor(OSSL_LIB_CTX *libctx)
+{
+#ifdef FIPS_MODULE
+    return "FIPS internal library context";
+#else
+    if (ossl_lib_ctx_is_global_default(libctx))
+        return "Global default library context";
+    if (ossl_lib_ctx_is_default(libctx))
+        return "Thread-local default library context";
+    return "Non-default library context";
+#endif
 }

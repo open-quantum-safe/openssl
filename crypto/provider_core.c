@@ -85,6 +85,7 @@ struct ossl_provider_st {
      */
     unsigned char *operation_bits;
     size_t operation_bits_sz;
+    CRYPTO_RWLOCK *opbits_lock;
 
     /* Provider side data */
     void *provctx;
@@ -252,6 +253,7 @@ static OSSL_PROVIDER *provider_new(const char *name,
         || (prov->activatecnt_lock = CRYPTO_THREAD_lock_new()) == NULL
 #endif
         || !ossl_provider_up_ref(prov) /* +1 One reference to be returned */
+        || (prov->opbits_lock = CRYPTO_THREAD_lock_new()) == NULL
         || (prov->name = OPENSSL_strdup(name)) == NULL) {
         ossl_provider_free(prov);
         ERR_raise(ERR_LIB_CRYPTO, ERR_R_MALLOC_FAILURE);
@@ -371,6 +373,7 @@ void ossl_provider_free(OSSL_PROVIDER *prov)
             OPENSSL_free(prov->name);
             OPENSSL_free(prov->path);
             sk_INFOPAIR_pop_free(prov->parameters, free_infopair);
+            CRYPTO_THREAD_lock_free(prov->opbits_lock);
 #ifndef HAVE_ATOMICS
             CRYPTO_THREAD_lock_free(prov->refcnt_lock);
             CRYPTO_THREAD_lock_free(prov->activatecnt_lock);
@@ -726,34 +729,50 @@ static int provider_forall_loaded(struct provider_store_st *store,
  */
 static void provider_activate_fallbacks(struct provider_store_st *store)
 {
-    if (store->use_fallbacks) {
-        int num_provs = sk_OSSL_PROVIDER_num(store->providers);
-        int activated_fallback_count = 0;
-        int i;
+    int use_fallbacks;
+    int num_provs;
+    int activated_fallback_count = 0;
+    int i;
 
-        for (i = 0; i < num_provs; i++) {
-            OSSL_PROVIDER *prov = sk_OSSL_PROVIDER_value(store->providers, i);
+    CRYPTO_THREAD_read_lock(store->lock);
+    use_fallbacks = store->use_fallbacks;
+    CRYPTO_THREAD_unlock(store->lock);
+    if (!use_fallbacks)
+        return;
 
-            if (ossl_provider_up_ref(prov)) {
-                if (prov->flag_fallback) {
-                    if (provider_activate(prov)) {
-                        prov->flag_activated_as_fallback = 1;
-                        activated_fallback_count++;
-                    }
-                }
-                ossl_provider_free(prov);
-            }
-        }
-
-        /*
-         * We assume that all fallbacks have been added to the store before
-         * any fallback is activated.
-         * TODO: We may have to reconsider this, IF we find ourselves adding
-         * fallbacks after any previous fallback has been activated.
-         */
-        if (activated_fallback_count > 0)
-            store->use_fallbacks = 0;
+    CRYPTO_THREAD_write_lock(store->lock);
+    /* Check again, just in case another thread changed it */
+    use_fallbacks = store->use_fallbacks;
+    if (!use_fallbacks) {
+        CRYPTO_THREAD_unlock(store->lock);
+        return;
     }
+
+    num_provs = sk_OSSL_PROVIDER_num(store->providers);
+    for (i = 0; i < num_provs; i++) {
+        OSSL_PROVIDER *prov = sk_OSSL_PROVIDER_value(store->providers, i);
+
+        if (ossl_provider_up_ref(prov)) {
+            if (prov->flag_fallback) {
+                if (provider_activate(prov)) {
+                    prov->flag_activated_as_fallback = 1;
+                    activated_fallback_count++;
+                }
+            }
+            ossl_provider_free(prov);
+        }
+    }
+
+    /*
+     * We assume that all fallbacks have been added to the store before
+     * any fallback is activated.
+     * TODO: We may have to reconsider this, IF we find ourselves adding
+     * fallbacks after any previous fallback has been activated.
+     */
+    if (activated_fallback_count > 0)
+        store->use_fallbacks = 0;
+
+    CRYPTO_THREAD_unlock(store->lock);
 }
 
 int ossl_provider_forall_loaded(OSSL_LIB_CTX *ctx,
@@ -773,10 +792,9 @@ int ossl_provider_forall_loaded(OSSL_LIB_CTX *ctx,
 #endif
 
     if (store != NULL) {
-        CRYPTO_THREAD_read_lock(store->lock);
-
         provider_activate_fallbacks(store);
 
+        CRYPTO_THREAD_read_lock(store->lock);
         /*
          * Now, we sweep through all providers
          */
@@ -791,9 +809,7 @@ int ossl_provider_forall_loaded(OSSL_LIB_CTX *ctx,
 int ossl_provider_available(OSSL_PROVIDER *prov)
 {
     if (prov != NULL) {
-        CRYPTO_THREAD_read_lock(prov->store->lock);
         provider_activate_fallbacks(prov->store);
-        CRYPTO_THREAD_unlock(prov->store->lock);
 
         return prov->flag_activated;
     }
@@ -907,11 +923,13 @@ int ossl_provider_set_operation_bit(OSSL_PROVIDER *provider, size_t bitnum)
     size_t byte = bitnum / 8;
     unsigned char bit = (1 << (bitnum % 8)) & 0xFF;
 
+    CRYPTO_THREAD_write_lock(provider->opbits_lock);
     if (provider->operation_bits_sz <= byte) {
         unsigned char *tmp = OPENSSL_realloc(provider->operation_bits,
                                              byte + 1);
 
         if (tmp == NULL) {
+            CRYPTO_THREAD_unlock(provider->opbits_lock);
             ERR_raise(ERR_LIB_CRYPTO, ERR_R_MALLOC_FAILURE);
             return 0;
         }
@@ -921,6 +939,7 @@ int ossl_provider_set_operation_bit(OSSL_PROVIDER *provider, size_t bitnum)
         provider->operation_bits_sz = byte + 1;
     }
     provider->operation_bits[byte] |= bit;
+    CRYPTO_THREAD_unlock(provider->opbits_lock);
     return 1;
 }
 
@@ -936,8 +955,10 @@ int ossl_provider_test_operation_bit(OSSL_PROVIDER *provider, size_t bitnum,
     }
 
     *result = 0;
+    CRYPTO_THREAD_read_lock(provider->opbits_lock);
     if (provider->operation_bits_sz > byte)
         *result = ((provider->operation_bits[byte] & bit) != 0);
+    CRYPTO_THREAD_unlock(provider->opbits_lock);
     return 1;
 }
 

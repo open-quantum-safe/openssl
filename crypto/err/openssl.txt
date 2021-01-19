@@ -2039,7 +2039,6 @@ BIO_R_NO_ACCEPT_ADDR_OR_SERVICE_SPECIFIED:143:\
 BIO_R_NO_HOSTNAME_OR_SERVICE_SPECIFIED:144:no hostname or service specified
 BIO_R_NO_PORT_DEFINED:113:no port defined
 BIO_R_NO_SUCH_FILE:128:no such file
-BIO_R_NULL_PARAMETER:115:null parameter
 BIO_R_TRANSFER_ERROR:104:transfer error
 BIO_R_TRANSFER_TIMEOUT:105:transfer timeout
 BIO_R_UNABLE_TO_BIND_SOCKET:117:unable to bind socket
@@ -2554,7 +2553,6 @@ EVP_R_EXPECTING_A_ECX_KEY:219:expecting a ecx key
 EVP_R_EXPECTING_A_EC_KEY:142:expecting a ec key
 EVP_R_EXPECTING_A_POLY1305_KEY:164:expecting a poly1305 key
 EVP_R_EXPECTING_A_SIPHASH_KEY:175:expecting a siphash key
-EVP_R_FETCH_FAILED:202:fetch failed
 EVP_R_FINAL_ERROR:188:final error
 EVP_R_FIPS_MODE_NOT_SUPPORTED:167:fips mode not supported
 EVP_R_GENERATE_ERROR:214:generate error
@@ -2610,7 +2608,7 @@ EVP_R_PRIVATE_KEY_ENCODE_ERROR:146:private key encode error
 EVP_R_PUBLIC_KEY_NOT_RSA:106:public key not rsa
 EVP_R_SET_DEFAULT_PROPERTY_FAILURE:209:set default property failure
 EVP_R_TOO_MANY_RECORDS:183:too many records
-EVP_R_UNABLE_TO_ENABLE_PARENT_LOCKING:212:unable to enable parent locking
+EVP_R_UNABLE_TO_ENABLE_LOCKING:212:unable to enable locking
 EVP_R_UNABLE_TO_GET_MAXIMUM_REQUEST_SIZE:215:unable to get maximum request size
 EVP_R_UNABLE_TO_GET_RANDOM_STRENGTH:216:unable to get random strength
 EVP_R_UNABLE_TO_LOCK_CONTEXT:211:unable to lock context
@@ -3103,9 +3101,9 @@ SM2_R_INVALID_DIGEST:102:invalid digest
 SM2_R_INVALID_DIGEST_TYPE:103:invalid digest type
 SM2_R_INVALID_ENCODING:104:invalid encoding
 SM2_R_INVALID_FIELD:105:invalid field
+SM2_R_INVALID_PRIVATE_KEY:113:invalid private key
 SM2_R_NO_PARAMETERS_SET:109:no parameters set
 SM2_R_USER_ID_TOO_LARGE:106:user id too large
-SSL_R_ALGORITHM_FETCH_FAILED:295:algorithm fetch failed
 SSL_R_APPLICATION_DATA_AFTER_CLOSE_NOTIFY:291:\
 	application data after close notify
 SSL_R_APP_DATA_IN_HANDSHAKE:100:app data in handshake

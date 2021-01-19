@@ -178,7 +178,7 @@ PKCS7 *d2i_PKCS7_fp(FILE *fp, PKCS7 **p7)
     PKCS7 *ret;
 
     ret = ASN1_item_d2i_fp(ASN1_ITEM_rptr(PKCS7), fp, p7);
-    if (ret != NULL && p7 != NULL)
+    if (ret != NULL)
         pkcs7_resolve_libctx(ret);
     return ret;
 }
@@ -194,7 +194,7 @@ PKCS7 *d2i_PKCS7_bio(BIO *bp, PKCS7 **p7)
     PKCS7 *ret;
 
     ret = ASN1_item_d2i_bio(ASN1_ITEM_rptr(PKCS7), bp, p7);
-    if (ret != NULL && p7 != NULL)
+    if (ret != NULL)
         pkcs7_resolve_libctx(ret);
     return ret;
 }
@@ -392,7 +392,7 @@ int X509_digest(const X509 *cert, const EVP_MD *md, unsigned char *data,
                 unsigned int *len)
 {
     if (EVP_MD_is_a(md, SN_sha1) && (cert->ex_flags & EXFLAG_SET) != 0
-            && (cert->ex_flags & EXFLAG_INVALID) == 0) {
+            && (cert->ex_flags & EXFLAG_NO_FINGERPRINT) == 0) {
         /* Asking for SHA1 and we already computed it. */
         if (len != NULL)
             *len = sizeof(cert->sha1_hash);
@@ -436,7 +436,7 @@ int X509_CRL_digest(const X509_CRL *data, const EVP_MD *type,
                     unsigned char *md, unsigned int *len)
 {
     if (type == EVP_sha1() && (data->flags & EXFLAG_SET) != 0
-            && (data->flags & EXFLAG_INVALID) == 0) {
+            && (data->flags & EXFLAG_NO_FINGERPRINT) == 0) {
         /* Asking for SHA1; always computed in CRL d2i. */
         if (len != NULL)
             *len = sizeof(data->sha1_hash);
