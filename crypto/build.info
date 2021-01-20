@@ -82,7 +82,6 @@ SOURCE[../libcrypto]=$UTIL_COMMON \
         $UPLINKSRC
 SOURCE[../providers/libfips.a]=$UTIL_COMMON
 SOURCE[../providers/liblegacy.a]=$UTIL_COMMON
-SOURCE[../providers/liboqsprovider.a]=$UTIL_COMMON
 
 # Implementations are now spread across several libraries, so the defines
 # need to be applied to all affected libraries and modules.

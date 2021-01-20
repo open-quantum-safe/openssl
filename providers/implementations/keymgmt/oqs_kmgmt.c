@@ -28,7 +28,6 @@
 #include <openssl/err.h>
 #include <openssl/evp.h>
 #include <openssl/rand.h>
-#include "internal/param_build_set.h"
 #include "openssl/param_build.h"
 #include "prov/implementations.h"
 #include "prov/providercommon.h"
@@ -136,33 +135,13 @@ static int oqsx_import(void *keydata, int selection, const OSSL_PARAM params[])
     return ok;
 }
 
-static int key_to_params(OQSX_KEY *key, OSSL_PARAM_BLD *tmpl,
-                         OSSL_PARAM params[])
-{
-    OQS_KM_PRINTF("OQSKEYMGMT: key_to_params called\n");
-    if (key == NULL)
-        return 0;
-
-    if (!ossl_param_build_set_octet_string(tmpl, params,
-                                           OSSL_PKEY_PARAM_PUB_KEY,
-                                           key->pubkey, key->pubkeylen)) 
-        return 0;
-
-    if (key->privkey != NULL
-        && !ossl_param_build_set_octet_string(tmpl, params,
-                                              OSSL_PKEY_PARAM_PRIV_KEY,
-                                              key->privkey, key->privkeylen)) 
-        return 0;
-
-    return 1;
-}
-
 static int oqsx_export(void *keydata, int selection, OSSL_CALLBACK *param_cb,
                       void *cbarg)
 {
     OQSX_KEY *key = keydata;
     OSSL_PARAM_BLD *tmpl;
     OSSL_PARAM *params = NULL;
+    OSSL_PARAM *p;
     int ret = 0;
 
     OQS_KM_PRINTF("OQSKEYMGMT: export called\n");
@@ -177,12 +156,17 @@ static int oqsx_export(void *keydata, int selection, OSSL_CALLBACK *param_cb,
         return 0;
     }
 
-    if ((selection & OSSL_KEYMGMT_SELECT_ALL_PARAMETERS) != 0
-         && !key_to_params(key, tmpl, NULL))
-        goto err;
-    if ((selection & OSSL_KEYMGMT_SELECT_KEYPAIR) != 0
-         && !key_to_params(key, tmpl, NULL))
-        goto err;
+    if (((selection & OSSL_KEYMGMT_SELECT_ALL_PARAMETERS) != 0) ||
+        ((selection & OSSL_KEYMGMT_SELECT_KEYPAIR) != 0)) {
+        if ((p = OSSL_PARAM_locate(params, OSSL_PKEY_PARAM_PUB_KEY)) != NULL) {
+            if (!OSSL_PARAM_set_octet_string(p, key->pubkey, key->pubkeylen))
+                goto err;
+        }
+        if ((p = OSSL_PARAM_locate(params, OSSL_PKEY_PARAM_PRIV_KEY)) != NULL) {
+            if (!OSSL_PARAM_set_octet_string(p, key->privkey, key->privkeylen))
+                goto err;
+        }
+    }
 
     params = OSSL_PARAM_BLD_to_param(tmpl);
     if (params == NULL)
@@ -230,8 +214,16 @@ static int oqsx_get_params(void *key, OSSL_PARAM params[])
         if (!OSSL_PARAM_set_octet_string(p, oqsxk->pubkey, oqsxk->pubkeylen))
             return 0;
     }
+    if ((p = OSSL_PARAM_locate(params, OSSL_PKEY_PARAM_PUB_KEY)) != NULL) {
+        if (!OSSL_PARAM_set_octet_string(p, oqsxk->pubkey, oqsxk->pubkeylen))
+            return 0;
+    }
+    if ((p = OSSL_PARAM_locate(params, OSSL_PKEY_PARAM_PRIV_KEY)) != NULL) {
+        if (!OSSL_PARAM_set_octet_string(p, oqsxk->privkey, oqsxk->privkeylen))
+            return 0;
+    }
 
-    return key_to_params(oqsxk, NULL, params);
+    return 1;
 }
 
 static const OSSL_PARAM oqsx_gettable_params[] = {

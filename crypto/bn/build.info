@@ -113,13 +113,11 @@ IF[{- !$disabled{'deprecated-3.0'} -}]
 ENDIF
 SOURCE[../../providers/libfips.a]=$COMMON $BNASM
 SOURCE[../../providers/liblegacy.a]=$BNASM
-SOURCE[../../providers/liboqsprovider.a]=$BNASM
 # Implementations are now spread across several libraries, so the defines
 # need to be applied to all affected libraries and modules.
 DEFINE[../../libcrypto]=$BNDEF
 DEFINE[../../providers/libfips.a]=$BNDEF
 DEFINE[../../providers/liblegacy.a]=$BNDEF
-DEFINE[../../providers/liboqsprovider.a]=$BNDEF
 DEFINE[../../providers/libimplementations.a]=$BNDEF
 
 INCLUDE[bn_exp.o]=..
