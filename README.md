@@ -35,6 +35,8 @@ Assuming standard creation of RSA server certificates, these commands show prope
 Example server start: `/opt/ossl3/bin/openssl s_server -cert rsa_srv.crt -key rsa_srv.key -www -tls1_3 -groups kyber768:frodo640shake`
 Example client start: `/opt/ossl3/bin/openssl s_client -groups frodo640shake`
 
+*Note:* For these demo commands to work, be sure to have all required OpenSSL providers active, at least 'oqsprovider' (for the OQS KEM algorithms) and 'default' (for the RSA certificate) provider. Do this by listing them as active in your `openssl.cnf` (in /opt/ossl3 if using the exact same build parameters as described in this README).
+
 ## Third-party integration
 
 As OpenSSL3 has not yet reached beta status, no further application integrations are available.
