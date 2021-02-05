@@ -5608,7 +5608,7 @@
 #define SN_p521_dilithium5_aes          "p521_dilithium5_aes"
 #define LN_p521_dilithium5_aes          "p521_dilithium5_aes"
 #define NID_p521_dilithium5_aes         1293
-#define OBJ_p521_dilithium5_aes         1L,3L,9999L,3L,11L,4L
+#define OBJ_p521_dilithium5_aes         1L,3L,9999L,2L,11L,4L
 
 #define SN_falcon512            "falcon512"
 #define LN_falcon512            "falcon512"

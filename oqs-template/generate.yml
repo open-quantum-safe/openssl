@@ -407,7 +407,7 @@ sigs:
         enable: true
         mix_with: [{'name': 'p521',
                     'pretty_name': 'ECDSA p521',
-                    'oid': '1.3.9999.3.11.4',
+                    'oid': '1.3.9999.2.11.4',
                     'code_point': '0xfead'}]
   -
     # iso (1)
