@@ -3,7 +3,7 @@ import pytest
 import sys
 import os
 
-@pytest.fixture(params=common.signatures)
+@pytest.fixture(params=["p384_dilithium3_aes"])
 def server(ossl, ossl_config, test_artifacts_dir, request, worker_id):
     # Setup: start ossl server
     common.gen_keys(ossl, ossl_config, request.param, test_artifacts_dir, worker_id)
