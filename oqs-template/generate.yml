@@ -327,7 +327,7 @@ sigs:
     # IBM (2)
     # qsc (267)
     # Dilithium-r3 (7)
-    family: 'CRYSTALS-DILITHIUM'
+    family: 'CRYSTALS-Dilithium'
     variants:
       -
         name: 'dilithium2'

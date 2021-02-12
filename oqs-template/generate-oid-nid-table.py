@@ -1,20 +1,39 @@
 #!/usr/bin/env python3
 
+import argparse
 import sys
 from tabulate import tabulate
 import yaml
-
-table = [['Algorithm', 'Claimed NIST Level', 'Code Point', 'oid']]
+import os
 
 config = {}
 with open('generate.yml', mode='r', encoding='utf-8') as f:
     config = yaml.safe_load(f.read())
 
-# Generate the signature table
+parser = argparse.ArgumentParser()
+parser.add_argument('--liboqs-docs-dir', dest="liboqs_docs_dir", required=True)
+args = parser.parse_args()
 
+######################################
+# Generate Signature Information Table
+######################################
+
+liboqs_sig_docs_dir = os.path.join(args.liboqs_docs_dir, 'algorithms', 'sig')
+sig_to_impl_version = {}
+for root, _, files in os.walk(liboqs_sig_docs_dir):
+    for fil in files:
+        with open(os.path.join(root, fil), mode='r', encoding='utf-8') as f:
+            alg_pretty_name = next(f).rstrip()
+            for line in f:
+                if line.startswith("- **Version**:"):
+                    sig_to_impl_version[alg_pretty_name] = line.split(":")[1].rstrip()
+                    break
+
+table = [['Algorithm', 'Implementation Version',
+          'Claimed NIST Level', 'Code Point', 'OID']]
+claimed_nist_level = 0
 for sig in config['sigs'][1:]:
     for variant in sig['variants']:
-        claimed_nist_level = 0
         if variant['security'] == 128:
             claimed_nist_level = 1
         elif variant['security'] == 192:
@@ -24,21 +43,43 @@ for sig in config['sigs'][1:]:
         else:
             sys.exit("variant['security'] value malformed.")
 
-        table.append([variant['name'], claimed_nist_level, variant['code_point'], variant['oid']])
+        if sig['family'].startswith('SPHINCS'):
+            sig['family'] = 'SPHINCS+'
+
+        table.append([variant['name'], sig_to_impl_version[sig['family']],
+                      claimed_nist_level, variant['code_point'],
+                      variant['oid']])
+
         for hybrid in variant['mix_with']:
-            table.append([variant['name'] + ' **hybrid with** ' + hybrid['name'], claimed_nist_level, hybrid['code_point'], hybrid['oid']])
+            table.append([variant['name'] + ' **hybrid with** ' + hybrid['name'],
+                          sig_to_impl_version[sig['family']],
+                          claimed_nist_level,
+                          hybrid['code_point'],
+                          hybrid['oid']])
 
 with open('oqs-sig-info.md', mode='w', encoding='utf-8') as f:
     f.write(tabulate(table, tablefmt="pipe", headers="firstrow"))
 
-# Generate the kem table
+##################################
+# Generate KEM Information Table
+##################################
 
-table = [['Family', 'Variant', 'Claimed NIST Level', 'PQ-only Code Point', 'Hybrid Elliptic Curve', 'Hybrid Code Point']]
-x25519_table = [['Family', 'Variant', 'Claimed NIST Level', 'PQ-only Code Point', 'Hybrid Elliptic Curve', 'Hybrid Code Point']]
+liboqs_kem_docs_dir = os.path.join(args.liboqs_docs_dir, 'algorithms', 'kem')
+kem_to_impl_version = {}
+for root, _, files in os.walk(liboqs_kem_docs_dir):
+    for fil in files:
+        with open(os.path.join(root, fil), mode='r', encoding='utf-8') as f:
+            alg_pretty_name = next(f).rstrip()
+            for line in f:
+                if line.startswith("- **Version**:"):
+                    kem_to_impl_version[alg_pretty_name] = line.split(":")[1].rstrip()
+                    break
+kem_to_impl_version['SIDH'] = kem_to_impl_version['SIKE']
 
+table = [['Family', 'Implementation Version', 'Variant', 'Claimed NIST Level',
+           'PQ-only Code Point', 'Hybrid Elliptic Curve', 'Hybrid Code Point']]
+hybrid_elliptic_curve = ''
 for kem in config['kems']:
-    claimed_nist_level = 0
-    hybrid_elliptic_curve = ''
     if kem['bit_security'] == 128:
         claimed_nist_level = 1
         hybrid_elliptic_curve = 'secp256_r1'
@@ -52,13 +93,21 @@ for kem in config['kems']:
         sys.exit("kem['bit_security'] value malformed.")
 
     if kem['name_group'] == 'kyber512':
-        table.append([kem['family'], kem['name_group'], claimed_nist_level, kem['nid'], 'x25519', '0x2F26'])
+        table.append([kem['family'], kem_to_impl_version[kem['family']],
+                      kem['name_group'], claimed_nist_level, kem['nid'],
+                      'x25519', '0x2F26'])
     elif kem['name_group'] == 'sikep434':
-        table.append([kem['family'], kem['name_group'], claimed_nist_level, kem['nid'], 'x25519', '0x2F27'])
+        table.append([kem['family'], kem_to_impl_version[kem['family']],
+                      kem['name_group'], claimed_nist_level, kem['nid'],
+                      'x25519', '0x2F27'])
     elif kem['name_group'] == 'bike1l1fo':
-        table.append([kem['family'], kem['name_group'], claimed_nist_level, kem['nid'], 'x25519', '0x2F28'])
+        table.append([kem['family'], kem_to_impl_version[kem['family']],
+                      kem['name_group'], claimed_nist_level, kem['nid'],
+                      'x25519', '0x2F28'])
 
-    table.append([kem['family'], kem['name_group'], claimed_nist_level, kem['nid'], hybrid_elliptic_curve, kem['nid_hybrid']])
+    table.append([kem['family'], kem_to_impl_version[kem['family']],
+                  kem['name_group'], claimed_nist_level, kem['nid'],
+                  hybrid_elliptic_curve, kem['nid_hybrid']])
 
 with open('oqs-kem-info.md', mode='w', encoding='utf-8') as f:
     f.write(tabulate(table, tablefmt="pipe", headers="firstrow"))
