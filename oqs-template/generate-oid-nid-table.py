@@ -34,6 +34,8 @@ with open('oqs-sig-info.md', mode='w', encoding='utf-8') as f:
 # Generate the kem table
 
 table = [['Family', 'Variant', 'Claimed NIST Level', 'PQ-only Code Point', 'Hybrid Elliptic Curve', 'Hybrid Code Point']]
+x25519_table = [['Family', 'Variant', 'Claimed NIST Level', 'PQ-only Code Point', 'Hybrid Elliptic Curve', 'Hybrid Code Point']]
+
 for kem in config['kems']:
     claimed_nist_level = 0
     hybrid_elliptic_curve = ''
@@ -48,6 +50,14 @@ for kem in config['kems']:
         hybrid_elliptic_curve = 'secp521_r1'
     else:
         sys.exit("kem['bit_security'] value malformed.")
+
+    if kem['name_group'] == 'kyber512':
+        table.append([kem['family'], kem['name_group'], claimed_nist_level, kem['nid'], 'x25519', '0x2F26'])
+    elif kem['name_group'] == 'sikep434':
+        table.append([kem['family'], kem['name_group'], claimed_nist_level, kem['nid'], 'x25519', '0x2F27'])
+    elif kem['name_group'] == 'bike1l1fo':
+        table.append([kem['family'], kem['name_group'], claimed_nist_level, kem['nid'], 'x25519', '0x2F28'])
+
     table.append([kem['family'], kem['name_group'], claimed_nist_level, kem['nid'], hybrid_elliptic_curve, kem['nid_hybrid']])
 
 with open('oqs-kem-info.md', mode='w', encoding='utf-8') as f:

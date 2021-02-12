@@ -8,6 +8,7 @@
 | FrodoKEM       | frodo1344shake  |                    5 | 0x0205               | secp521_r1              | 0x2F05              |
 | BIKE           | bike1l1cpa      |                    1 | 0x0206               | secp256_r1              | 0x2F06              |
 | BIKE           | bike1l3cpa      |                    3 | 0x0207               | secp384_r1              | 0x2F07              |
+| CRYSTALS-Kyber | kyber512        |                    1 | 0x020F               | x25519                  | 0x2F26              |
 | CRYSTALS-Kyber | kyber512        |                    1 | 0x020F               | secp256_r1              | 0x2F0F              |
 | CRYSTALS-Kyber | kyber768        |                    3 | 0x0210               | secp384_r1              | 0x2F10              |
 | CRYSTALS-Kyber | kyber1024       |                    5 | 0x0211               | secp521_r1              | 0x2F11              |
@@ -22,10 +23,12 @@
 | SIDH           | sidhp503        |                    1 | 0x021C               | secp256_r1              | 0x2F1C              |
 | SIDH           | sidhp610        |                    3 | 0x021D               | secp384_r1              | 0x2F1D              |
 | SIDH           | sidhp751        |                    5 | 0x021E               | secp521_r1              | 0x2F1E              |
+| SIKE           | sikep434        |                    1 | 0x021F               | x25519                  | 0x2F27              |
 | SIKE           | sikep434        |                    1 | 0x021F               | secp256_r1              | 0x2F1F              |
 | SIKE           | sikep503        |                    1 | 0x0220               | secp256_r1              | 0x2F20              |
 | SIKE           | sikep610        |                    3 | 0x0221               | secp384_r1              | 0x2F21              |
 | SIKE           | sikep751        |                    5 | 0x0222               | secp521_r1              | 0x2F22              |
+| BIKE           | bike1l1fo       |                    1 | 0x0223               | x25519                  | 0x2F28              |
 | BIKE           | bike1l1fo       |                    1 | 0x0223               | secp256_r1              | 0x2F23              |
 | BIKE           | bike1l3fo       |                    3 | 0x0224               | secp384_r1              | 0x2F24              |
 | CRYSTALS-Kyber | kyber90s512     |                    1 | 0x0229               | secp256_r1              | 0x2F29              |

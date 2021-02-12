@@ -1,13 +1,19 @@
 | Algorithm                                         |   Claimed NIST Level | Code Point   | oid                       |
 |:--------------------------------------------------|---------------------:|:-------------|:--------------------------|
-| dilithium2                                        |                    1 | 0xfe03       | 1.3.6.1.4.1.2.267.6.4.3   |
-| dilithium2 **hybrid with** p256                   |                    1 | 0xfe04       | 1.3.9999.2.2              |
-| dilithium2 **hybrid with** rsa3072                |                    1 | 0xfe05       | 1.3.9999.2.3              |
-| dilithium3                                        |                    1 | 0xfe06       | 1.3.6.1.4.1.2.267.6.5.4   |
-| dilithium3 **hybrid with** p256                   |                    1 | 0xfe07       | 1.3.9999.2.4              |
-| dilithium3 **hybrid with** rsa3072                |                    1 | 0xfe08       | 1.3.9999.2.5              |
-| dilithium4                                        |                    3 | 0xfe09       | 1.3.6.1.4.1.2.267.6.6.5   |
-| dilithium4 **hybrid with** p384                   |                    3 | 0xfe0a       | 1.3.9999.2.6              |
+| dilithium2                                        |                    1 | 0xfea0       | 1.3.6.1.4.1.2.267.7.4.4   |
+| dilithium2 **hybrid with** p256                   |                    1 | 0xfea1       | 1.3.9999.2.7.1            |
+| dilithium2 **hybrid with** rsa3072                |                    1 | 0xfea2       | 1.3.9999.2.7.2            |
+| dilithium3                                        |                    3 | 0xfea3       | 1.3.6.1.4.1.2.267.7.6.5   |
+| dilithium3 **hybrid with** p384                   |                    3 | 0xfea4       | 1.3.9999.2.7.3            |
+| dilithium5                                        |                    5 | 0xfea5       | 1.3.6.1.4.1.2.267.7.8.7   |
+| dilithium5 **hybrid with** p521                   |                    5 | 0xfea6       | 1.3.9999.2.7.4            |
+| dilithium2_aes                                    |                    1 | 0xfea7       | 1.3.6.1.4.1.2.267.11.4.4  |
+| dilithium2_aes **hybrid with** p256               |                    1 | 0xfea8       | 1.3.9999.2.11.1           |
+| dilithium2_aes **hybrid with** rsa3072            |                    1 | 0xfea9       | 1.3.9999.2.11.2           |
+| dilithium3_aes                                    |                    3 | 0xfeaa       | 1.3.6.1.4.1.2.267.11.6.5  |
+| dilithium3_aes **hybrid with** p384               |                    3 | 0xfeab       | 1.3.9999.2.11.3           |
+| dilithium5_aes                                    |                    5 | 0xfeac       | 1.3.6.1.4.1.2.267.11.8.7  |
+| dilithium5_aes **hybrid with** p521               |                    5 | 0xfead       | 1.3.9999.2.11.4           |
 | falcon512                                         |                    1 | 0xfe0b       | 1.3.9999.3.1              |
 | falcon512 **hybrid with** p256                    |                    1 | 0xfe0c       | 1.3.9999.3.2              |
 | falcon512 **hybrid with** rsa3072                 |                    1 | 0xfe0d       | 1.3.9999.3.3              |
@@ -29,27 +35,27 @@
 | picnic3l3 **hybrid with** p384                    |                    3 | 0xfe1f       | 1.3.6.1.4.1.311.89.2.1.25 |
 | picnic3l5                                         |                    5 | 0xfe20       | 1.3.6.1.4.1.311.89.2.1.26 |
 | picnic3l5 **hybrid with** p521                    |                    5 | 0xfe21       | 1.3.6.1.4.1.311.89.2.1.27 |
-| rainbowIclassic                                   |                    1 | 0xfe27       | 1.3.9999.5.1.1            |
-| rainbowIclassic **hybrid with** p256              |                    1 | 0xfe28       | 1.3.9999.5.1.2            |
-| rainbowIclassic **hybrid with** rsa3072           |                    1 | 0xfe29       | 1.3.9999.5.1.3            |
-| rainbowIcircumzenithal                            |                    1 | 0xfe30       | 1.3.9999.5.1.4            |
-| rainbowIcircumzenithal **hybrid with** p256       |                    1 | 0xfe31       | 1.3.9999.5.1.5            |
-| rainbowIcircumzenithal **hybrid with** rsa3072    |                    1 | 0xfe32       | 1.3.9999.5.1.6            |
-| rainbowIcompressed                                |                    1 | 0xfe33       | 1.3.9999.5.1.7            |
-| rainbowIcompressed **hybrid with** p256           |                    1 | 0xfe34       | 1.3.9999.5.1.8            |
-| rainbowIcompressed **hybrid with** rsa3072        |                    1 | 0xfe35       | 1.3.9999.5.1.9            |
-| rainbowIIIclassic                                 |                    3 | 0xfe36       | 1.3.9999.5.2.1            |
-| rainbowIIIclassic **hybrid with** p384            |                    3 | 0xfe37       | 1.3.9999.5.2.2            |
-| rainbowIIIcircumzenithal                          |                    3 | 0xfe38       | 1.3.9999.5.2.3            |
-| rainbowIIIcircumzenithal **hybrid with** p384     |                    3 | 0xfe39       | 1.3.9999.5.2.4            |
-| rainbowIIIcompressed                              |                    3 | 0xfe3a       | 1.3.9999.5.2.5            |
-| rainbowIIIcompressed **hybrid with** p384         |                    3 | 0xfe3b       | 1.3.9999.5.2.6            |
-| rainbowVclassic                                   |                    5 | 0xfe3c       | 1.3.9999.5.3.1            |
-| rainbowVclassic **hybrid with** p521              |                    5 | 0xfe3d       | 1.3.9999.5.3.2            |
-| rainbowVcircumzenithal                            |                    5 | 0xfe3e       | 1.3.9999.5.3.3            |
-| rainbowVcircumzenithal **hybrid with** p521       |                    5 | 0xfe3f       | 1.3.9999.5.3.4            |
-| rainbowVcompressed                                |                    5 | 0xfe40       | 1.3.9999.5.3.5            |
-| rainbowVcompressed **hybrid with** p521           |                    5 | 0xfe41       | 1.3.9999.5.3.6            |
+| rainbowIclassic                                   |                    1 | 0xfe27       | 1.3.9999.5.1.1.1          |
+| rainbowIclassic **hybrid with** p256              |                    1 | 0xfe28       | 1.3.9999.5.1.2.1          |
+| rainbowIclassic **hybrid with** rsa3072           |                    1 | 0xfe29       | 1.3.9999.5.1.3.1          |
+| rainbowIcircumzenithal                            |                    1 | 0xfe30       | 1.3.9999.5.1.4.1          |
+| rainbowIcircumzenithal **hybrid with** p256       |                    1 | 0xfe31       | 1.3.9999.5.1.5.1          |
+| rainbowIcircumzenithal **hybrid with** rsa3072    |                    1 | 0xfe32       | 1.3.9999.5.1.6.1          |
+| rainbowIcompressed                                |                    1 | 0xfe33       | 1.3.9999.5.1.7.1          |
+| rainbowIcompressed **hybrid with** p256           |                    1 | 0xfe34       | 1.3.9999.5.1.8.1          |
+| rainbowIcompressed **hybrid with** rsa3072        |                    1 | 0xfe35       | 1.3.9999.5.1.9.1          |
+| rainbowIIIclassic                                 |                    3 | 0xfe36       | 1.3.9999.5.2.1.1          |
+| rainbowIIIclassic **hybrid with** p384            |                    3 | 0xfe37       | 1.3.9999.5.2.2.1          |
+| rainbowIIIcircumzenithal                          |                    3 | 0xfe38       | 1.3.9999.5.2.3.1          |
+| rainbowIIIcircumzenithal **hybrid with** p384     |                    3 | 0xfe39       | 1.3.9999.5.2.4.1          |
+| rainbowIIIcompressed                              |                    3 | 0xfe3a       | 1.3.9999.5.2.5.1          |
+| rainbowIIIcompressed **hybrid with** p384         |                    3 | 0xfe3b       | 1.3.9999.5.2.6.1          |
+| rainbowVclassic                                   |                    5 | 0xfe3c       | 1.3.9999.5.3.1.1          |
+| rainbowVclassic **hybrid with** p521              |                    5 | 0xfe3d       | 1.3.9999.5.3.2.1          |
+| rainbowVcircumzenithal                            |                    5 | 0xfe3e       | 1.3.9999.5.3.3.1          |
+| rainbowVcircumzenithal **hybrid with** p521       |                    5 | 0xfe3f       | 1.3.9999.5.3.4.1          |
+| rainbowVcompressed                                |                    5 | 0xfe40       | 1.3.9999.5.3.5.1          |
+| rainbowVcompressed **hybrid with** p521           |                    5 | 0xfe41       | 1.3.9999.5.3.6.1          |
 | sphincsharaka128frobust                           |                    1 | 0xfe42       | 1.3.9999.6.1.1            |
 | sphincsharaka128frobust **hybrid with** p256      |                    1 | 0xfe43       | 1.3.9999.6.1.2            |
 | sphincsharaka128frobust **hybrid with** rsa3072   |                    1 | 0xfe44       | 1.3.9999.6.1.3            |
