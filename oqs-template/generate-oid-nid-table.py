@@ -32,7 +32,7 @@ for root, _, files in os.walk(liboqs_sig_docs_dir):
 table = [['Algorithm', 'Implementation Version',
           'Claimed NIST Level', 'Code Point', 'OID']]
 claimed_nist_level = 0
-for sig in config['sigs'][1:]:
+for sig in sorted(config['sigs'][1:], key=lambda s: s['family']):
     for variant in sig['variants']:
         if variant['security'] == 128:
             claimed_nist_level = 1
@@ -79,7 +79,7 @@ kem_to_impl_version['SIDH'] = kem_to_impl_version['SIKE']
 table = [['Family', 'Implementation Version', 'Variant', 'Claimed NIST Level',
            'PQ-only Code Point', 'Hybrid Elliptic Curve', 'Hybrid Code Point']]
 hybrid_elliptic_curve = ''
-for kem in config['kems']:
+for kem in sorted(config['kems'], key=lambda k: k['family']):
     if kem['bit_security'] == 128:
         claimed_nist_level = 1
         hybrid_elliptic_curve = 'secp256_r1'
