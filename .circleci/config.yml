@@ -54,7 +54,7 @@ jobs:
   macOS:
     description: A template for running OQS-OpenSSL tests on macOS
     macos:
-      xcode: "11.3.0"
+      xcode: "12.4.0"
     parameters:
       LIBOQS_SHARED:
         description: "Build liboqs as a shared library."
@@ -78,11 +78,10 @@ jobs:
       - run:
           name: Build OpenSSL
           command: <<# parameters.OPENSSL_SHARED >> env OPENSSL_LIBTYPE=shared <</ parameters.OPENSSL_SHARED >> ./oqs-scripts/build_openssl.sh
-      # TODO: Figure out why the tests fail on macOS when OpenSSL
-      # is built as a shared library.
-      #- run:
-          #name: Run OpenSSL tests
-          #command: env DYLD_LIBRARY_PATH="$(pwd):$(pwd)/oqs/lib" make test
+      # making liboqs shared lib available in a non-standard place due to https://github.com/openssl/openssl/issues/13413 to allow shared-lib make test to run 
+      - run:
+          name: Run OpenSSL tests
+          command: ln -sf oqs/lib/liboqs.0.dylib . && env DYLD_LIBRARY_PATH="$(pwd):$(pwd)/oqs/lib" make test
       - run:
           name: Run OQS connection, CMS and speed tests
           command: env DYLD_LIBRARY_PATH="$(pwd):$(pwd)/oqs/lib" python3 -m pytest --numprocesses=auto oqs-test/test_tls_full.py oqs-test/test_cms.py oqs-test/test_speed.py
