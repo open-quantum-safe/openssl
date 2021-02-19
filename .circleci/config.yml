@@ -173,6 +173,7 @@ workflows:
           name: macOS-static_oqs-static_ossl
           TESTSET: oqs-test/test_tls_full.py oqs-test/test_cms.py oqs-test/test_speed.py
       - ubuntu_focal:
+          <<: *require_testapproval
           name: ubuntu-shared_oqs-shared_ossl
           context: openquantumsafe
           LIBOQS_SHARED: true
