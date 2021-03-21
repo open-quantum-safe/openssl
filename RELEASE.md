@@ -21,7 +21,15 @@ What's New
 This is the fifth snapshot release of OQS-OpenSSL_1\_1\_1-stable.  It is based on OpenSSL 1.1.1j.
 
 - Removes algorithms from NIST PQC Round 2 that did not advance to Round 3: NewHope, ThreeBears, MQDSS, qTesla.
-- Updates algorithms to those use in liboqs 0.5.0, as described in the [liboqs release notes](https://github.com/open-quantum-safe/liboqs/blob/main/RELEASE.md).
+- Updates algorithms to those used in liboqs 0.5.0, as described in the [liboqs release notes](https://github.com/open-quantum-safe/liboqs/blob/main/RELEASE.md).
 - Adds HQC, NTRUPrime.
 - Improvements to continuous integration testing and build process, including building of shared libraries.
 - Change format of hybrid key exchange in TLS 1.3 to follow https://tools.ietf.org/html/draft-ietf-tls-hybrid-design-01
+
+Previous release notes
+----------------------
+
+- [OQS-OpenSSL 1.1.1 snapshot 2020-08](https://github.com/open-quantum-safe/openssl/releases/tag/OQS-OpenSSL_1_1_1-stable-snapshot-2020-08) aligned with liboqs 0.4.0 (August 11, 2020)
+- [OQS-OpenSSL 1.1.1 snapshot 2020-07](https://github.com/open-quantum-safe/openssl/releases/tag/OQS-OpenSSL_1_1_1-stable-snapshot-2020-07) aligned with liboqs 0.3.0 (July 10, 2020)
+- [OQS-OpenSSL 1.1.1 snapshot 2019-10](https://github.com/open-quantum-safe/openssl/releases/tag/OQS-OpenSSL_1_1_1-stable-snapshot-2019-10) aligned with liboqs 0.2.0 (October 8, 2019)
+- [OQS-OpenSSL 1.1.1 snapshot 2018-11](https://github.com/open-quantum-safe/openssl/releases/tag/OQS-OpenSSL_1_1_1-stable-snapshot-2018-11) aligned with liboqs 0.1.0 (November 13, 2018)
