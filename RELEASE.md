@@ -13,7 +13,7 @@ The **Open Quantum Safe (OQS) project** has the goal of developing and prototypi
 Release notes
 =============
 
-This is the 2021-03 snapshot release of OQS-OpenSSL, which was released on March  XX, 2021. Its release page on GitHub is https://github.com/open-quantum-safe/openssl/releases/tag/OQS-OpenSSL_1_1_1-stable-snapshot-2021-03.  This release is intended to be used with liboqs version 0.5.0.
+This is the 2021-03 snapshot release of OQS-OpenSSL, which was released on March 26, 2021. Its release page on GitHub is https://github.com/open-quantum-safe/openssl/releases/tag/OQS-OpenSSL_1_1_1-stable-snapshot-2021-03.  This release is intended to be used with liboqs version 0.5.0.
 
 What's New
 ----------
