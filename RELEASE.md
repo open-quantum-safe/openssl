@@ -18,7 +18,7 @@ This is the 2021-03 snapshot release of OQS-OpenSSL, which was released on March
 What's New
 ----------
 
-This is the fifth snapshot release of OQS-OpenSSL_1\_1\_1-stable.  It is based on OpenSSL 1.1.1j.
+This is the fifth snapshot release of OQS-OpenSSL_1\_1\_1-stable.  It is based on OpenSSL 1.1.1k.
 
 - Removes algorithms from NIST PQC Round 2 that did not advance to Round 3: NewHope, ThreeBears, MQDSS, qTesla.
 - Updates algorithms to those used in liboqs 0.5.0, as described in the [liboqs release notes](https://github.com/open-quantum-safe/liboqs/blob/main/RELEASE.md).
