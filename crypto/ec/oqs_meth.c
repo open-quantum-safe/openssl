@@ -1695,6 +1695,7 @@ static int oqs_int_update(EVP_MD_CTX *ctx, const void *data, size_t count)
 {
     OQS_KEY *oqs_key = (OQS_KEY*) EVP_MD_CTX_pkey_ctx(ctx)->pkey->pkey.ptr;
 
+    /* chose SHA512 as default digest if none other explicitly set */
     if (oqs_key->digest == NULL) {
        	if ((oqs_key->digest = EVP_MD_CTX_create()) == NULL) {
        		return 0;
@@ -1727,7 +1728,8 @@ static int pkey_oqs_signctx(EVP_PKEY_CTX *ctx, unsigned char *sig, size_t *sigle
     if (sig != NULL) {
 	// support any digest requested:
 	tbslen = EVP_MD_CTX_size(oqs_key->digest);
-	if (oqs_key->digest == NULL) {
+
+	if (oqs_key->digest == NULL) { // error; ctrl not called?
 		return 0;
 	}
 
@@ -1769,6 +1771,7 @@ static int pkey_oqs_verify(EVP_PKEY_CTX *ctx,
 	printf("oqs verify auto fail without digest\n");
 	return 0;
 }
+
 static int pkey_oqs_verifyctx_init(EVP_PKEY_CTX *ctx, EVP_MD_CTX *mctx) {
 
    EVP_MD_CTX_set_flags(mctx, EVP_MD_CTX_FLAG_NO_INIT);
@@ -1784,21 +1787,23 @@ static int pkey_oqs_verifyctx(EVP_PKEY_CTX *ctx, const unsigned char *sig, int s
     unsigned int tbslen = 0;
 
     if (sig != NULL) {
-       tbslen = 512/8; // as per https://tools.ietf.org/id/draft-ietf-lamps-cms-shakes-08.html
-       // Finalize SHAKE:
-       if (oqs_key->digest == NULL) {
-         return 0;
-       }
+        // support any digest requested:
+        tbslen = EVP_MD_CTX_size(oqs_key->digest);
 
-       if((tbs = (unsigned char *)OPENSSL_malloc(tbslen)) == NULL) {
-         return 0;
-       }
+        if (oqs_key->digest == NULL) { // error; ctrl not called?
+                return 0;
+        }
 
-       if(EVP_DigestFinal(oqs_key->digest, tbs, &tbslen) <= 0) {
-         return 0;
-       }
+        if((tbs = (unsigned char *)OPENSSL_malloc(tbslen)) == NULL) {
+                return 0;
+        }
+
+        if(EVP_DigestFinal(oqs_key->digest, tbs, &tbslen) <= 0) {
+                return 0;
+        }
 
     }
+
     int ret = pkey_oqs_digestverify(mctx, sig, siglen, tbs, tbslen); 
     if (sig != NULL) { // cleanup only if it's not the empty setup call
        OPENSSL_free(tbs);
