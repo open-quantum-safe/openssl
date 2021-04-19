@@ -32,7 +32,7 @@ def test_sigverify(ossl, ossl_config, test_artifacts_dir, sig_name, worker_id):
     dgst_list = dgst_algs(dgsts_out)
     # now pick a random digest algorithm; for EC and RSA only accept a SHA[1|2]*
     test_dgst = dgst_list[random.randint(0, len(dgst_list)-1)]
-    while (sig_name.startswith("ec") or sig_name.startswith("rsa")) and not ("sha1" in test_dgst or "sha2" in test_dgst):
+    while (sig_name.startswith("ec") or sig_name.startswith("rsa")) and not (test_dgst.startswith("-sha1") or test_dgst.startswith("-sha2")):
        test_dgst = dgst_list[random.randint(0, len(dgst_list)-1)]
 
     # do sign/verify with the picked digest
