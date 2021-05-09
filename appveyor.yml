@@ -65,7 +65,9 @@ test_script:
          set PATH=%cd%;%PATH% && if not exist tmp (mkdir tmp) && python -m pytest --numprocesses=auto --verbose  oqs-test/test_tls_basic.py oqs-test/test_tls_full.py oqs-test/test_cms.py oqs-test/test_speed.py oqs-test/test_dgst.py --junitxml=test-results.xml
 
 artifacts:
-  - path: *.xml
+  - path: test-results.xml
+    name: test logs
+    type: File
 
 after_test:
   - ps: |-
