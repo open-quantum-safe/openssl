@@ -17,6 +17,7 @@ for:
     before_build:
       - cmd: |-
              choco install openssl
+             choco install strawberryperl
              SET "OPENSSL_ROOT_DIR=C:\OpenSSL-Win64"
 
 before_build:
@@ -60,9 +61,9 @@ before_test:
 test_script:
   - cmd: |-
          cd %APPVEYOR_BUILD_FOLDER%
-         set PATH=%cd%;%PATH% && if not exist tmp (mkdir tmp) && python -m pytest --numprocesses=auto --verbose  oqs-test/test_tls_basic.py --junitxml=build\test-results\pytest\test-results.xml
+         set PATH=%cd%;%PATH% && if not exist tmp (mkdir tmp) && python -m pytest --numprocesses=auto --verbose  oqs-test/test_tls_basic.py --junitxml=test-results.xml
 
 after_test:
   - ps: |-
         $wc = New-Object 'System.Net.WebClient'
-        $wc.UploadFile("https://ci.appveyor.com/api/testresults/xunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\build\test-results\pytest\test-results.xml))
+        $wc.UploadFile("https://ci.appveyor.com/api/testresults/xunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\test-results.xml))
