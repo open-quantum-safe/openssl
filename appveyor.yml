@@ -17,7 +17,7 @@ for:
     before_build:
       - cmd: |-
              choco install openssl
-             choco install strawberryperl
+             choco install -y strawberryperl
              SET "OPENSSL_ROOT_DIR=C:\OpenSSL-Win64"
 
 before_build:
