@@ -1,4 +1,3 @@
-@echo off
 IF %COMPILER%==msys2 (
     @echo on
     SET "PATH=C:\msys64\mingw64\bin;%PATH%"
@@ -11,9 +10,9 @@ IF %COMPILER%==msvc2019 (
     set "PATH=C:\Strawberry\perl\bin;%PATH%"
     perl Configure %TARGET% %SHARED%
     perl configdata.pm --dump
-    echo %PATH%
+    @echo "%PATH%"
     CALL "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat"
-    echo %PATH%
+    @echo "%PATH%"
     nmake
     nmake tests
     python -m pytest oqs-test/test_tls_basic.py
