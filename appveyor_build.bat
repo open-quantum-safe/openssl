@@ -6,14 +6,11 @@ IF %COMPILER%==msys2 (
 IF %COMPILER%==msvc2019 (
     @echo on
     CALL "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat"
-    git clone --depth 1 --branch main https://github.com/open-quantum-safe/liboqs.git && cd liboqs && mkdir build && cd build && cmake .. -GNinja -DCMAKE_INSTALL_PREFIX=%APPVEYOR_BUILD_FOLDER%/oqs -DOQS_BUILD_ONLY_LIB=ON -DOQS_USE_OPENSSL=OFF && ninja && ninja install && cd .. && cd ..
+    git clone --depth 1 --branch main https://github.com/open-quantum-safe/liboqs.git && cd liboqs && mkdir build && cd build && cmake .. -GNinja -DCMAKE_VERBOSE_MAKEFILE=ON -DOQS_MINIMAL_BUILD=ON -DCMAKE_INSTALL_PREFIX=%APPVEYOR_BUILD_FOLDER%/oqs -DOQS_BUILD_ONLY_LIB=ON -DOQS_USE_OPENSSL=OFF && ninja && ninja install && cd .. && cd ..
     set "PATH=C:\Strawberry\perl\bin;%PATH%"
     perl Configure %TARGET% %SHARED%
     perl configdata.pm --dump
-    @echo "%PATH%"
     CALL "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat"
-    @echo "%PATH%"
     nmake
     nmake tests
-    python -m pytest oqs-test/test_tls_basic.py
 )
