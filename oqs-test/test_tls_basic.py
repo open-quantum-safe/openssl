@@ -31,6 +31,8 @@ def test_kem(ossl, sig_default_server_port, test_artifacts_dir, kex_name, worker
                                                   '-verify_return_error',
                                                   '-connect', 'localhost:{}'.format(sig_default_server_port)],
                                             input='Q'.encode())
+    if (sys.platform.startswith("win") and ("bike" in kex_name)):
+        pytest.skip('BIKE and rainbowVclassic not supported in windows')
     if kex_name.startswith('p256'):
         kex_full_name = "{} hybrid".format(kex_name)
     else:
@@ -41,6 +43,8 @@ def test_kem(ossl, sig_default_server_port, test_artifacts_dir, kex_name, worker
 
 def test_sig(parametrized_sig_server, ossl, test_artifacts_dir, worker_id):
     server_sig = parametrized_sig_server[0]
+    if (sys.platform.startswith("win") and ("rainbowVclassic" in server_sig)):
+        pytest.skip('BIKE and rainbowVclassic not supported in windows')
     server_port = parametrized_sig_server[1]
 
     client_output = common.run_subprocess([ossl, 's_client',
