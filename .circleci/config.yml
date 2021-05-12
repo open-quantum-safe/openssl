@@ -16,12 +16,6 @@ localCheckout: &localCheckout
     cp -a /tmp/_circleci_local_build_repo/.git ${PROJECT_PATH}
 
 jobs:
-  empty:
-    description: Do nothing
-    docker:
-      - image: openquantumsafe/ci-ubuntu-focal-x86_64:latest
-    steps:
-      - checkout # change this from "checkout" to "*localCheckout" when running CircleCI locally
   ubuntu_focal:
     description: A template for running OQS-OpenSSL tests on x64 Ubuntu Bionic Docker VMs
     parameters:
