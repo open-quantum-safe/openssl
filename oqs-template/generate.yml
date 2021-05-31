@@ -68,7 +68,7 @@ kems:
       current:
         - hybrid_group: "x25519"
           nid: '0x2F26'
-      previous:
+      old:
         - implementation_version: NIST Round 2 submission
           nid: '0x020F'
         - implementation_version: NIST Round 2 submission

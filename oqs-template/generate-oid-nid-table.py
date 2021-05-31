@@ -108,8 +108,8 @@ for kem in sorted(config['kems'], key=lambda k: k['family']):
                 table.append([kem['family'], kem_to_impl_version[kem['family']],
                               kem['name_group'], claimed_nist_level, 
                               kem['nid'], ""])
-        if 'previous' in kem['extra_nids']:
-            for entry in kem['extra_nids']['previous']:
+        if 'old' in kem['extra_nids']:
+            for entry in kem['extra_nids']['old']:
                 if 'hybrid_group' in entry:
                     table.append([kem['family'], entry['implementation_version'],
                                   kem['name_group'], claimed_nist_level, 
