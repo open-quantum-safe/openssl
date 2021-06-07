@@ -61,19 +61,22 @@ kems:
     family: 'CRYSTALS-Kyber'
     name_group: 'kyber512'
     nid: '0x020F'
-    nid_hybrid: '0x2F0F'
+    nid_hybrid: '0x2F3A'
     oqs_alg: 'OQS_KEM_alg_kyber_512'
     bit_security: 128
     extra_nids:
       current:
         - hybrid_group: "x25519"
-          nid: '0x2F26'
+          nid: '0x2F39'
       old:
         - implementation_version: NIST Round 2 submission
           nid: '0x020F'
         - implementation_version: NIST Round 2 submission
           hybrid_group: secp256_r1
           nid: '0x2F0F'
+        - implementation_version: NIST Round 2 submission
+          hybrid_group: x25519
+          nid: '0x2F26'
   -
     family: 'CRYSTALS-Kyber'
     name_group: 'kyber768'
@@ -208,6 +211,13 @@ kems:
       current:
         - hybrid_group: "x25519"
           nid: '0x2F28'
+      old:
+        - implementation_version: NIST Round 3 submission
+          hybrid_group: secp256_r1
+          nid: '0x2F38'
+        - implementation_version: NIST Round 3 submission
+          hybrid_group: x25519
+          nid: '0x2F37'
   -
     family: 'BIKE'
     name_group: 'bike1l3fo'
