@@ -102,15 +102,15 @@ def nist_to_bits(nistlevel):
 def validate_config(config):
    for kem in config['kems']:
       bits_level = nist_to_bits(get_nistlevel(kem['oqs_alg'], True))
-      if bits_level != int(kem['bit_security']):
-         print("Warning: Correcting NIST level mismatch for %s: %s vs %s." % (kem['name_group'], kem['bit_security'], bits_level))
-         kem['bit_security'] = bits_level
+      #if bits_level != int(kem['bit_security']):
+      #      print("Warning: Correcting NIST level mismatch for %s: %s vs %s." % (kem['name_group'], kem['bit_security'], bits_level))
+      kem['bit_security'] = bits_level
    for famsig in config['sigs']:
       for sig in famsig['variants']:
          bits_level = nist_to_bits(get_nistlevel(sig['oqs_meth'], False))
-         if bits_level != int(sig['security']):
-            print("Warning: Correcting NIST level mismatch for %s: %s vs %s " % (sig['name'], sig['security'], bits_level))
-            sig['security'] = bits_level
+         #if bits_level != int(sig['security']):
+         #   print("Warning: Correcting NIST level mismatch for %s: %s vs %s " % (sig['name'], sig['security'], bits_level))
+         sig['security'] = bits_level
    return config
 
 config = load_config()
