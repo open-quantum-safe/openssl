@@ -1120,7 +1120,7 @@ static const unsigned char so[8071] = {
     0x2B,0xCE,0x0F,0x06,0x07,0x03,                 /* [ 8064] OBJ_rsa3072_sphincsshake256128frobust */
 };
 
-#define NUM_NID 1344
+#define NUM_NID 1319
 static const ASN1_OBJECT nid_objs[NUM_NID] = {
     {"UNDEF", "undefined", NID_undef},
     {"rsadsi", "RSA Data Security, Inc.", NID_rsadsi, 6, &so[0]},
@@ -2361,44 +2361,44 @@ static const ASN1_OBJECT nid_objs[NUM_NID] = {
     {"p256_oqs_kem_default", "p256_oqs_kem_default", NID_p256_oqs_kem_default},
     {"p256_frodo640aes", "p256_frodo640aes", NID_p256_frodo640aes},
     {"p256_frodo640shake", "p256_frodo640shake", NID_p256_frodo640shake},
-    { NULL, NULL, NID_undef },
-    { NULL, NULL, NID_undef },
-    { NULL, NULL, NID_undef },
-    { NULL, NULL, NID_undef },
+    {"p384_frodo976aes", "p384_frodo976aes", NID_p384_frodo976aes},
+    {"p384_frodo976shake", "p384_frodo976shake", NID_p384_frodo976shake},
+    {"p521_frodo1344aes", "p521_frodo1344aes", NID_p521_frodo1344aes},
+    {"p521_frodo1344shake", "p521_frodo1344shake", NID_p521_frodo1344shake},
     {"p256_bike1l1cpa", "p256_bike1l1cpa", NID_p256_bike1l1cpa},
-    { NULL, NULL, NID_undef },
+    {"p384_bike1l3cpa", "p384_bike1l3cpa", NID_p384_bike1l3cpa},
     {"p256_kyber512", "p256_kyber512", NID_p256_kyber512},
-    { NULL, NULL, NID_undef },
-    { NULL, NULL, NID_undef },
+    {"p384_kyber768", "p384_kyber768", NID_p384_kyber768},
+    {"p521_kyber1024", "p521_kyber1024", NID_p521_kyber1024},
     {"p256_ntru_hps2048509", "p256_ntru_hps2048509", NID_p256_ntru_hps2048509},
-    { NULL, NULL, NID_undef },
-    { NULL, NULL, NID_undef },
-    { NULL, NULL, NID_undef },
+    {"p384_ntru_hps2048677", "p384_ntru_hps2048677", NID_p384_ntru_hps2048677},
+    {"p521_ntru_hps4096821", "p521_ntru_hps4096821", NID_p521_ntru_hps4096821},
+    {"p384_ntru_hrss701", "p384_ntru_hrss701", NID_p384_ntru_hrss701},
     {"p256_lightsaber", "p256_lightsaber", NID_p256_lightsaber},
-    { NULL, NULL, NID_undef },
-    { NULL, NULL, NID_undef },
+    {"p384_saber", "p384_saber", NID_p384_saber},
+    {"p521_firesaber", "p521_firesaber", NID_p521_firesaber},
     {"p256_sidhp434", "p256_sidhp434", NID_p256_sidhp434},
     {"p256_sidhp503", "p256_sidhp503", NID_p256_sidhp503},
-    { NULL, NULL, NID_undef },
-    { NULL, NULL, NID_undef },
+    {"p384_sidhp610", "p384_sidhp610", NID_p384_sidhp610},
+    {"p521_sidhp751", "p521_sidhp751", NID_p521_sidhp751},
     {"p256_sikep434", "p256_sikep434", NID_p256_sikep434},
     {"p256_sikep503", "p256_sikep503", NID_p256_sikep503},
-    { NULL, NULL, NID_undef },
-    { NULL, NULL, NID_undef },
+    {"p384_sikep610", "p384_sikep610", NID_p384_sikep610},
+    {"p521_sikep751", "p521_sikep751", NID_p521_sikep751},
     {"p256_bike1l1fo", "p256_bike1l1fo", NID_p256_bike1l1fo},
-    { NULL, NULL, NID_undef },
+    {"p384_bike1l3fo", "p384_bike1l3fo", NID_p384_bike1l3fo},
     {"p256_kyber90s512", "p256_kyber90s512", NID_p256_kyber90s512},
-    { NULL, NULL, NID_undef },
-    { NULL, NULL, NID_undef },
+    {"p384_kyber90s768", "p384_kyber90s768", NID_p384_kyber90s768},
+    {"p521_kyber90s1024", "p521_kyber90s1024", NID_p521_kyber90s1024},
     {"p256_hqc128", "p256_hqc128", NID_p256_hqc128},
-    { NULL, NULL, NID_undef },
-    { NULL, NULL, NID_undef },
+    {"p384_hqc192", "p384_hqc192", NID_p384_hqc192},
+    {"p521_hqc256", "p521_hqc256", NID_p521_hqc256},
     {"p256_ntrulpr653", "p256_ntrulpr653", NID_p256_ntrulpr653},
-    { NULL, NULL, NID_undef },
-    { NULL, NULL, NID_undef },
+    {"p384_ntrulpr761", "p384_ntrulpr761", NID_p384_ntrulpr761},
+    {"p384_ntrulpr857", "p384_ntrulpr857", NID_p384_ntrulpr857},
     {"p256_sntrup653", "p256_sntrup653", NID_p256_sntrup653},
-    { NULL, NULL, NID_undef },
-    { NULL, NULL, NID_undef },
+    {"p384_sntrup761", "p384_sntrup761", NID_p384_sntrup761},
+    {"p384_sntrup857", "p384_sntrup857", NID_p384_sntrup857},
     {"oqs_sig_default", "oqs_sig_default", NID_oqs_sig_default, 5, &so[7761]},
     {"p256_oqs_sig_default", "p256_oqs_sig_default", NID_p256_oqs_sig_default, 5, &so[7766]},
     {"rsa3072_oqs_sig_default", "rsa3072_oqs_sig_default", NID_rsa3072_oqs_sig_default, 5, &so[7771]},
@@ -2441,31 +2441,6 @@ static const ASN1_OBJECT nid_objs[NUM_NID] = {
     {"sphincsshake256128frobust", "sphincsshake256128frobust", NID_sphincsshake256128frobust, 6, &so[8052]},
     {"p256_sphincsshake256128frobust", "p256_sphincsshake256128frobust", NID_p256_sphincsshake256128frobust, 6, &so[8058]},
     {"rsa3072_sphincsshake256128frobust", "rsa3072_sphincsshake256128frobust", NID_rsa3072_sphincsshake256128frobust, 6, &so[8064]},
-    {"p384_frodo976aes", "p384_frodo976aes", NID_p384_frodo976aes},
-    {"p384_frodo976shake", "p384_frodo976shake", NID_p384_frodo976shake},
-    {"p521_frodo1344aes", "p521_frodo1344aes", NID_p521_frodo1344aes},
-    {"p521_frodo1344shake", "p521_frodo1344shake", NID_p521_frodo1344shake},
-    {"p384_bike1l3cpa", "p384_bike1l3cpa", NID_p384_bike1l3cpa},
-    {"p384_kyber768", "p384_kyber768", NID_p384_kyber768},
-    {"p521_kyber1024", "p521_kyber1024", NID_p521_kyber1024},
-    {"p384_ntru_hps2048677", "p384_ntru_hps2048677", NID_p384_ntru_hps2048677},
-    {"p521_ntru_hps4096821", "p521_ntru_hps4096821", NID_p521_ntru_hps4096821},
-    {"p384_ntru_hrss701", "p384_ntru_hrss701", NID_p384_ntru_hrss701},
-    {"p384_saber", "p384_saber", NID_p384_saber},
-    {"p521_firesaber", "p521_firesaber", NID_p521_firesaber},
-    {"p384_sidhp610", "p384_sidhp610", NID_p384_sidhp610},
-    {"p521_sidhp751", "p521_sidhp751", NID_p521_sidhp751},
-    {"p384_sikep610", "p384_sikep610", NID_p384_sikep610},
-    {"p521_sikep751", "p521_sikep751", NID_p521_sikep751},
-    {"p384_bike1l3fo", "p384_bike1l3fo", NID_p384_bike1l3fo},
-    {"p384_kyber90s768", "p384_kyber90s768", NID_p384_kyber90s768},
-    {"p521_kyber90s1024", "p521_kyber90s1024", NID_p521_kyber90s1024},
-    {"p384_hqc192", "p384_hqc192", NID_p384_hqc192},
-    {"p521_hqc256", "p521_hqc256", NID_p521_hqc256},
-    {"p384_ntrulpr761", "p384_ntrulpr761", NID_p384_ntrulpr761},
-    {"p384_ntrulpr857", "p384_ntrulpr857", NID_p384_ntrulpr857},
-    {"p384_sntrup761", "p384_sntrup761", NID_p384_sntrup761},
-    {"p384_sntrup857", "p384_sntrup857", NID_p384_sntrup857},
 };
 
 #define NUM_SN 1310
@@ -3406,37 +3381,37 @@ static const unsigned int sn_objs[NUM_SN] = {
     1311,    /* "p256_sphincsharaka128frobust" */
     1314,    /* "p256_sphincssha256128frobust" */
     1317,    /* "p256_sphincsshake256128frobust" */
-    1323,    /* "p384_bike1l3cpa" */
-    1335,    /* "p384_bike1l3fo" */
+    1244,    /* "p384_bike1l3cpa" */
+    1264,    /* "p384_bike1l3fo" */
     1284,    /* "p384_dilithium3" */
     1291,    /* "p384_dilithium3_aes" */
-    1319,    /* "p384_frodo976aes" */
-    1320,    /* "p384_frodo976shake" */
-    1338,    /* "p384_hqc192" */
-    1324,    /* "p384_kyber768" */
-    1336,    /* "p384_kyber90s768" */
-    1326,    /* "p384_ntru_hps2048677" */
-    1328,    /* "p384_ntru_hrss701" */
-    1340,    /* "p384_ntrulpr761" */
-    1341,    /* "p384_ntrulpr857" */
-    1329,    /* "p384_saber" */
-    1331,    /* "p384_sidhp610" */
-    1333,    /* "p384_sikep610" */
-    1342,    /* "p384_sntrup761" */
-    1343,    /* "p384_sntrup857" */
+    1239,    /* "p384_frodo976aes" */
+    1240,    /* "p384_frodo976shake" */
+    1269,    /* "p384_hqc192" */
+    1246,    /* "p384_kyber768" */
+    1266,    /* "p384_kyber90s768" */
+    1249,    /* "p384_ntru_hps2048677" */
+    1251,    /* "p384_ntru_hrss701" */
+    1272,    /* "p384_ntrulpr761" */
+    1273,    /* "p384_ntrulpr857" */
+    1253,    /* "p384_saber" */
+    1257,    /* "p384_sidhp610" */
+    1261,    /* "p384_sikep610" */
+    1275,    /* "p384_sntrup761" */
+    1276,    /* "p384_sntrup857" */
     1286,    /* "p521_dilithium5" */
     1293,    /* "p521_dilithium5_aes" */
     1298,    /* "p521_falcon1024" */
-    1330,    /* "p521_firesaber" */
-    1321,    /* "p521_frodo1344aes" */
-    1322,    /* "p521_frodo1344shake" */
-    1339,    /* "p521_hqc256" */
-    1325,    /* "p521_kyber1024" */
-    1337,    /* "p521_kyber90s1024" */
-    1327,    /* "p521_ntru_hps4096821" */
+    1254,    /* "p521_firesaber" */
+    1241,    /* "p521_frodo1344aes" */
+    1242,    /* "p521_frodo1344shake" */
+    1270,    /* "p521_hqc256" */
+    1247,    /* "p521_kyber1024" */
+    1267,    /* "p521_kyber90s1024" */
+    1250,    /* "p521_ntru_hps4096821" */
     1309,    /* "p521_rainbowVclassic" */
-    1332,    /* "p521_sidhp751" */
-    1334,    /* "p521_sikep751" */
+    1258,    /* "p521_sidhp751" */
+    1262,    /* "p521_sikep751" */
      489,    /* "pagerTelephoneNumber" */
      374,    /* "path" */
      112,    /* "pbeWithMD5AndCast5CBC" */
@@ -4693,37 +4668,37 @@ static const unsigned int ln_objs[NUM_LN] = {
     1311,    /* "p256_sphincsharaka128frobust" */
     1314,    /* "p256_sphincssha256128frobust" */
     1317,    /* "p256_sphincsshake256128frobust" */
-    1323,    /* "p384_bike1l3cpa" */
-    1335,    /* "p384_bike1l3fo" */
+    1244,    /* "p384_bike1l3cpa" */
+    1264,    /* "p384_bike1l3fo" */
     1284,    /* "p384_dilithium3" */
     1291,    /* "p384_dilithium3_aes" */
-    1319,    /* "p384_frodo976aes" */
-    1320,    /* "p384_frodo976shake" */
-    1338,    /* "p384_hqc192" */
-    1324,    /* "p384_kyber768" */
-    1336,    /* "p384_kyber90s768" */
-    1326,    /* "p384_ntru_hps2048677" */
-    1328,    /* "p384_ntru_hrss701" */
-    1340,    /* "p384_ntrulpr761" */
-    1341,    /* "p384_ntrulpr857" */
-    1329,    /* "p384_saber" */
-    1331,    /* "p384_sidhp610" */
-    1333,    /* "p384_sikep610" */
-    1342,    /* "p384_sntrup761" */
-    1343,    /* "p384_sntrup857" */
+    1239,    /* "p384_frodo976aes" */
+    1240,    /* "p384_frodo976shake" */
+    1269,    /* "p384_hqc192" */
+    1246,    /* "p384_kyber768" */
+    1266,    /* "p384_kyber90s768" */
+    1249,    /* "p384_ntru_hps2048677" */
+    1251,    /* "p384_ntru_hrss701" */
+    1272,    /* "p384_ntrulpr761" */
+    1273,    /* "p384_ntrulpr857" */
+    1253,    /* "p384_saber" */
+    1257,    /* "p384_sidhp610" */
+    1261,    /* "p384_sikep610" */
+    1275,    /* "p384_sntrup761" */
+    1276,    /* "p384_sntrup857" */
     1286,    /* "p521_dilithium5" */
     1293,    /* "p521_dilithium5_aes" */
     1298,    /* "p521_falcon1024" */
-    1330,    /* "p521_firesaber" */
-    1321,    /* "p521_frodo1344aes" */
-    1322,    /* "p521_frodo1344shake" */
-    1339,    /* "p521_hqc256" */
-    1325,    /* "p521_kyber1024" */
-    1337,    /* "p521_kyber90s1024" */
-    1327,    /* "p521_ntru_hps4096821" */
+    1254,    /* "p521_firesaber" */
+    1241,    /* "p521_frodo1344aes" */
+    1242,    /* "p521_frodo1344shake" */
+    1270,    /* "p521_hqc256" */
+    1247,    /* "p521_kyber1024" */
+    1267,    /* "p521_kyber90s1024" */
+    1250,    /* "p521_ntru_hps4096821" */
     1309,    /* "p521_rainbowVclassic" */
-    1332,    /* "p521_sidhp751" */
-    1334,    /* "p521_sikep751" */
+    1258,    /* "p521_sidhp751" */
+    1262,    /* "p521_sikep751" */
      935,    /* "pSpecified" */
      489,    /* "pagerTelephoneNumber" */
      782,    /* "password based MAC" */
