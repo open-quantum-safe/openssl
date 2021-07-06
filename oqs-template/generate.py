@@ -52,10 +52,19 @@ def populate(filename, config, delimiter, overwrite=False):
 def load_config(include_disabled_sigs=False):
     config = file_get_contents(os.path.join('oqs-template', 'generate.yml'), encoding='utf-8')
     config = yaml.safe_load(config)
+
+    # remove KEMs without NID (old stuff)
+    newkems = []
+    for kem in config['kems']:
+        if 'nid' in kem:
+           newkems.append(kem)
+    config['kems']=newkems
+
     if include_disabled_sigs:
         return config
     for sig in config['sigs']:
         sig['variants'] = [variant for variant in sig['variants'] if variant['enable']]
+
     return config
 
 config = load_config()

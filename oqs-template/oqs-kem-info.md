@@ -1,17 +1,19 @@
 | Family         | Implementation Version   | Variant         |   Claimed NIST Level | Code Point   | Hybrid Elliptic Curve (if any)   |
 |:---------------|:-------------------------|:----------------|---------------------:|:-------------|:---------------------------------|
-| BIKE           | 3.2                      | bike1l1cpa      |                    1 | 0x0206       |                                  |
-| BIKE           | 3.2                      | bike1l1cpa      |                    1 | 0x2F06       | secp256_r1                       |
-| BIKE           | 3.2                      | bike1l1fo       |                    1 | 0x0223       |                                  |
-| BIKE           | 3.2                      | bike1l1fo       |                    1 | 0x2F23       | secp256_r1                       |
-| BIKE           | 3.2                      | bike1l1fo       |                    1 | 0x2F28       | x25519                           |
-| BIKE           | 3.2                      | bike1l3cpa      |                    3 | 0x0207       |                                  |
-| BIKE           | 3.2                      | bike1l3cpa      |                    3 | 0x2F07       | secp384_r1                       |
-| BIKE           | 3.2                      | bike1l3fo       |                    3 | 0x0224       |                                  |
-| BIKE           | 3.2                      | bike1l3fo       |                    3 | 0x2F24       | secp384_r1                       |
 | BIKE           | 4.1                      | bikel1          |                    1 | 0x0238       |                                  |
 | BIKE           | 4.1                      | bikel1          |                    1 | 0x2F38       | secp256_r1                       |
 | BIKE           | 4.1                      | bikel1          |                    1 | 0x2F37       | x25519                           |
+| BIKE           | 4.1                      | bikel3          |                    3 | 0x023B       |                                  |
+| BIKE           | 4.1                      | bikel3          |                    3 | 0x2F3B       | secp384_r1                       |
+| BIKE           | NIST Round 2 submission  | bike1l1cpa      |                    1 | 0x0206       |                                  |
+| BIKE           | NIST Round 2 submission  | bike1l1cpa      |                    1 | 0x2F06       | secp256_r1                       |
+| BIKE           | NIST Round 2 submission  | bike1l1fo       |                    1 | 0x0223       |                                  |
+| BIKE           | NIST Round 2 submission  | bike1l1fo       |                    1 | 0x2F23       | secp256_r1                       |
+| BIKE           | NIST Round 2 submission  | bike1l1fo       |                    1 | 0x2F28       | x25519                           |
+| BIKE           | NIST Round 2 submission  | bike1l3cpa      |                    3 | 0x0207       |                                  |
+| BIKE           | NIST Round 2 submission  | bike1l3cpa      |                    3 | 0x2F07       | secp384_r1                       |
+| BIKE           | NIST Round 2 submission  | bike1l3fo       |                    3 | 0x0224       |                                  |
+| BIKE           | NIST Round 2 submission  | bike1l3fo       |                    3 | 0x2F24       | secp384_r1                       |
 | CRYSTALS-Kyber | NIST Round 3 submission  | kyber512        |                    1 | 0x020F       |                                  |
 | CRYSTALS-Kyber | NIST Round 3 submission  | kyber512        |                    1 | 0x2F3A       | secp256_r1                       |
 | CRYSTALS-Kyber | NIST Round 3 submission  | kyber512        |                    1 | 0x2F39       | x25519                           |

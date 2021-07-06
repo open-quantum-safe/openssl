@@ -100,12 +100,16 @@ for kem in sorted(config['kems'], key=lambda k: k['family']):
     else:
         implementation_version = kem_to_impl_version[kem['family']]
 
-    table.append([kem['family'], implementation_version,
-                  kem['name_group'], claimed_nist_level, 
-                  kem['nid'], ""])
-    table.append([kem['family'], implementation_version,
-                  kem['name_group'], claimed_nist_level, 
-                  kem['nid_hybrid'], hybrid_elliptic_curve])
+    try: 
+       table.append([kem['family'], implementation_version,
+                     kem['name_group'], claimed_nist_level, 
+                     kem['nid'], ""])
+       table.append([kem['family'], implementation_version,
+                     kem['name_group'], claimed_nist_level, 
+                     kem['nid_hybrid'], hybrid_elliptic_curve])
+    except KeyError:
+       # Non-existant NIDs mean this alg is not supported any more
+       pass
 
     if 'extra_nids' in kem:
         if 'current' in kem['extra_nids']:
