@@ -3,17 +3,18 @@
 | BIKE           | 3.2                      | bike1l1cpa      |                    1 | 0x0206       |                                  |
 | BIKE           | 3.2                      | bike1l1cpa      |                    1 | 0x2F06       | secp256_r1                       |
 | BIKE           | 3.2                      | bike1l1fo       |                    1 | 0x0223       |                                  |
-| BIKE           | 3.2                      | bike1l1fo       |                    1 | 0x0223       |                                  |
 | BIKE           | 3.2                      | bike1l1fo       |                    1 | 0x2F23       | secp256_r1                       |
+| BIKE           | 3.2                      | bike1l1fo       |                    1 | 0x2F28       | x25519                           |
 | BIKE           | 3.2                      | bike1l3cpa      |                    3 | 0x0207       |                                  |
 | BIKE           | 3.2                      | bike1l3cpa      |                    3 | 0x2F07       | secp384_r1                       |
 | BIKE           | 3.2                      | bike1l3fo       |                    3 | 0x0224       |                                  |
 | BIKE           | 3.2                      | bike1l3fo       |                    3 | 0x2F24       | secp384_r1                       |
-| BIKE           | NIST Round 3 submission  | bike1l1fo       |                    1 | 0x2F38       | secp256_r1                       |
-| BIKE           | NIST Round 3 submission  | bike1l1fo       |                    1 | 0x2F37       | x25519                           |
-| CRYSTALS-Kyber | NIST Round 3 submission  | kyber512        |                    1 | 0x020F       |                                  |
+| BIKE           | 4.1                      | bikel1          |                    1 | 0x0238       |                                  |
+| BIKE           | 4.1                      | bikel1          |                    1 | 0x2F38       | secp256_r1                       |
+| BIKE           | 4.1                      | bikel1          |                    1 | 0x2F37       | x25519                           |
 | CRYSTALS-Kyber | NIST Round 3 submission  | kyber512        |                    1 | 0x020F       |                                  |
 | CRYSTALS-Kyber | NIST Round 3 submission  | kyber512        |                    1 | 0x2F3A       | secp256_r1                       |
+| CRYSTALS-Kyber | NIST Round 3 submission  | kyber512        |                    1 | 0x2F39       | x25519                           |
 | CRYSTALS-Kyber | NIST Round 3 submission  | kyber90s512     |                    1 | 0x0229       |                                  |
 | CRYSTALS-Kyber | NIST Round 3 submission  | kyber90s512     |                    1 | 0x2F29       | secp256_r1                       |
 | CRYSTALS-Kyber | NIST Round 3 submission  | kyber768        |                    3 | 0x0210       |                                  |
@@ -80,8 +81,8 @@
 | SIDH           | 3.4                      | sidhp751        |                    5 | 0x021E       |                                  |
 | SIDH           | 3.4                      | sidhp751        |                    5 | 0x2F1E       | secp521_r1                       |
 | SIKE           | 3.4                      | sikep434        |                    1 | 0x021F       |                                  |
-| SIKE           | 3.4                      | sikep434        |                    1 | 0x021F       |                                  |
 | SIKE           | 3.4                      | sikep434        |                    1 | 0x2F1F       | secp256_r1                       |
+| SIKE           | 3.4                      | sikep434        |                    1 | 0x2F27       | x25519                           |
 | SIKE           | 3.4                      | sikep503        |                    1 | 0x0220       |                                  |
 | SIKE           | 3.4                      | sikep503        |                    1 | 0x2F20       | secp256_r1                       |
 | SIKE           | 3.4                      | sikep610        |                    3 | 0x0221       |                                  |

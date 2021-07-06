@@ -94,31 +94,33 @@ for kem in sorted(config['kems'], key=lambda k: k['family']):
         hybrid_elliptic_curve = 'secp521_r1'
     else:
         sys.exit("kem['bit_security'] value malformed.")
+        
+    if 'implementation_version' in kem:
+        implementation_version = kem['implementation_version']
+    else:
+        implementation_version = kem_to_impl_version[kem['family']]
 
-    table.append([kem['family'], kem_to_impl_version[kem['family']],
+    table.append([kem['family'], implementation_version,
                   kem['name_group'], claimed_nist_level, 
                   kem['nid'], ""])
-    table.append([kem['family'], kem_to_impl_version[kem['family']],
+    table.append([kem['family'], implementation_version,
                   kem['name_group'], claimed_nist_level, 
                   kem['nid_hybrid'], hybrid_elliptic_curve])
 
     if 'extra_nids' in kem:
         if 'current' in kem['extra_nids']:
             for entry in kem['extra_nids']['current']:
-                table.append([kem['family'], kem_to_impl_version[kem['family']],
+                table.append([kem['family'], implementation_version,
                               kem['name_group'], claimed_nist_level, 
-                              kem['nid'], ""])
+                              entry['nid'], 
+                              entry['hybrid_group'] if 'hybrid_group' in entry else ""])
         if 'old' in kem['extra_nids']:
             for entry in kem['extra_nids']['old']:
-                if 'hybrid_group' in entry:
-                    table.append([kem['family'], entry['implementation_version'],
-                                  kem['name_group'], claimed_nist_level, 
-                                  entry['nid'], entry['hybrid_group']])
-                else:
-                    table.append([kem['family'], entry['implementation_version'],
-                                  kem['name_group'], claimed_nist_level, 
-                                  entry['nid'], ""])
-                        
+                table.append([kem['family'], entry['implementation_version'],
+                              kem['name_group'], claimed_nist_level, 
+                              entry['nid'],
+                              entry['hybrid_group'] if 'hybrid_group' in entry else ""])
+
 # sort by:  family, version, security level, variant, hybrid
 table.sort(key = lambda row: "{:s}|{:s}|{:d}|{:s}|{:s}".format(row[0], row[1], row[3], row[2], row[5]))
 
