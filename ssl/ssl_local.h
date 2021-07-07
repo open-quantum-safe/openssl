@@ -531,9 +531,9 @@
   (nid == NID_frodo976shake ? 0x0203 : \
   (nid == NID_frodo1344aes ? 0x0204 : \
   (nid == NID_frodo1344shake ? 0x0205 : \
-  (nid == NID_kyber512 ? 0x020F : \
-  (nid == NID_kyber768 ? 0x0210 : \
-  (nid == NID_kyber1024 ? 0x0211 : \
+  (nid == NID_kyber512 ? 0x023A : \
+  (nid == NID_kyber768 ? 0x023C : \
+  (nid == NID_kyber1024 ? 0x023D : \
   (nid == NID_ntru_hps2048509 ? 0x0214 : \
   (nid == NID_ntru_hps2048677 ? 0x0215 : \
   (nid == NID_ntru_hps4096821 ? 0x0216 : \
@@ -551,9 +551,9 @@
   (nid == NID_sikep751 ? 0x0222 : \
   (nid == NID_bikel1 ? 0x0238 : \
   (nid == NID_bikel3 ? 0x023B : \
-  (nid == NID_kyber90s512 ? 0x0229 : \
-  (nid == NID_kyber90s768 ? 0x022A : \
-  (nid == NID_kyber90s1024 ? 0x022B : \
+  (nid == NID_kyber90s512 ? 0x023E : \
+  (nid == NID_kyber90s768 ? 0x023F : \
+  (nid == NID_kyber90s1024 ? 0x0240 : \
   (nid == NID_hqc128 ? 0x022C : \
   (nid == NID_hqc192 ? 0x022D : \
   (nid == NID_hqc256 ? 0x022E : \
@@ -576,8 +576,8 @@
     (nid == NID_p521_frodo1344aes ? 0x2F04 : \
     (nid == NID_p521_frodo1344shake ? 0x2F05 : \
     (nid == NID_p256_kyber512 ? 0x2F3A : \
-    (nid == NID_p384_kyber768 ? 0x2F10 : \
-    (nid == NID_p521_kyber1024 ? 0x2F11 : \
+    (nid == NID_p384_kyber768 ? 0x2F3C : \
+    (nid == NID_p521_kyber1024 ? 0x2F3D : \
     (nid == NID_p256_ntru_hps2048509 ? 0x2F14 : \
     (nid == NID_p384_ntru_hps2048677 ? 0x2F15 : \
     (nid == NID_p521_ntru_hps4096821 ? 0x2F16 : \
@@ -595,9 +595,9 @@
     (nid == NID_p521_sikep751 ? 0x2F22 : \
     (nid == NID_p256_bikel1 ? 0x2F38 : \
     (nid == NID_p384_bikel3 ? 0x2F3B : \
-    (nid == NID_p256_kyber90s512 ? 0x2F29 : \
-    (nid == NID_p384_kyber90s768 ? 0x2F2A : \
-    (nid == NID_p521_kyber90s1024 ? 0x2F2B : \
+    (nid == NID_p256_kyber90s512 ? 0x2F3E : \
+    (nid == NID_p384_kyber90s768 ? 0x2F3F : \
+    (nid == NID_p521_kyber90s1024 ? 0x2F40 : \
     (nid == NID_p256_hqc128 ? 0x2F2C : \
     (nid == NID_p384_hqc192 ? 0x2F2D : \
     (nid == NID_p521_hqc256 ? 0x2F2E : \
@@ -620,9 +620,9 @@
   (curveID == 0x0203 || curveID == 0x2F03 ? NID_frodo976shake : \
   (curveID == 0x0204 || curveID == 0x2F04 ? NID_frodo1344aes : \
   (curveID == 0x0205 || curveID == 0x2F05 ? NID_frodo1344shake : \
-  (curveID == 0x020F || curveID == 0x2F3A ? NID_kyber512 : \
-  (curveID == 0x0210 || curveID == 0x2F10 ? NID_kyber768 : \
-  (curveID == 0x0211 || curveID == 0x2F11 ? NID_kyber1024 : \
+  (curveID == 0x023A || curveID == 0x2F3A ? NID_kyber512 : \
+  (curveID == 0x023C || curveID == 0x2F3C ? NID_kyber768 : \
+  (curveID == 0x023D || curveID == 0x2F3D ? NID_kyber1024 : \
   (curveID == 0x0214 || curveID == 0x2F14 ? NID_ntru_hps2048509 : \
   (curveID == 0x0215 || curveID == 0x2F15 ? NID_ntru_hps2048677 : \
   (curveID == 0x0216 || curveID == 0x2F16 ? NID_ntru_hps4096821 : \
@@ -640,9 +640,9 @@
   (curveID == 0x0222 || curveID == 0x2F22 ? NID_sikep751 : \
   (curveID == 0x0238 || curveID == 0x2F38 ? NID_bikel1 : \
   (curveID == 0x023B || curveID == 0x2F3B ? NID_bikel3 : \
-  (curveID == 0x0229 || curveID == 0x2F29 ? NID_kyber90s512 : \
-  (curveID == 0x022A || curveID == 0x2F2A ? NID_kyber90s768 : \
-  (curveID == 0x022B || curveID == 0x2F2B ? NID_kyber90s1024 : \
+  (curveID == 0x023E || curveID == 0x2F3E ? NID_kyber90s512 : \
+  (curveID == 0x023F || curveID == 0x2F3F ? NID_kyber90s768 : \
+  (curveID == 0x0240 || curveID == 0x2F40 ? NID_kyber90s1024 : \
   (curveID == 0x022C || curveID == 0x2F2C ? NID_hqc128 : \
   (curveID == 0x022D || curveID == 0x2F2D ? NID_hqc192 : \
   (curveID == 0x022E || curveID == 0x2F2E ? NID_hqc256 : \
@@ -666,8 +666,8 @@
     (curveID == 0x2F04 ? NID_p521_frodo1344aes : \
     (curveID == 0x2F05 ? NID_p521_frodo1344shake : \
     (curveID == 0x2F3A ? NID_p256_kyber512 : \
-    (curveID == 0x2F10 ? NID_p384_kyber768 : \
-    (curveID == 0x2F11 ? NID_p521_kyber1024 : \
+    (curveID == 0x2F3C ? NID_p384_kyber768 : \
+    (curveID == 0x2F3D ? NID_p521_kyber1024 : \
     (curveID == 0x2F14 ? NID_p256_ntru_hps2048509 : \
     (curveID == 0x2F15 ? NID_p384_ntru_hps2048677 : \
     (curveID == 0x2F16 ? NID_p521_ntru_hps4096821 : \
@@ -685,9 +685,9 @@
     (curveID == 0x2F22 ? NID_p521_sikep751 : \
     (curveID == 0x2F38 ? NID_p256_bikel1 : \
     (curveID == 0x2F3B ? NID_p384_bikel3 : \
-    (curveID == 0x2F29 ? NID_p256_kyber90s512 : \
-    (curveID == 0x2F2A ? NID_p384_kyber90s768 : \
-    (curveID == 0x2F2B ? NID_p521_kyber90s1024 : \
+    (curveID == 0x2F3E ? NID_p256_kyber90s512 : \
+    (curveID == 0x2F3F ? NID_p384_kyber90s768 : \
+    (curveID == 0x2F40 ? NID_p521_kyber90s1024 : \
     (curveID == 0x2F2C ? NID_p256_hqc128 : \
     (curveID == 0x2F2D ? NID_p384_hqc192 : \
     (curveID == 0x2F2E ? NID_p521_hqc256 : \
@@ -765,8 +765,8 @@
   (cid == 0x2F04 ?25: \
   (cid == 0x2F05 ?25: \
   (cid == 0x2F3A ?23: \
-  (cid == 0x2F10 ?24: \
-  (cid == 0x2F11 ?25: \
+  (cid == 0x2F3C ?24: \
+  (cid == 0x2F3D ?25: \
   (cid == 0x2F14 ?23: \
   (cid == 0x2F15 ?24: \
   (cid == 0x2F16 ?25: \
@@ -784,9 +784,9 @@
   (cid == 0x2F22 ?25: \
   (cid == 0x2F38 ?23: \
   (cid == 0x2F3B ?24: \
-  (cid == 0x2F29 ?23: \
-  (cid == 0x2F2A ?24: \
-  (cid == 0x2F2B ?25: \
+  (cid == 0x2F3E ?23: \
+  (cid == 0x2F3F ?24: \
+  (cid == 0x2F40 ?25: \
   (cid == 0x2F2C ?23: \
   (cid == 0x2F2D ?24: \
   (cid == 0x2F2E ?25: \
