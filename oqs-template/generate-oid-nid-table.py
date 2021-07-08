@@ -33,7 +33,7 @@ for root, _, files in os.walk(liboqs_sig_docs_dir):
 table = [['Algorithm', 'Implementation Version',
           'Claimed NIST Level', 'Code Point', 'OID']]
 claimed_nist_level = 0
-for sig in sorted(config['sigs'][1:], key=lambda s: s['family']):
+for sig in sorted(config['sigs'], key=lambda s: s['family']):
     for variant in sig['variants']:
         if variant['security'] == 128:
             claimed_nist_level = 1
