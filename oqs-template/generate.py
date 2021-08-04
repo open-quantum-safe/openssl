@@ -81,12 +81,14 @@ def get_nistlevel(alg, iskem):
          f.write("int main(int argc, char* argv[]) { OQS_SIG *sig = OQS_SIG_new("+alg+"); printf(\"%d\", sig->claimed_nist_level); }")
     # now compile this so that it works with both shared and static liboqs:
     # gcc must exist as otherwise nothing else will build afterwards
-    if os.system("gcc -Ioqs/include -Loqs/lib "+TMPOQS_SRC+" -loqs -lcrypto -o "+TMPOQS_EXE) != 0:
+    if os.system("cc -Ioqs/include -Loqs/lib "+TMPOQS_SRC+" -loqs -lcrypto -o "+TMPOQS_EXE) != 0:
        print("Compilation failed. Cannot get NIST level. Exiting.")
        exit(1)
     # now execute it so it works for both shared and static liboqs
     env =os.environ
     env["LD_LIBRARY_PATH"] = "oqs/lib"
+    # in case we're trying shared OQS libs on OSX:
+    env["DYLD_LIBRARY_PATH"] = "oqs/lib"
     p = subprocess.Popen(["./"+TMPOQS_EXE], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env)
     output, err = p.communicate()
     # delete temp files:
@@ -109,7 +111,7 @@ def nist_to_bits(nistlevel):
    print("Unknown NIST level %s. Exiting." % (nistlevel))
    exit(1)
 
-def validate_config(config):
+def complete_config(config):
    for kem in config['kems']:
       bits_level = nist_to_bits(get_nistlevel(kem['oqs_alg'], True))
       kem['bit_security'] = bits_level
@@ -120,9 +122,12 @@ def validate_config(config):
    return config
 
 config = load_config()
-# only do sanity check on linux:
+# only tested OK on linux due to code compilation:
 if sys.platform=="linux":
-   config = validate_config(config)
+   config = complete_config(config)
+else:
+   print("Unsupported platform for code generation: %s. Exiting." % (sys.platform))
+   exit(1)
 
 if len(sys.argv)>2: 
    # short term approach: iterate KEMs looking for OQS alg names: Argument needs to be v040 KEM KATS list
