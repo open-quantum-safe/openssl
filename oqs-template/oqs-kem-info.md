@@ -84,6 +84,8 @@
 | NTRU           | NIST Round 3 submission  | ntru_hps40961229 |            3 |                    5 | 0x2F45       | secp521_r1                       |
 | NTRU           | NIST Round 3 submission  | ntru_hps4096821  |            3 |                    5 | 0x0216       |                                  |
 | NTRU           | NIST Round 3 submission  | ntru_hps4096821  |            3 |                    5 | 0x2F16       | secp521_r1                       |
+| NTRU           | NIST Round 3 submission  | ntru_hrss1373    |            3 |                    5 | 0x0246       |                                  |
+| NTRU           | NIST Round 3 submission  | ntru_hrss1373    |            3 |                    5 | 0x2F46       | secp521_r1                       |
 | NTRU           | NIST Round 3 submission  | ntru_hrss701     |            3 |                    3 | 0x0217       |                                  |
 | NTRU           | NIST Round 3 submission  | ntru_hrss701     |            3 |                    3 | 0x2F17       | secp384_r1                       |
 | SABER          | NIST Round 3 submission  | firesaber        |            3 |                    5 | 0x021A       |                                  |
