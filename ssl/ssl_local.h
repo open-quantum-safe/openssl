@@ -537,6 +537,7 @@
   (nid == NID_ntru_hps2048509 ? 0x0214 : \
   (nid == NID_ntru_hps2048677 ? 0x0215 : \
   (nid == NID_ntru_hps4096821 ? 0x0216 : \
+  (nid == NID_ntru_hps40961229 ? 0x0245 : \
   (nid == NID_ntru_hrss701 ? 0x0217 : \
   (nid == NID_lightsaber ? 0x0218 : \
   (nid == NID_saber ? 0x0219 : \
@@ -566,7 +567,7 @@
   (nid == NID_sntrup857 ? 0x0234 : \
   (nid == NID_sntrup1277 ? 0x0242 : \
   0 \
-  ))))))))))))))))))))))))))))))))))))))))
+  )))))))))))))))))))))))))))))))))))))))))
 ///// OQS_TEMPLATE_FRAGMENT_OQS_KEM_CURVEID_END
 
 ///// OQS_TEMPLATE_FRAGMENT_OQS_KEM_HYBRID_CURVEID_START
@@ -583,6 +584,7 @@
     (nid == NID_p256_ntru_hps2048509 ? 0x2F14 : \
     (nid == NID_p384_ntru_hps2048677 ? 0x2F15 : \
     (nid == NID_p521_ntru_hps4096821 ? 0x2F16 : \
+    (nid == NID_p521_ntru_hps40961229 ? 0x2F45 : \
     (nid == NID_p384_ntru_hrss701 ? 0x2F17 : \
     (nid == NID_p256_lightsaber ? 0x2F18 : \
     (nid == NID_p384_saber ? 0x2F19 : \
@@ -612,7 +614,7 @@
     (nid == NID_p384_sntrup857 ? 0x2F34 : \
     (nid == NID_p521_sntrup1277 ? 0x2F42 : \
   0 \
-  ))))))))))))))))))))))))))))))))))))))))
+  )))))))))))))))))))))))))))))))))))))))))
 ///// OQS_TEMPLATE_FRAGMENT_OQS_KEM_HYBRID_CURVEID_END
 
   /* Returns the non-hybrid OQS KEM NID for a PQ or hybrid curve ID */
@@ -630,6 +632,7 @@
   (curveID == 0x0214 || curveID == 0x2F14 ? NID_ntru_hps2048509 : \
   (curveID == 0x0215 || curveID == 0x2F15 ? NID_ntru_hps2048677 : \
   (curveID == 0x0216 || curveID == 0x2F16 ? NID_ntru_hps4096821 : \
+  (curveID == 0x0245 || curveID == 0x2F45 ? NID_ntru_hps40961229 : \
   (curveID == 0x0217 || curveID == 0x2F17 ? NID_ntru_hrss701 : \
   (curveID == 0x0218 || curveID == 0x2F18 ? NID_lightsaber : \
   (curveID == 0x0219 || curveID == 0x2F19 ? NID_saber : \
@@ -659,7 +662,7 @@
   (curveID == 0x0234 || curveID == 0x2F34 ? NID_sntrup857 : \
   (curveID == 0x0242 || curveID == 0x2F42 ? NID_sntrup1277 : \
   0 \
-  ))))))))))))))))))))))))))))))))))))))))
+  )))))))))))))))))))))))))))))))))))))))))
 ///// OQS_TEMPLATE_FRAGMENT_OQS_KEM_NID_END
 
   /* Returns the hybrid OQS KEM NID for a hybrid curve ID */
@@ -677,6 +680,7 @@
     (curveID == 0x2F14 ? NID_p256_ntru_hps2048509 : \
     (curveID == 0x2F15 ? NID_p384_ntru_hps2048677 : \
     (curveID == 0x2F16 ? NID_p521_ntru_hps4096821 : \
+    (curveID == 0x2F45 ? NID_p521_ntru_hps40961229 : \
     (curveID == 0x2F17 ? NID_p384_ntru_hrss701 : \
     (curveID == 0x2F18 ? NID_p256_lightsaber : \
     (curveID == 0x2F19 ? NID_p384_saber : \
@@ -706,7 +710,7 @@
     (curveID == 0x2F34 ? NID_p384_sntrup857 : \
     (curveID == 0x2F42 ? NID_p521_sntrup1277 : \
   0 \
-  ))))))))))))))))))))))))))))))))))))))))
+  )))))))))))))))))))))))))))))))))))))))))
 ///// OQS_TEMPLATE_FRAGMENT_OQS_HYBRID_KEM_NID_END
 
 /* Returns true if the curve ID is for an OQS KEM */
@@ -732,6 +736,7 @@
   (nid == NID_ntru_hps2048509 ? OQS_KEM_alg_ntru_hps2048509 : \
   (nid == NID_ntru_hps2048677 ? OQS_KEM_alg_ntru_hps2048677 : \
   (nid == NID_ntru_hps4096821 ? OQS_KEM_alg_ntru_hps4096821 : \
+  (nid == NID_ntru_hps40961229 ? OQS_KEM_alg_ntru_hps40961229 : \
   (nid == NID_ntru_hrss701 ? OQS_KEM_alg_ntru_hrss701 : \
   (nid == NID_lightsaber ? OQS_KEM_alg_saber_lightsaber : \
   (nid == NID_saber ? OQS_KEM_alg_saber_saber : \
@@ -761,7 +766,7 @@
   (nid == NID_sntrup857 ? OQS_KEM_alg_ntruprime_sntrup857 : \
   (nid == NID_sntrup1277 ? OQS_KEM_alg_ntruprime_sntrup1277 : \
   0 \
-  ))))))))))))))))))))))))))))))))))))))))
+  )))))))))))))))))))))))))))))))))))))))))
 ///// OQS_TEMPLATE_FRAGMENT_OQS_ALG_NAME_END
 
 /* Returns the classic curve ID for a given hybrid curve */
@@ -780,6 +785,7 @@
   (cid == 0x2F14 ?23: \
   (cid == 0x2F15 ?24: \
   (cid == 0x2F16 ?25: \
+  (cid == 0x2F45 ?25: \
   (cid == 0x2F17 ?24: \
   (cid == 0x2F18 ?23: \
   (cid == 0x2F19 ?24: \
@@ -809,7 +815,7 @@
   (cid == 0x2F34 ?24: \
   (cid == 0x2F42 ?25: \
   23 \
-  )))))))))))))))))))))))))))))))))))))))))
+  ))))))))))))))))))))))))))))))))))))))))))
 ///// OQS_TEMPLATE_FRAGMENT_OQS_MAP_HYBRID_END
 
 /* Returns the classical nid for an hybrid alg */

@@ -126,6 +126,12 @@ kems:
     oqs_alg: 'OQS_KEM_alg_ntru_hps4096821'
   -
     family: 'NTRU'
+    name_group: 'ntru_hps40961229'
+    nid: '0x0245'
+    nid_hybrid: '0x2F45'
+    oqs_alg: 'OQS_KEM_alg_ntru_hps40961229'
+  -
+    family: 'NTRU'
     name_group: 'ntru_hrss701'
     nid: '0x0217'
     nid_hybrid: '0x2F17'
