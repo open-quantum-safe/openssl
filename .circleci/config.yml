@@ -163,6 +163,7 @@ workflows:
           name: macOS-shared_oqs-shared_ossl
           LIBOQS_SHARED: true
           OPENSSL_SHARED: true
+          TESTSET: oqs-test/test_tls_full.py oqs-test/test_cms.py oqs-test/test_speed.py oqs-test/test_dgst.py
       - cond-testapproval:
           requires:
             - ubuntu-static_oqs-static_ossl
