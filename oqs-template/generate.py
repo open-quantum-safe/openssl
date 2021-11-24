@@ -113,8 +113,7 @@ populate('oqs-test/common.py', config, '#####')
 populate('oqs-interop-test/common.py', config, '#####')
 
 # wireshark files
-populate('oqs-scripts/packet-tls-utils.c', config, '/////')
-populate('oqs-scripts/packet-pkcs1.c', config, '/////')
+populate('qsc.h', config, '/////')
 
 config = load_config(include_disabled_sigs=True)
 populate('README.md', config, '<!---')
