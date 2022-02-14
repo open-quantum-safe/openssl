@@ -29,12 +29,13 @@ def parametrized_sig_server(request, ossl, ossl_config, test_artifacts_dir, work
 def test_kem(ossl, sig_default_server_port, test_artifacts_dir, kex_name, worker_id):
     if (sys.platform.startswith("win") and ("bike" in kex_name)):
         pytest.skip('BIKE not supported in windows')
+    env = os.environ
+    env["TLS_DEFAULT_GROUPS"]=kex_name
     client_output = common.run_subprocess([ossl, 's_client',
-                                                  '-groups', kex_name,
                                                   '-CAfile', os.path.join(test_artifacts_dir, '{}_dilithium2_CA.crt'.format(worker_id)),
                                                   '-verify_return_error',
                                                   '-connect', 'localhost:{}'.format(sig_default_server_port)],
-                                            input='Q'.encode())
+                                            input='Q'.encode(), env=env)
     if kex_name.startswith('p256'):
         kex_full_name = "{} hybrid".format(kex_name)
     else:
