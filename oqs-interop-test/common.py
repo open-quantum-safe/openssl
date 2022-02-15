@@ -11,7 +11,7 @@ BSSL_SHIM = os.path.join('boringssl', 'build', 'ssl', 'test', 'bssl_shim')
 BSSL = os.path.join('boringssl', 'build', 'tool', 'bssl')
 OSSL = os.path.join('apps', 'openssl')
 
-TLS13_IDENTIFIER=772 #0x0304
+TLS1_3_VERSION=772 #0x0304
 
 key_exchanges = [
 ##### OQS_TEMPLATE_FRAGMENT_KEX_ALGS_START
