@@ -160,58 +160,15 @@ kems:
     nid: '0x021A'
     nid_hybrid: '0x2F1A'
     oqs_alg: 'OQS_KEM_alg_saber_firesaber'
-  -
-    family: 'SIDH'
-    name_group: 'sidhp434'
-    nid: '0x021B'
-    nid_hybrid: '0x2F1B'
-    oqs_alg: 'OQS_KEM_alg_sidh_p434'
-  -
-    family: 'SIDH'
-    name_group: 'sidhp503'
-    nid: '0x021C'
-    nid_hybrid: '0x2F1C'
-    oqs_alg: 'OQS_KEM_alg_sidh_p503'
-  -
-    family: 'SIDH'
-    name_group: 'sidhp610'
-    nid: '0x021D'
-    nid_hybrid: '0x2F1D'
-    oqs_alg: 'OQS_KEM_alg_sidh_p610'
-  -
-    family: 'SIDH'
-    name_group: 'sidhp751'
-    nid: '0x021E'
-    nid_hybrid: '0x2F1E'
-    oqs_alg: 'OQS_KEM_alg_sidh_p751'
-  -
-    family: 'SIKE'
-    name_group: 'sikep434'
-    nid: '0x021F'
-    nid_hybrid: '0x2F1F'
-    oqs_alg: 'OQS_KEM_alg_sike_p434'
-    extra_nids:
-      current:
-        - hybrid_group: "x25519"
-          nid: '0x2F27'
-  -
-    family: 'SIKE'
-    name_group: 'sikep503'
-    nid: '0x0220'
-    nid_hybrid: '0x2F20'
-    oqs_alg: 'OQS_KEM_alg_sike_p503'
-  -
-    family: 'SIKE'
-    name_group: 'sikep610'
-    nid: '0x0221'
-    nid_hybrid: '0x2F21'
-    oqs_alg: 'OQS_KEM_alg_sike_p610'
-  -
-    family: 'SIKE'
-    name_group: 'sikep751'
-    nid: '0x0222'
-    nid_hybrid: '0x2F22'
-    oqs_alg: 'OQS_KEM_alg_sike_p751'
+# NB: code points used for SIDH & not to be reused:
+# '0x021B', '0x2F1B'
+# '0x021C', '0x2F1C'
+# '0x021D', '0x2F1D'
+# '0x021E', '0x2F1E'
+# '0x021F', '0x2F1F', '0x2F27'
+# '0x0220', '0x2F20'
+# '0x0221', '0x2F21'
+# '0x0222', '0x2F22'
   -
     family: 'BIKE'
     name_group: 'bike1l1fo'
