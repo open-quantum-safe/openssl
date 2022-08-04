@@ -40,17 +40,32 @@ def gen_sig_table(oqslibdocdir):
         if variant['name'].startswith('dilithium2'):
             claimed_nist_level = 2
 
-        table.append([variant['name'], liboqs_sigs[sig['family']]['spec-version'],
-                      liboqs_sigs[sig['family']]['nist-round'], claimed_nist_level, variant['code_point'],
-                      variant['oid']])
+        try: 
+            table.append([variant['name'], liboqs_sigs[sig['family']]['spec-version'],
+                          liboqs_sigs[sig['family']]['nist-round'], claimed_nist_level, variant['code_point'],
+                          variant['oid']])
+            for hybrid in variant['mix_with']:
+                table.append([variant['name'] + ' **hybrid with** ' + hybrid['name'],
+                              liboqs_sigs[sig['family']]['spec-version'],
+                              liboqs_sigs[sig['family']]['nist-round'],
+                              claimed_nist_level,
+                              hybrid['code_point'],
+                              hybrid['oid']])
+        except KeyError as ke:
+            # Non-existant NIDs mean this alg is not supported any more
+            pass
 
-        for hybrid in variant['mix_with']:
-            table.append([variant['name'] + ' **hybrid with** ' + hybrid['name'],
-                          liboqs_sigs[sig['family']]['spec-version'],
-                          liboqs_sigs[sig['family']]['nist-round'],
-                          claimed_nist_level,
-                          hybrid['code_point'],
-                          hybrid['oid']])
+        if 'extra_oids' in variant:
+            table.append([variant['name'], liboqs_sigs[sig['family']]['spec-version'],
+                          variant['extra_oids']['nist-round'], claimed_nist_level, variant['extra_oids']['code_point'],
+                          variant['extra_oids']['oid']])
+            for hybrid in variant['extra_oids']['mix_with']:
+                table.append([variant['name'] + ' **hybrid with** ' + hybrid['name'],
+                              liboqs_sigs[sig['family']]['spec-version'],
+                              variant['extra_oids']['nist-round'],
+                              claimed_nist_level,
+                              hybrid['code_point'],
+                              hybrid['oid']])
 
   with open(os.path.join('oqs-template', 'oqs-sig-info.md'), mode='w', encoding='utf-8') as f:
     f.write(tabulate(table, tablefmt="pipe", headers="firstrow"))
