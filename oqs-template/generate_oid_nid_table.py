@@ -112,10 +112,10 @@ def gen_kem_table(oqslibdocdir):
                               kem['name_group'], liboqs_kems[kem['family']]['nist-round'], claimed_nist_level,
                               entry['nid'], 
                               entry['hybrid_group'] if 'hybrid_group' in entry else ""])
-        if 'old' in kem['extra_nids']: # assume "old" submissions to mean NIST round 2:
+        if 'old' in kem['extra_nids']:
             for entry in kem['extra_nids']['old']:
                 table.append([kem['family'], entry['implementation_version'],
-                              kem['name_group'], 2, claimed_nist_level,
+                              kem['name_group'], entry['nist-round'], claimed_nist_level,
                               entry['nid'],
                               entry['hybrid_group'] if 'hybrid_group' in entry else ""])
 
