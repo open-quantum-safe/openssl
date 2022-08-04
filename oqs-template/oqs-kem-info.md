@@ -94,3 +94,20 @@
 | SABER          | NIST Round 3 submission  | lightsaber       |            3 |                    1 | 0x2F18       | secp256_r1                       |
 | SABER          | NIST Round 3 submission  | saber            |            3 |                    3 | 0x0219       |                                  |
 | SABER          | NIST Round 3 submission  | saber            |            3 |                    3 | 0x2F19       | secp384_r1                       |
+| SIDH           | NIST Round 3 submission  | sidhp434         |            2 |                    1 | 0x021B       |                                  |
+| SIDH           | NIST Round 3 submission  | sidhp434         |            2 |                    1 | 0x2F1B       | secp256_r1                       |
+| SIDH           | NIST Round 3 submission  | sidhp503         |            2 |                    2 | 0x021C       |                                  |
+| SIDH           | NIST Round 3 submission  | sidhp503         |            2 |                    2 | 0x2F1C       | secp256_r1                       |
+| SIDH           | NIST Round 3 submission  | sidhp610         |            2 |                    3 | 0x021D       |                                  |
+| SIDH           | NIST Round 3 submission  | sidhp610         |            2 |                    3 | 0x2F1D       | secp384_r1                       |
+| SIDH           | NIST Round 3 submission  | sidhp751         |            2 |                    5 | 0x021E       |                                  |
+| SIDH           | NIST Round 3 submission  | sidhp751         |            2 |                    5 | 0x2F1E       | secp521_r1                       |
+| SIKE           | NIST Round 3 submission  | sikep434         |            2 |                    1 | 0x021F       |                                  |
+| SIKE           | NIST Round 3 submission  | sikep434         |            2 |                    1 | 0x2F1F       | secp256_r1                       |
+| SIKE           | NIST Round 3 submission  | sikep434         |            2 |                    1 | 0x2F27       | x25519                           |
+| SIKE           | NIST Round 3 submission  | sikep503         |            2 |                    2 | 0x0220       |                                  |
+| SIKE           | NIST Round 3 submission  | sikep503         |            2 |                    2 | 0x2F20       | secp256_r1                       |
+| SIKE           | NIST Round 3 submission  | sikep610         |            2 |                    3 | 0x0221       |                                  |
+| SIKE           | NIST Round 3 submission  | sikep610         |            2 |                    3 | 0x2F21       | secp384_r1                       |
+| SIKE           | NIST Round 3 submission  | sikep751         |            2 |                    5 | 0x0222       |                                  |
+| SIKE           | NIST Round 3 submission  | sikep751         |            2 |                    5 | 0x2F22       | secp521_r1                       |

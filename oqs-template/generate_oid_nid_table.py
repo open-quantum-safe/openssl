@@ -91,6 +91,9 @@ def gen_kem_table(oqslibdocdir):
     else:
         implementation_version = liboqs_kems[kem['family']]['spec-version']
 
+    if kem['name_group'].startswith('sidhp503') or kem['name_group'].startswith('sikep503'):
+        claimed_nist_level = 2
+
     try: 
        table.append([kem['family'], implementation_version,
                      kem['name_group'], liboqs_kems[kem['family']]['nist-round'], claimed_nist_level,
