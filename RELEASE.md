@@ -13,7 +13,7 @@ The **Open Quantum Safe (OQS) project** has the goal of developing and prototypi
 Release notes
 =============
 
-This is the 2022-08 snapshot release of OQS-OpenSSL. The release candidate was released on August 23, 2022.  This release is intended to be used with liboqs version 0.7.2.
+This is the 2022-08 snapshot release of OQS-OpenSSL, which was released on August 23, 2022.  This release is intended to be used with liboqs version 0.7.2.
 
 What's New
 ----------
