@@ -10,7 +10,7 @@
     {%- endfor %}
 {%- endfor %}
 #define OQS_OPENSSL_SIG_algs_length {{ count.val }}
-#define OQS_OPENSSL_KEM_algs_length {{ config['kems']|length }}
+#define OQS_OPENSSL_KEM_algs_length (2*{{ config['kems']|length }})
 {%- set last_kem_hybrid_level = (config['kems']|last)['bit_security'] -%}
 {%- if last_kem_hybrid_level == 128 -%}
    {%- set hybrid_curve = "p256_" -%}

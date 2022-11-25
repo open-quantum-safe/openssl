@@ -1,4 +1,8 @@
 {%- for kem in config['kems'] %}
         NID_{{ kem['name_group'] }},
+    {% if kem['bit_security'] == 128 -%} NID_p256_{{ kem['name_group'] }}, {%- endif -%}
+    {% if kem['bit_security'] == 192 -%} NID_p384_{{ kem['name_group'] }}, {%- endif -%}
+    {% if kem['bit_security'] == 256 -%} NID_p521_{{ kem['name_group'] }}, {%- endif -%}
+
 {%- endfor %}
 //
