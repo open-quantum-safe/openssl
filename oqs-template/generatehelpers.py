@@ -31,9 +31,8 @@ def get_kem_nistlevel(alg, docsdir):
     try:
         algymlfilename = os.path.join(docsdir, 'algorithms', 'kem', '{:s}.yml'.format(datasheetname))
         algyml = yaml.safe_load(file_get_contents(algymlfilename, encoding='utf-8'))
-    except: # check alternate location in "oldalgs" folder
-        algymlfilename = os.path.join("oqs-template", 'oldalgdocs', 'kem', '{:s}.yml'.format(datasheetname))
-        algyml = yaml.safe_load(file_get_contents(algymlfilename, encoding='utf-8'))
+    except:
+        return None
 
     # hacks to match names
     def matches(name, alg):
