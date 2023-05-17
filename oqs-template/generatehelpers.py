@@ -24,6 +24,8 @@ def get_kem_nistlevel(alg, docsdir):
     if alg['family'] == 'CRYSTALS-Kyber': datasheetname = 'kyber'
     elif alg['family'] == 'SIDH': datasheetname = 'sike'
     elif alg['family'] == 'NTRU-Prime': datasheetname = 'ntruprime'
+    elif alg['family'] == 'SPHINCS-SHA2': datasheetname = 'sphincs'
+    elif alg['family'] == 'SPHINCS-SHAKE': datasheetname = 'sphincs'
     else: datasheetname = alg['family'].lower()
     # load datasheet
     try:
@@ -38,8 +40,6 @@ def get_kem_nistlevel(alg, docsdir):
         def simplify(s):
             return s.lower().replace('_', '').replace('-', '')
         if 'FrodoKEM' in name: name = name.replace('FrodoKEM', 'Frodo')
-        if 'Saber-KEM' in name: name = name.replace('-KEM', '')
-        if '-90s' in name: name = name.replace('-90s', '').replace('Kyber', 'Kyber90s')
         if simplify(name) == simplify(alg['name_group']): return True
         return False
     # find the variant that matches
@@ -51,9 +51,8 @@ def get_kem_nistlevel(alg, docsdir):
 def get_sig_nistlevel(family, alg, docsdir):
     # translate family names in generate.yml to directory names for liboqs algorithm datasheets
     if family['family'] == 'CRYSTALS-Dilithium': datasheetname = 'dilithium'
-    elif family['family'] == 'SPHINCS-Haraka': datasheetname = 'sphincs'
-    elif family['family'] == 'SPHINCS-SHA256': datasheetname = 'sphincs'
-    elif family['family'] == 'SPHINCS-SHAKE256': datasheetname = 'sphincs'
+    elif family['family'] == 'SPHINCS-SHA2': datasheetname = 'sphincs'
+    elif family['family'] == 'SPHINCS-SHAKE': datasheetname = 'sphincs'
     else: datasheetname = family['family'].lower()
     # load datasheet
     algymlfilename = os.path.join(docsdir, 'algorithms', 'sig', '{:s}.yml'.format(datasheetname))
@@ -98,11 +97,8 @@ def complete_config(config, oqsdocsdir = None):
          if not "security" in sig.keys():
             bits_level = nist_to_bits(get_sig_nistlevel(famsig, sig, oqsdocsdir))
             if bits_level == None: 
-                if sig['name'].startswith("rainbowI"):
-                    bits_level=128
-                else:
-                    print("Cannot find security level for {:s} {:s}".format(famsig['family'], sig['name']))
-                    exit(1)
+                print("Cannot find security level for {:s} {:s}".format(famsig['family'], sig['name']))
+                exit(1)
             sig['security'] = bits_level
    return config
 
