@@ -15,8 +15,6 @@ def sig_default_server_port(ossl, ossl_config, test_artifacts_dir, worker_id):
 
 @pytest.fixture(params=common.signatures)
 def parametrized_sig_server(request, ossl, ossl_config, test_artifacts_dir, worker_id):
-    if (sys.platform.startswith("win") and ("rainbowVclassic" in request.param)):
-        pytest.skip('rainbowVclassic not supported in windows')
     # Setup: start ossl server
     common.gen_keys(ossl, ossl_config, request.param, test_artifacts_dir, worker_id)
     server, port = common.start_server(ossl, test_artifacts_dir, request.param, worker_id)
@@ -45,8 +43,6 @@ def test_kem(ossl, sig_default_server_port, test_artifacts_dir, kex_name, worker
 
 def test_sig(parametrized_sig_server, ossl, test_artifacts_dir, worker_id):
     server_sig = parametrized_sig_server[0]
-    if (sys.platform.startswith("win") and ("rainbowVclassic" in server_sig)):
-        pytest.skip('rainbowVclassic not supported in windows')
     server_port = parametrized_sig_server[1]
 
     client_output = common.run_subprocess([ossl, 's_client',
