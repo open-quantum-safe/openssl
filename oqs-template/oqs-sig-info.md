@@ -1,5 +1,4 @@
-## Note: As oqs-openssl111 is phased out, please rely on the new iteration of th
-is information at https://github.com/open-quantum-safe/oqs-provider/blob/main/oqs-template/oqs-sig-info.md
+## Note: As oqs-openssl111 is phased out, please rely on the new iteration of this information at https://github.com/open-quantum-safe/oqs-provider/blob/main/oqs-template/oqs-sig-info.md
 
 | Algorithm                                      | Implementation Version                        |   NIST round |   Claimed NIST Level | Code Point   | OID                     |
 |:-----------------------------------------------|:----------------------------------------------|-------------:|---------------------:|:-------------|:------------------------|
