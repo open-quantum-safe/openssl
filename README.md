@@ -1,11 +1,11 @@
-[![AppVeyor](https://ci.appveyor.com/api/projects/status/mjujhh01coab3fsw/branch/OQS-OpenSSL_1_1_1-stable?svg=true)](https://ci.appveyor.com/project/dstebila/openssl/branch/OQS-OpenSSL_1_1_1-stable), [![CircleCI](https://circleci.com/gh/open-quantum-safe/openssl/tree/OQS-OpenSSL_1_1_1-stable.svg?style=svg)](https://circleci.com/gh/open-quantum-safe/openssl/tree/OQS-OpenSSL_1_1_1-stable)
+![Badge: Status: Deprecated](https://img.shields.io/badge/status-deprecated-red)
 
 OQS-OpenSSL\_1\_1\_1
 ==================================
 
-## <span style="color: red;">Warning</span>
+## <span style="color: red;">DEPRECATION NOTICE</span>
 
-<b><span style="color: red;">The OpenSSL project has announced that its support for OpenSSL 1.1.1 will stop in September, 2023, and that all users should switch to OpenSSL 3.  Consequently, the Open Quantum Safe project is discontinuing development of our OQS-OpenSSL 1.1.1 fork.  No more releases are planned for OQS-OpenSSL 1.1.1.  The [OQS Provider for OpenSSL 3](https://github.com/open-quantum-safe/oqs-provider/) provides full support for post-quantum key exchange and authentication in TLS 1.3, X.509, and S/MIME.</span></b>
+<b><span style="color: red;">The OpenSSL project has stopped support for OpenSSL 1.1.1, and all users should switch to OpenSSL 3.  Consequently, the Open Quantum Safe project has discontinued development of our OQS-OpenSSL 1.1.1 fork.  This repository is being archived as read-only.  The [OQS Provider for OpenSSL 3](https://github.com/open-quantum-safe/oqs-provider/) provides full support for post-quantum key exchange and authentication in TLS 1.3, X.509, and S/MIME.  Use of this code is not recommended, as it may rely on obsolete algorithms or implementations or may have security vulnerabilities or other bugs.</span></b>
 
 ---
 
